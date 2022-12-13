@@ -29,7 +29,5 @@
         "webpack-cli": "^4.10.0",
         "webpack-merge": "^5.8.0"
     },
-    "dependencies": {
-        "phaser": "^3.55.2"
-    }
+    "dependencies": {}
 }

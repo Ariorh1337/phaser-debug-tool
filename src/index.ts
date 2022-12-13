@@ -1,4 +1,3 @@
-//import "phaser";
 import "phaser3_gui_inspector";
 import LocalDebugs from "./utils/cheats";
 
