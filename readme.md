@@ -5,7 +5,9 @@ https://github.com/SilverTree7622/Phaser3_GUI_Inspector
 
 If Phaser is found on the page, you will see an extension button on the right side of the screen which will show a list of available scenes.
 
-After selecting the scene, you will be taken to the original GUI menu of the inspector
+After selecting the scene, you will be taken to the original GUI menu of the inspector.
+
+in addition to the UI interface, you can access the game class and scenes inside the object `window.PhaserDebugExt`
 
 ## Build
 
@@ -32,3 +34,8 @@ Firefox: `npm run build-firefox`
 3. Choose manifest.json inside `dist` project folder
 4. Refresh game tab
 5. Left top corner you will see "Cheats" button
+
+## TODO
+
+1. Check firefox
+2. Add the ability to change the scene after calling the previous one
