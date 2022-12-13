@@ -1,0 +1,22 @@
+{
+    "name": "Phaser Debugger",
+    "description": "Debug tool for Phaser 3",
+    "version": "",
+    "manifest_version": 2,
+    "permissions": ["tabs", "<all_urls>"],
+    "content_scripts": [
+        {
+            "js": ["inject.js"],
+            "matches": ["*://*/*"],
+            "match_about_blank": true,
+            "all_frames": true,
+            "run_at": "document_start"
+        }
+    ],
+    "icons": {
+        "128": "logo.png",
+        "16": "logo.png",
+        "48": "logo.png"
+    },
+    "web_accessible_resources": ["index.js"]
+}
