@@ -28,12 +28,11 @@ document.addEventListener("phaser-debug", () => {
             const postBoot = callbacks.postBoot || (() => {});
 
             callbacks.postBoot = (game: any) => {
-                (window as any).PhaserDebugExt = {
-                    game: game,
-                    scenes: game.scene.scenes,
-                };
+                const scenes = new Map();
 
                 game.scene.scenes.forEach((scene: any) => {
+                    scenes.set(scene.scene.key, scene);
+
                     debugs.addButton(scene.scene.key, () => {
                         debugs.kill();
 
@@ -44,6 +43,11 @@ document.addEventListener("phaser-debug", () => {
                         };
                     });
                 });
+
+                (window as any).PhaserDebugExt = {
+                    game: game,
+                    scenes: scenes,
+                };
 
                 postBoot(game);
             };
