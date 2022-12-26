@@ -21,12 +21,8 @@ export default function definePosition(folder: any, obj: any) {
 
     const input = folder.addInput(proxy, "vector2", {
         label: "position",
-        x: {
-            step: 2,
-        },
-        y: {
-            step: 2,
-        }
+        x: { step: 2 },
+        y: { step: 2 },
     });
     folder.on("refresh", () => input.refresh());
 }

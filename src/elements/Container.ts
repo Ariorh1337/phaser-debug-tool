@@ -1,6 +1,7 @@
 import defineActive from "../props/active";
 import defineAlpha from "../props/alpha";
 import defineAngle from "../props/angle";
+import defineBlendMode from "../props/blendMode";
 import defineDeclare from "../props/declare";
 import defineDestroy, { onDestroy } from "../props/destroy";
 import defineInput from "../props/input";
@@ -28,6 +29,7 @@ export default function addContainer(
     defineAngle(folder, obj);
     defineRotation(folder, obj);
     defineScale(folder, obj);
+    defineBlendMode(folder, obj);
 
     const children = folder.addFolder({ title: "Children", expanded: false });
     (obj as any)._pane = children;

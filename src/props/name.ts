@@ -1,7 +1,7 @@
 import { hasProp } from "../utils/extra";
 
 export default function defineName(folder: any, obj: any) {
-    folder.title = parseName(obj);
+    folder.title = folder.title || parseName(obj);
 
     if (hasProp(obj, "name")) {
         const proxy = {

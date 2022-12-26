@@ -1,6 +1,7 @@
 import defineActive from "../props/active";
 import defineAlpha from "../props/alpha";
 import defineAngle from "../props/angle";
+import defineCrop from "../props/crop";
 import defineDeclare from "../props/declare";
 import defineDestroy, { onDestroy } from "../props/destroy";
 import defineInput from "../props/input";
@@ -15,7 +16,7 @@ import defineVisible from "../props/visible";
 
 export default function addSprite(
     pane: any,
-    obj: Phaser.GameObjects.Image,
+    obj: Phaser.GameObjects.Sprite,
     options = { title: "", expanded: false }
 ) {
     const folder = pane.addFolder(options);
@@ -33,6 +34,7 @@ export default function addSprite(
     defineAngle(folder, obj);
     defineRotation(folder, obj);
     defineScale(folder, obj);
+    defineCrop(folder, obj);
     defineTexture(folder, obj);
     defineDestroy(folder, obj);
     defineDeclare(folder, obj);

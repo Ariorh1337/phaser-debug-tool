@@ -11,6 +11,7 @@ import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineVisible from "../props/visible";
+import addArc from "./Arc";
 import addBitmapText from "./BitmapText";
 import addContainer from "./Container";
 import addImage from "./Image";
@@ -43,6 +44,10 @@ export default function addGameObject(
 
     if (obj.type && obj.type === "Rectangle") {
         return addRectangle(pane, obj, options);
+    }
+
+    if (obj.type && obj.type === "Arc") {
+        return addArc(pane, obj, options);
     }
 
     if (obj.type && obj.type === "Container") {

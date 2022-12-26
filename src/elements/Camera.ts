@@ -9,7 +9,7 @@ import defineSize from "../props/size";
 
 export default function addCamera(
     pane: any,
-    obj: Phaser.Cameras.Scene2D.BaseCamera,
+    obj: Phaser.Cameras.Scene2D.Camera,
     options = { title: "", expanded: false }
 ) {
     const folder = pane.addFolder(options);
