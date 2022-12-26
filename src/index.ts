@@ -1,59 +1,39 @@
-import "phaser3_gui_inspector";
-import LocalDebugs from "./utils/cheats";
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+///<reference path="../node_modules/phaser/types/phaser.d.ts" />
 
-declare var PhaserGUIAction: any;
-declare var PhaserGUI: any;
-declare var Phaser: any;
+import getGame from "./Game";
 
-const search = setInterval(() => {
+/*import {
+    AddAnimationState,
+    AddArcadeBody,
+    AddGameObject,
+    AddGroup,
+    AddInput,
+    AddKey,
+    AddKeys,
+    AddLight,
+    AddParticleEmitter,
+    AddSound,
+    AddTimeline,
+    AddTimerEvent,
+    AddTween,
+//@ts-ignore
+} from "phaser-plugin-inspector";*/
+
+const DebugToolInterval = setInterval(() => {
     try {
         if (!Phaser) return;
 
         document.dispatchEvent(new Event("phaser-debug"));
-        clearInterval(search);
+
+        clearInterval(DebugToolInterval);
     } catch (e) {}
 }, 1);
 
 document.addEventListener("phaser-debug", () => {
     if (!Phaser) return console.error("Phaser is not defined");
+
     console.log("Phaser debug is enabled");
 
-    const debugs = new LocalDebugs();
-
-    // @ts-ignore
-    class Game extends Phaser.Game {
-        constructor(config: any) {
-            const callbacks = config.callbacks || {};
-            const postBoot = callbacks.postBoot || (() => {});
-
-            callbacks.postBoot = (game: any) => {
-                const scenes = new Map();
-
-                game.scene.scenes.forEach((scene: any) => {
-                    scenes.set(scene.scene.key, scene);
-
-                    debugs.addButton(scene.scene.key, () => {
-                        debugs.kill();
-
-                        PhaserGUIAction(scene);
-
-                        PhaserGUI.destroyGUI = function () {
-                            PhaserGUI.GUI.lib.destroyGUI();
-                        };
-                    });
-                });
-
-                (window as any).PhaserDebugExt = {
-                    game: game,
-                    scenes: scenes,
-                };
-
-                postBoot(game);
-            };
-            config.callbacks = callbacks;
-
-            super(config);
-        }
-    }
-    Phaser.Game = Game;
+    Phaser.Game = getGame();
 });

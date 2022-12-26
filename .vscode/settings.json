@@ -1,6 +1,6 @@
 {
-    "eslint.autoFixOnSave": true,
-    "editor.formatOnSave": true,
+    "eslint.autoFixOnSave": false,
+    "editor.formatOnSave": false,
     "editor.codeActionsOnSave": {
         "source.organizeImports": true,
 
@@ -16,5 +16,5 @@
         "source.fixAll": true
     },
     "files.eol": "\r\n",
-    "files.autoSave": "onFocusChange",
+    "files.autoSave": "onFocusChange"
 }
