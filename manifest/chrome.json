@@ -3,9 +3,6 @@
     "description": "Debug tool for Phaser 3",
     "version": "",
     "manifest_version": 3,
-    "permissions": [
-        "activeTab"
-    ],
     "content_scripts": [
         {
             "js": ["inject.js"],

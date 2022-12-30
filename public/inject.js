@@ -1,3 +1,20 @@
+/**
+ * injectScript - Inject internal script to available access to the `window`
+ *
+ * @param  {type} file_path Local path of the internal script.
+ * @param  {type} tag The tag as string, where the script will be append (default: 'body').
+ * @see    {@link http://stackoverflow.com/questions/20499994/access-window-variable-from-content-script}
+ */
+ function injectScript(file_path) {
+    var script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', file_path);
+
+    let html = document.childNodes[1];
+    if (!html) html = document.childNodes[0];
+    html.appendChild(script);
+}
+
 let url;
 
 try {
@@ -6,9 +23,4 @@ try {
     url = chrome.runtime.getURL('index.js');
 }
 
-const tab = (window.browser || window.chrome).tabs.getCurrent();
-(window.browser || window.chrome).tabs.executeScript(tab.id, {
-    "file": url,
-    "all_frames": true,
-    "run_at": "document_start"
-});
+injectScript(url);
