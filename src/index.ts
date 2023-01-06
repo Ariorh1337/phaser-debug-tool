@@ -3,23 +3,6 @@
 
 import getGame from "./Game";
 
-/*import {
-    AddAnimationState,
-    AddArcadeBody,
-    AddGameObject,
-    AddGroup,
-    AddInput,
-    AddKey,
-    AddKeys,
-    AddLight,
-    AddParticleEmitter,
-    AddSound,
-    AddTimeline,
-    AddTimerEvent,
-    AddTween,
-//@ts-ignore
-} from "phaser-plugin-inspector";*/
-
 const DebugToolInterval = setInterval(() => {
     try {
         if (!Phaser) return;
