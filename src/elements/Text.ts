@@ -1,6 +1,7 @@
 import defineActive from "../props/active";
 import defineAlpha from "../props/alpha";
 import defineAngle from "../props/angle";
+import defineCrop from "../props/crop";
 import defineDeclare from "../props/declare";
 import defineDestroy, { onDestroy } from "../props/destroy";
 import defineInput from "../props/input";
@@ -33,6 +34,7 @@ export default function addText(
     defineAngle(folder, obj);
     defineRotation(folder, obj);
     defineScale(folder, obj);
+    defineCrop(folder, obj);
 
     defineText(folder, obj);
     defineTextStyle(folder, obj);

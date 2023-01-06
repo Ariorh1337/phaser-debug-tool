@@ -1,8 +1,5 @@
 ## About
 
-This is an extension for automatic GUI inspector injection.
-https://github.com/SilverTree7622/Phaser3_GUI_Inspector
-
 If Phaser is found on the page, you will see an extension button on the right side of the screen which will show a list of available scenes.
 
 After selecting the scene, you will be taken to the original GUI menu of the inspector.

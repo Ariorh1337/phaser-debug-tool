@@ -164,4 +164,55 @@ export default function defineTextStyle(folder: any, obj: any) {
         step: 1,
     });
     folder.on("refresh", () => input12.refresh());
+
+
+    const paddingYProxy = {
+        vector2: {
+            get x() {
+                return obj.padding.top || 0;
+            },
+            set x(value) {
+                const {left, top, right, bottom} = obj.padding;
+                obj.setPadding(left, value, right, bottom);
+            },
+            get y() {
+                return obj.padding.bottom || 0;
+            },
+            set y(value) {
+                const {left, top, right, bottom} = obj.padding;
+                obj.setPadding(left, top, right, value);
+            },
+        },
+    };
+    const input13 = folder.addInput(paddingYProxy, "vector2", {
+        label: "padding (top, bottom)",
+        x: { step: 1 },
+        y: { step: 1 },
+    });
+    folder.on("refresh", () => input13.refresh());
+
+    const paddingXProxy = {
+        vector2: {
+            get x() {
+                return obj.padding.left || 0;
+            },
+            set x(value) {
+                const {left, top, right, bottom} = obj.padding;
+                obj.setPadding(value, top, right, bottom);
+            },
+            get y() {
+                return obj.padding.right || 0;
+            },
+            set y(value) {
+                const {left, top, right, bottom} = obj.padding;
+                obj.setPadding(left, top, value, bottom);
+            },
+        },
+    };
+    const input14 = folder.addInput(paddingXProxy, "vector2", {
+        label: "padding (left, right)",
+        x: { step: 1 },
+        y: { step: 1 },
+    });
+    folder.on("refresh", () => input14.refresh());
 }
