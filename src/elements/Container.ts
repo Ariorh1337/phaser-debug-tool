@@ -18,21 +18,24 @@ export default function addContainer(
     options = { title: "", expanded: false }
 ) {
     const folder = pane.addFolder(options);
+    (obj as any)._pane = folder;
 
     defineName(folder, obj);
-    defineInput(folder, obj);
-    defineActive(folder, obj);
-    defineVisible(folder, obj);
 
-    definePosition(folder, obj);
-    defineAlpha(folder, obj);
-    defineAngle(folder, obj);
-    defineRotation(folder, obj);
-    defineScale(folder, obj);
-    defineBlendMode(folder, obj);
+    const settings = folder.addFolder({ title: "Settings", expanded: false });
+    defineInput(settings, obj);
+    defineActive(settings, obj);
+    defineVisible(settings, obj);
+
+    definePosition(settings, obj);
+    defineAlpha(settings, obj);
+    defineAngle(settings, obj);
+    defineRotation(settings, obj);
+    defineScale(settings, obj);
+    defineBlendMode(settings, obj);
 
     const children = folder.addFolder({ title: "Children", expanded: false });
-    (obj as any)._pane = children;
+    (obj as any)._paneChild = children;
 
     obj.list.forEach((child: any) => {
         if (child._pane) return;

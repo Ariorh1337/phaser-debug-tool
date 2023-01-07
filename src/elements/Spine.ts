@@ -25,23 +25,32 @@ export default function addSpine(
     if (obj.list) obj.type = "SpineContainer";
 
     defineName(folder, obj);
-    defineInput(folder, obj);
-    defineActive(folder, obj);
-    defineVisible(folder, obj);
 
-    definePosition(folder, obj);
-    defineSize(folder, obj);
-    defineOrigin(folder, obj);
-    defineAlpha(folder, obj);
-    defineAngle(folder, obj);
-    defineRotation(folder, obj);
-    defineScale(folder, obj);
+    const settings = (() => {
+        if (obj.type === "SpineContainer") {
+            return folder.addFolder({ title: "Settings", expanded: false });
+        }
 
-    defineBlendMode(folder, obj);
+        return folder;
+    })();
+    
+    defineInput(settings, obj);
+    defineActive(settings, obj);
+    defineVisible(settings, obj);
+
+    definePosition(settings, obj);
+    defineSize(settings, obj);
+    defineOrigin(settings, obj);
+    defineAlpha(settings, obj);
+    defineAngle(settings, obj);
+    defineRotation(settings, obj);
+    defineScale(settings, obj);
+
+    defineBlendMode(settings, obj);
 
     if (obj.list) {
         const children = folder.addFolder({ title: "Children", expanded: false });
-        (obj as any)._pane = children;
+        (obj as any)._paneChild = children;
 
         obj.list.forEach((child: any) => {
             if (child._pane) return;

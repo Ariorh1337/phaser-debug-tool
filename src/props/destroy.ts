@@ -31,7 +31,7 @@ export function onDestroy(obj: any, folder: any, options: any) {
 
                 this.parent = obj.parentContainer;
 
-                const pane = obj?.parentContainer?._pane || folder;
+                const pane = obj?.parentContainer?._paneChild || folder;
                 addGameObject(pane, obj, options);
             }, 50);
         },
