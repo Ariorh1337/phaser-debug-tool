@@ -21,11 +21,11 @@ export default function addContainer(
     (obj as any)._pane = folder;
 
     defineName(folder, obj);
+    defineVisible(folder, obj);
 
     const settings = folder.addFolder({ title: "Settings", expanded: false });
     defineInput(settings, obj);
     defineActive(settings, obj);
-    defineVisible(settings, obj);
 
     definePosition(settings, obj);
     defineAlpha(settings, obj);

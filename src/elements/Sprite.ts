@@ -36,10 +36,24 @@ export default function addSprite(
     defineScale(folder, obj);
     defineCrop(folder, obj);
     defineTexture(folder, obj);
+    
+
+    const anims = folder.addFolder({ title: "Animations", expanded: false });
+    checkAnimations(anims, obj);
+
     defineDestroy(folder, obj);
     defineDeclare(folder, obj);
 
     onDestroy(obj, folder, options);
 
     return folder;
+}
+
+function checkAnimations(folder: any, obj: any) {
+    folder.children.forEach((a: any) => a.dispose());
+
+    Object.keys(obj.scene.anims.anims.entries).map((animation: any) => {
+        const btn = folder.addButton({ title: animation });
+        btn.on("click", () => obj.play(animation));
+    });
 }
