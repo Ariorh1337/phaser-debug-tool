@@ -11,17 +11,17 @@ Extension button on the right side of the screen which will show a list of avail
 
 ## Showcase
 
-[image](./readme/chrome_1Rg0EENWSP.png)
+![scenes](./readme/chrome_1Rg0EENWSP.png)
 
-[image](./readme/chrome_86qPcCaOnH.png)
+![Spine](./readme/chrome_86qPcCaOnH.png)
 
-[image](./readme/chrome_pusI5JVAiJ.png)
+![Rectangle](./readme/chrome_pusI5JVAiJ.png)
 
-[image](./readme/chrome_ST3AHGqiV8.png)
+![Image](./readme/chrome_ST3AHGqiV8.png)
 
-[image](./readme/chrome_U0ADmIqujz.png)
+![Container](./readme/chrome_U0ADmIqujz.png)
 
-[image](./readme/chrome_XyvcK5kfX1.png)
+![Text](./readme/chrome_XyvcK5kfX1.png)
 
 
 ## Build
