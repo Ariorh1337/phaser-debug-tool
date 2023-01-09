@@ -40,7 +40,7 @@ Firefox: `npm run build-firefox`
 3. Press "Load Unpacked Extension"
 4. Choose `dist` project folder
 5. Refresh game tab
-6. Left top corner you will see "Cheats" button
+6. Left top corner you will see "Debug" button
 
 ### Firefox
 
@@ -48,7 +48,7 @@ Firefox: `npm run build-firefox`
 2. Click on "Load Temporary Add-on"
 3. Choose manifest.json inside `dist` project folder
 4. Refresh game tab
-5. Left top corner you will see "Cheats" button
+5. Left top corner you will see "Debug" button
 
 ## TODO
 
