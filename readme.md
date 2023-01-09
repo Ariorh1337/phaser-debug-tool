@@ -1,10 +1,28 @@
 ## About
 
-If Phaser is found on the page, you will see an extension button on the right side of the screen which will show a list of available scenes.
+If Phaser is found on the page, you will see `Phaser debug is enabled` message in console, at this point
+the injection occurs. If you see this message after the Phaser has shown its version the injection is late.
 
-After selecting the scene, you will be taken to the original GUI menu of the inspector.
+To solve the problem where the project loads faster than the injection, you need to enable the overwrite
+mode in the browser (if the project is third party) and before `new Phaser.Game(config)` being called you
+need to execute `document.dispatchEvent(new Event("phaser-debug"));`
 
-in addition to the UI interface, you can access the game class and scenes inside the object `window.PhaserDebugExt`
+Extension button on the right side of the screen which will show a list of available scenes & FPS.
+
+## Showcase
+
+[image](./readme/chrome_1Rg0EENWSP.png)
+
+[image](./readme/chrome_86qPcCaOnH.png)
+
+[image](./readme/chrome_pusI5JVAiJ.png)
+
+[image](./readme/chrome_ST3AHGqiV8.png)
+
+[image](./readme/chrome_U0ADmIqujz.png)
+
+[image](./readme/chrome_XyvcK5kfX1.png)
+
 
 ## Build
 
@@ -19,7 +37,7 @@ Firefox: `npm run build-firefox`
 
 1. Open Extension tab `chrome://extensions/`
 2. Enable Developer Mode on top right corner
-3. Press "Load Unpacked Extansion"
+3. Press "Load Unpacked Extension"
 4. Choose `dist` project folder
 5. Refresh game tab
 6. Left top corner you will see "Cheats" button
@@ -34,5 +52,6 @@ Firefox: `npm run build-firefox`
 
 ## TODO
 
-1. Check firefox
-2. Add the ability to change the scene after calling the previous one
+1. Fix perfomance issue
+2. Add search into scenes childer
+3. Add arcade elements
