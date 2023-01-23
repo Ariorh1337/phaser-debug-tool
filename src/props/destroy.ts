@@ -1,4 +1,3 @@
-import addGameObject from "../elements/GameObject";
 
 export default function defineDestroy(folder: any, obj: any) {
     folder.addButton({ title: "Destroy" }).on("click", () => {
@@ -21,19 +20,9 @@ export function onDestroy(obj: any, folder: any, options: any) {
             }
 
             if (this.parent === obj.parentContainer) return;
+            if (!obj.parentContainer._pane) return;
 
-            (obj.scene || this.scene).events?.off("update", this.update);
-            folder.dispose();
-            obj._pane = undefined;
-
-            setTimeout(() => {
-                if (!obj?.parentContainer?._pane) return;
-
-                this.parent = obj.parentContainer;
-
-                const pane = obj?.parentContainer?._paneChild || folder;
-                addGameObject(pane, obj, options);
-            }, 50);
+            (this as any)._pane.movePaneTo(obj.parentContainer._paneChild);
         },
     };
     func.update = func.update.bind(func);

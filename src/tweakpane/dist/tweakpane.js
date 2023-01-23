@@ -1079,6 +1079,17 @@
 
             child.parent = this;
 
+            child.movePaneTo = function(parent) {
+                var index = child.parent.children.indexOf(child);
+                if (index !== -1) {
+                    child.parent.children.splice(index, 1);
+                }
+
+                child.parent = parent;
+                parent.element.lastChild.append(child.element);
+                child.parent.children.push(child);
+            }
+
             return child;
         }
         addButton(params) {

@@ -57,10 +57,13 @@ export default function addSpine(
             title: "Children",
             expanded: false,
         });
+
         (obj as any)._paneChild = children;
 
         obj.list.forEach((child: any) => {
-            if (child._pane) return;
+            if (child._pane) {
+                return child._pane.movePaneTo(children);
+            }
             addGameObject(children, child);
         });
     }

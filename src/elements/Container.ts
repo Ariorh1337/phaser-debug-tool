@@ -37,8 +37,34 @@ export default function addContainer(
     const children = folder.addFolder({ title: "Children", expanded: false });
     (obj as any)._paneChild = children;
 
+    const addMMethod = obj.add;
+
+    (obj as any).add = function (...args: any[]) {
+        const obj = addMMethod.apply(this, args as any);
+
+        if (Array.isArray(args[0])) {
+            args[0].forEach((child: any) => {
+                if (child._pane) {
+                    return child._pane.movePaneTo(children);
+                }
+
+                addGameObject(children, child);
+            });
+        } else {
+            if (args[0]._pane) {
+                return args[0]._pane.movePaneTo(children);
+            }
+            addGameObject(children, args[0]);
+        }
+
+        return obj;
+    };
+
     obj.list.forEach((child: any) => {
-        if (child._pane) return;
+        if (child._pane) {
+            return child._pane.movePaneTo(children);
+        }
+
         addGameObject(children, child);
     });
 
