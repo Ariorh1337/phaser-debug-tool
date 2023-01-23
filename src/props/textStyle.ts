@@ -113,8 +113,10 @@ export default function defineTextStyle(folder: any, obj: any) {
     });
     folder.on("refresh", () => input4.refresh());
 
-    const input5 = folder.addInput(proxy, "color", { view: "color" });
-    folder.on("refresh", () => input5.refresh());
+    if (typeof obj.style.color === "string") {
+        const input5 = folder.addInput(proxy, "color", { view: "color" });
+        folder.on("refresh", () => input5.refresh());
+    }
 
     const input6 = folder.addInput(proxy, "shadowFill", { format: Boolean });
     folder.on("refresh", () => input6.refresh());

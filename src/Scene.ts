@@ -73,6 +73,16 @@ export default function createSceneFolder(pane: any, scene: Phaser.Scene) {
             addGameObject(childrenFolder, gameObject);
         });
 
+        const container = Phaser.GameObjects.Container;
+        Phaser.GameObjects.Container = class Container extends container {
+            constructor(...args: any[]) {
+                // @ts-ignore
+                super(...args);
+                addGameObject(childrenFolder, this);
+            }
+        };
+
+
         if (!Phaser.GameObjects.Events.ADDED_TO_SCENE) {
             const time = 1;
 
