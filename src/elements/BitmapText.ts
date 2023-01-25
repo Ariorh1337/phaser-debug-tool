@@ -39,38 +39,48 @@ export default function addBitmapText(
     folder.addInput(obj, "fontSize", { step: 1 });
     folder.addInput(obj, "letterSpacing", { step: 1 });
 
-    const dropShadowProxy = {
-        vector2: {
-            get x() {
-                return obj.dropShadowX;
+    if (obj.dropShadowX && obj.dropShadowY) {
+        const dropShadowProxy = {
+            vector2: {
+                get x() {
+                    return obj.dropShadowX || 0;
+                },
+                set x(value) {
+                    obj.dropShadowX = value;
+                },
+                get y() {
+                    return obj.dropShadowY || 0;
+                },
+                set y(value) {
+                    obj.dropShadowY = value;
+                },
             },
-            set x(value) {
-                obj.dropShadowX = value;
-            },
-            get y() {
-                return obj.dropShadowY;
-            },
-            set y(value) {
-                obj.dropShadowY = value;
-            },
-        },
-    };
-    folder.addInput(dropShadowProxy, "vector2", {
-        label: "dropShadow",
-        x: { step: 1 },
-        y: { step: 1 },
-    });
-    folder.addInput(obj, "dropShadowColor", { view: "color" });
-    folder.addInput(obj, "dropShadowAlpha", { min: 0, max: 1, step: 0.01 });
+        };
+        folder.addInput(dropShadowProxy, "vector2", {
+            label: "dropShadow",
+            x: { step: 1 },
+            y: { step: 1 },
+        });
+    }
 
-    folder.addInput(obj, "_align", {
-        label: "align",
-        options: [
-            { text: "left", value: 0 },
-            { text: "center", value: 1 },
-            { text: "right", value: 2 },
-        ],
-    });
+    if (obj.dropShadowColor) {
+        folder.addInput(obj, "dropShadowColor", { view: "color" });
+    }
+
+    if (obj.dropShadowAlpha) {
+        folder.addInput(obj, "dropShadowAlpha", { min: 0, max: 1, step: 0.01 });
+    }
+
+    if ((obj as any)._align) {
+        folder.addInput(obj, "_align", {
+            label: "align",
+            options: [
+                { text: "left", value: 0 },
+                { text: "center", value: 1 },
+                { text: "right", value: 2 },
+            ],
+        });
+    }
     
     defineBlendMode(folder, obj);
     defineTexture(folder, obj);

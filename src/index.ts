@@ -5,11 +5,17 @@ import overwriteGame from "./overwrite/Game";
 
 Object.defineProperty(window, "Phaser", {
     set(value) {
-        let firstTmie = !Boolean(window._Phaser);
+        if (value.VERSION.match(/2\.([0-9]*)\.([0-9]*)/)) {
+            console.log("Phaser 2 unsupported");
+            window._Phaser = value;
+            return;
+        }
+
+        let firstTime = !Boolean(window._Phaser);
 
         window._Phaser = value;
 
-        if (firstTmie) {
+        if (firstTime) {
             console.log("Phaser debug is enabled");
             Phaser.Game = overwriteGame();
         }
@@ -18,3 +24,6 @@ Object.defineProperty(window, "Phaser", {
         return window._Phaser;
     }
 }); 
+
+
+//Phaser.VERSION

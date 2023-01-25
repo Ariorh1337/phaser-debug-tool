@@ -1,11 +1,7 @@
 ## About
 
 If Phaser is found on the page, you will see `Phaser debug is enabled` message in console, at this point
-the injection occurs. If you see this message after the Phaser has shown its version the injection is late.
-
-To solve the problem where the project loads faster than the injection, you need to enable the overwrite
-mode in the browser (if the project is third party) and before `new Phaser.Game(config)` being called you
-need to execute `document.dispatchEvent(new Event("phaser-debug"));`
+the injection occurs. Then you will get `Phaser debug is attached` if Game was successfully started.
 
 Extension button on the right side of the screen which will show a list of available scenes & FPS.
 
@@ -54,4 +50,3 @@ Firefox: `npm run build-firefox`
 
 1. Fix perfomance issue
 2. Add search into scenes childer
-3. Add arcade elements
