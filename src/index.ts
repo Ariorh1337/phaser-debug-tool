@@ -5,10 +5,14 @@ import overwriteGame from "./overwrite/Game";
 
 Object.defineProperty(window, "Phaser", {
     set(value) {
+        let firstTmie = !Boolean(window._Phaser);
+
         window._Phaser = value;
 
-        console.log("Phaser debug is enabled");
-        Phaser.Game = overwriteGame();
+        if (firstTmie) {
+            console.log("Phaser debug is enabled");
+            Phaser.Game = overwriteGame();
+        }
     },
     get() {
         return window._Phaser;

@@ -21,4 +21,26 @@ export function oldAddedToScene(scene: Phaser.Scene, DebugScene: any) {
             };
         }
     );
+
+    const physicsSprite = scene.physics.add.sprite;
+    scene.physics.add.sprite = function (...args: any[]) {
+        const obj = physicsSprite.apply(this, args as any);
+        addedToScene(DebugScene, obj);
+        return obj;
+    };
+
+    const physicsImage = scene.physics.add.image;
+    scene.physics.add.image = function (...args: any[]) {
+        const obj = physicsImage.apply(this, args as any);
+        addedToScene(DebugScene, obj);
+        return obj;
+    }
+
+    const physicsExisting = scene.physics.add.existing;
+    // @ts-ignore
+    scene.physics.add.existing = function (...args: any[]) {
+        const obj = physicsExisting.apply(this, args as any);
+        addedToScene(DebugScene, obj);
+        return obj;
+    }
 }

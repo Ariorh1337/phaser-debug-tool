@@ -20,7 +20,7 @@ export function onDestroy(obj: any, folder: any, options: any) {
             }
 
             if (this.parent === obj.parentContainer) return;
-            if (!obj.parentContainer._pane) return;
+            if (!obj.parentContainer?._pane) return;
 
             (this as any)._pane.movePaneTo(obj.parentContainer._paneChild);
         },
@@ -28,7 +28,7 @@ export function onDestroy(obj: any, folder: any, options: any) {
     func.update = func.update.bind(func);
 
     obj.scene.events.on("update", func.update);
-    obj.once("destroy", () => {
+    obj.once && obj.once("destroy", () => {
         obj.scene.events.off("update", func.update);
         folder.dispose();
     });
