@@ -1,15 +1,16 @@
-import createSceneFolder from "./Scene";
-import * as Tweakpane from "./tweakpane";
+import addScene from "../elements/Scene";
+import * as Tweakpane from "../tweakpane";
 
-export default function getGame() {
+export default function overwriteGame() {
     class Game extends Phaser.Game {
-        static DebugToolInterval: NodeJS.Timer | undefined;
-
-        constructor(config: Phaser.Types.Core.GameConfig) {
-            const callbacks = config.callbacks || {};
-            const postBoot = callbacks.postBoot || (() => {});
-
-            callbacks.postBoot = (game: Phaser.Game) => {
+        constructor(GameConfig?: Phaser.Types.Core.GameConfig) {
+            GameConfig ||= {};
+            GameConfig.callbacks ||= {};
+            GameConfig.callbacks.postBoot ||= () => {};
+    
+            const postBoot = GameConfig.callbacks.postBoot;
+    
+            GameConfig.callbacks.postBoot = (game: Phaser.Game) => {
                 console.log("Phaser debug is attached");
 
                 const pane = new Tweakpane.Pane() as any;
@@ -30,20 +31,18 @@ export default function getGame() {
                     label: "FPS",
                 });
 
-                game.scene.scenes.forEach((scene) => {
-                    createSceneFolder(folder, scene);
+                game.scene.scenes.forEach((scene, i) => {
+                    addScene(folder, scene);
                 });
 
                 folder.addButton({ title: "Declare as: window.game" }).on("click", () => {
-                    (window as any).game = game;
+                    window.game = game;
                 });
-
+    
                 postBoot(game);
             };
-
-            config.callbacks = callbacks;
-
-            super(config);
+    
+            super(GameConfig);
         }
     }
 
