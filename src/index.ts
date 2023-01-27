@@ -24,6 +24,3 @@ Object.defineProperty(window, "Phaser", {
         return window._Phaser;
     }
 }); 
-
-
-//Phaser.VERSION

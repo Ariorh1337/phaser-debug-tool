@@ -31,9 +31,21 @@ export default function overwriteGame() {
                     label: "FPS",
                 });
 
-                game.scene.scenes.forEach((scene, i) => {
-                    addScene(folder, scene);
+                const scenesFolder = folder.addFolder({
+                    title: `Scenes`,
+                    expanded: true,
                 });
+
+                game.scene.scenes.forEach((scene, i) => {
+                    addScene(scenesFolder, scene);
+                });
+
+                const method = game.scene.add;
+                game.scene.add = function (key: string, scene: Phaser.Scene, autoStart: boolean) {
+                    const obj = method.call(game.scene, key, scene, autoStart);
+                    addScene(scenesFolder, obj);
+                    return obj;
+                }
 
                 folder.addButton({ title: "Declare as: window.game" }).on("click", () => {
                     window.game = game;

@@ -4,7 +4,7 @@ import addGameObject from "./GameObject";
 
 export default function addScene(pane: any, scene: Phaser.Scene) {
     const folder = pane.addFolder({
-        title: `Scene “${scene.scene.key}”`,
+        title: `Scene "${scene.scene.key}"`,
         expanded: false,
     });
 
