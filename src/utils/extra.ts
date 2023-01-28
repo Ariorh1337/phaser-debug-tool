@@ -14,7 +14,7 @@ export function addedToScene(folder: any, gameObject: any) {
 export function oldAddedToScene(folder: any, scene: Phaser.Scene) {
     Object.keys(Object.getPrototypeOf(scene.add)).forEach(
         (methodName: string) => {
-            if (["boot", "start", "shutdown", "destroy"].includes(methodName)) return;
+            if (["boot", "start", "shutdown", "destroy", "tween"].includes(methodName)) return;
 
             const method = (scene.add as any)[methodName];
             (scene.add as any)[methodName] = function (...args: any[]) {
