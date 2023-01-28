@@ -14,6 +14,7 @@ import defineSize from "../props/size";
 import defineText from "../props/text";
 import defineTexture from "../props/texture";
 import defineVisible from "../props/visible";
+import { hasProp } from "../utils/extra";
 
 export default function addBitmapText(
     pane: any,
@@ -24,71 +25,93 @@ export default function addBitmapText(
     (obj as any)._pane = folder;
 
     defineName(folder, obj);
-    defineInput(folder, obj);
-    defineActive(folder, obj);
-    defineVisible(folder, obj);
-    definePosition(folder, obj);
-    defineSize(folder, obj);
-    defineOrigin(folder, obj);
-    defineScale(folder, obj);
-    defineAngle(folder, obj);
-    defineRotation(folder, obj);
-    defineText(folder, obj);
-    defineAlpha(folder, obj);
 
-    folder.addInput(obj, "fontSize", { step: 1 });
-    folder.addInput(obj, "letterSpacing", { step: 1 });
+    const create = () => {
+        defineInput(folder, obj);
+        defineActive(folder, obj);
+        defineVisible(folder, obj);
+        definePosition(folder, obj);
+        defineSize(folder, obj);
+        defineOrigin(folder, obj);
+        defineScale(folder, obj);
+        defineAngle(folder, obj);
+        defineRotation(folder, obj);
+        defineText(folder, obj);
+        defineAlpha(folder, obj);
 
-    if (obj.dropShadowX && obj.dropShadowY) {
-        const dropShadowProxy = {
-            vector2: {
-                get x() {
-                    return obj.dropShadowX || 0;
-                },
-                set x(value) {
-                    obj.dropShadowX = value;
-                },
-                get y() {
-                    return obj.dropShadowY || 0;
-                },
-                set y(value) {
-                    obj.dropShadowY = value;
-                },
-            },
-        };
-        folder.addInput(dropShadowProxy, "vector2", {
-            label: "dropShadow",
-            x: { step: 1 },
-            y: { step: 1 },
-        });
-    }
+        folder.addInput(obj, "fontSize", { step: 1 });
+        folder.addInput(obj, "letterSpacing", { step: 1 });
 
-    if (obj.dropShadowColor) {
-        folder.addInput(obj, "dropShadowColor", { view: "color" });
-    }
+        defineDropShadow(folder, obj);
+        defineDropShadowColor(folder, obj);
+        defineDropShadowAlpha(folder, obj);
+        defineAlign(folder, obj);
+        
+        defineBlendMode(folder, obj);
+        defineTexture(folder, obj);
 
-    if (obj.dropShadowAlpha) {
-        folder.addInput(obj, "dropShadowAlpha", { min: 0, max: 1, step: 0.01 });
-    }
+        defineDestroy(folder, obj);
+        defineDeclare(folder, obj);
 
-    if ((obj as any)._align) {
-        folder.addInput(obj, "_align", {
-            label: "align",
-            options: [
-                { text: "left", value: 0 },
-                { text: "center", value: 1 },
-                { text: "right", value: 2 },
-            ],
-        });
-    }
-    
-    defineBlendMode(folder, obj);
-    defineTexture(folder, obj);
+        folder.controller_.off("open", create);
+    };
 
-    defineDestroy(folder, obj);
-    defineDeclare(folder, obj);
+    folder.controller_.on("open", create);
 
     onDestroy(obj, folder, options);
 
     return folder;
+}
+
+function defineDropShadow(folder: any, obj: any) {
+    if (!hasProp(obj, "dropShadowX")) return;
+    if (!hasProp(obj, "dropShadowY")) return;
+
+    const dropShadowProxy = {
+        vector2: {
+            get x() {
+                return obj.dropShadowX || 0;
+            },
+            set x(value) {
+                obj.dropShadowX = value;
+            },
+            get y() {
+                return obj.dropShadowY || 0;
+            },
+            set y(value) {
+                obj.dropShadowY = value;
+            },
+        },
+    };
+
+    folder.addInput(dropShadowProxy, "vector2", {
+        label: "dropShadow",
+        x: { step: 1 },
+        y: { step: 1 },
+    });
+}
+
+function defineDropShadowColor(folder: any, obj: any) {
+    if (!hasProp(obj, "dropShadowColor")) return;
+
+    folder.addInput(obj, "dropShadowColor", { view: "color" });
+}
+
+function defineDropShadowAlpha(folder: any, obj: any) {
+    if (!hasProp(obj, "dropShadowAlpha")) return;
+
+    folder.addInput(obj, "dropShadowAlpha", { min: 0, max: 1, step: 0.01 });
+}
+
+function defineAlign(folder: any, obj: any) {
+    if (!hasProp(obj, "_align")) return;
+
+    folder.addInput(obj, "_align", {
+        label: "align",
+        options: [
+            { text: "left", value: 0 },
+            { text: "center", value: 1 },
+            { text: "right", value: 2 },
+        ],
+    });
 }

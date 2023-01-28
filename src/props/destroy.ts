@@ -21,6 +21,7 @@ export function onDestroy(obj: any, folder: any, options: any) {
 
             if (this.parent === obj.parentContainer) return;
             if (!obj.parentContainer?._pane) return;
+            if (!(this as any)._pane) return;
 
             (this as any)._pane.movePaneTo(obj.parentContainer._paneChild);
         },

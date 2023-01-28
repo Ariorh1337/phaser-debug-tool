@@ -13,82 +13,67 @@ import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineVisible from "../props/visible";
 import { hasProp } from "../utils/extra";
-import addGameObject from "./GameObject";
+import addSpineContainer from "./SpineContainer";
 
 export default function addSpine(
     pane: any,
     obj: any,
     options = { title: "", expanded: false }
 ) {
+    if (obj.list) {
+        return addSpineContainer(pane, obj, options);
+    }
+
     const folder = pane.addFolder(options);
     (obj as any)._pane = folder;
 
-    if (obj.list) obj.type = "SpineContainer";
-
     defineName(folder, obj);
-    defineVisible(folder, obj);
 
-    const settings = (() => {
-        if (obj.type === "SpineContainer") {
-            return folder.addFolder({ title: "Settings", expanded: false });
-        }
+    const create = () => {
+        defineVisible(folder, obj);
 
-        return folder;
-    })();
+        defineInput(folder, obj);
+        defineActive(folder, obj);
 
-    defineInput(settings, obj);
-    defineActive(settings, obj);
+        definePosition(folder, obj);
+        defineSize(folder, obj);
+        defineOrigin(folder, obj);
+        defineAlpha(folder, obj);
+        defineAngle(folder, obj);
+        defineRotation(folder, obj);
+        defineScale(folder, obj);
+        defineDebug(folder, obj);
+        defineTimeScale(folder, obj);
+        defineSkeleton(folder, obj);
 
-    definePosition(settings, obj);
-    defineSize(settings, obj);
-    defineOrigin(settings, obj);
-    defineAlpha(settings, obj);
-    defineAngle(settings, obj);
-    defineRotation(settings, obj);
-    defineScale(settings, obj);
-    defineDebug(settings, obj);
-    defineTimeScale(settings, obj);
-    defineSkeleton(settings, obj);
+        defineBlendMode(folder, obj);
 
-    defineBlendMode(settings, obj);
+        defineDestroy(folder, obj);
+        defineDeclare(folder, obj);
 
-    if (obj.list) {
-        const children = folder.addFolder({
-            title: "Children",
-            expanded: false,
-        });
+        folder.controller_.off("open", create);
+    };
 
-        (obj as any)._paneChild = children;
-
-        obj.list.forEach((child: any) => {
-            if (child._pane) {
-                return child._pane.movePaneTo(children);
-            }
-            addGameObject(children, child);
-        });
-    }
-
-    defineDestroy(folder, obj);
-    defineDeclare(folder, obj);
+    folder.controller_.on("open", create);
 
     onDestroy(obj, folder, options);
 
     return folder;
 }
 
-function defineDebug(folder: any, obj: any) {
+export function defineDebug(folder: any, obj: any) {
     if (!hasProp(obj, "drawDebug")) return;
 
     folder.addInput(obj, "drawDebug");
 }
 
-function defineTimeScale(folder: any, obj: any) {
+export function defineTimeScale(folder: any, obj: any) {
     if (!hasProp(obj, "timeScale")) return;
 
     folder.addInput(obj, "timeScale", { min: 0, max: 10, step: 0.01 });
 }
 
-function defineSkeleton(folder: any, obj: any) {
+export function defineSkeleton(folder: any, obj: any) {
     if (!hasProp(obj, "skeleton")) return;
 
     const list1Opt = () =>
@@ -129,7 +114,7 @@ function defineSkeleton(folder: any, obj: any) {
     checkAnimations(saved.list2, obj);
 }
 
-function whatIsMySkeleton(obj: any) {
+export function whatIsMySkeleton(obj: any) {
     const hash = obj.skeletonData.hash;
     const entries = obj.scene.spine.json.entries;
     const search = (a: any) => hash === a.skeleton?.hash;
@@ -138,7 +123,7 @@ function whatIsMySkeleton(obj: any) {
     return key;
 }
 
-function checkAnimations(folder: any, obj: any) {
+export function checkAnimations(folder: any, obj: any) {
     folder.children.forEach((a: any) => a.dispose());
 
     obj.skeletonData.animations.map((a: any) => {

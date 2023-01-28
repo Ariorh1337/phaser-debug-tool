@@ -1,6 +1,5 @@
 import { addedToScene, oldAddedToScene } from "../utils/extra";
 import addCamera from "./Camera";
-import addGameObject from "./GameObject";
 
 export default function addScene(pane: any, scene: Phaser.Scene) {
     const folder = pane.addFolder({
@@ -83,20 +82,9 @@ function addChildren(folder: any, scene: Phaser.Scene) {
         expanded: false,
     });
 
-    const DebugScene = new Map();
-
-    oldAddedToScene(scene, DebugScene);
+    oldAddedToScene(childrenFolder, scene);
 
     scene.events.on("addedtoscene", (gameObject: any) => {
-        addedToScene(DebugScene, gameObject);
-    });
-
-    scene.events.once("create", function () {
-        scene.events.once("update", function () {
-            DebugScene.forEach((gameObject: any) => {
-                if (!gameObject.scene) return;
-                addGameObject(childrenFolder, gameObject)
-            });
-        });
+        addedToScene(childrenFolder, gameObject);
     });
 }

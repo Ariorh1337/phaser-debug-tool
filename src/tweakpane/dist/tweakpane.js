@@ -1606,16 +1606,33 @@
 
         onTitleClick_ = () => {
             this.foldable.set('expanded', !this.foldable.get('expanded'));
+
+            const status = this.foldable.get('expanded') ? 'open' : 'close';
+            this.emit(status);
         }
 
         open() {
             if (this.foldable.get('expanded')) return;
             this.foldable.set('expanded', true);
+            this.emit('open');
         }
 
         close() {
             if (!this.foldable.get('expanded')) return;
             this.foldable.set('expanded', false);
+            this.emit('close');
+        }
+
+        on(...args) {
+            return this.blade.emitter.on(...args);
+        }
+
+        off(...args) {
+            return this.blade.emitter.off(...args);
+        }
+
+        emit(...args) {
+            return this.blade.emitter.emit(...args);
         }
     }
 

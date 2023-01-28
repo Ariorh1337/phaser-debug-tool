@@ -23,26 +23,33 @@ export default function addSprite(
     (obj as any)._pane = folder;
 
     defineName(folder, obj);
-    defineInput(folder, obj);
-    defineActive(folder, obj);
-    defineVisible(folder, obj);
 
-    definePosition(folder, obj);
-    defineSize(folder, obj);
-    defineOrigin(folder, obj);
-    defineAlpha(folder, obj);
-    defineAngle(folder, obj);
-    defineRotation(folder, obj);
-    defineScale(folder, obj);
-    defineCrop(folder, obj);
-    defineTexture(folder, obj);
-    
+    const create = () => {
+        defineInput(folder, obj);
+        defineActive(folder, obj);
+        defineVisible(folder, obj);
 
-    const anims = folder.addFolder({ title: "Animations", expanded: false });
-    checkAnimations(anims, obj);
+        definePosition(folder, obj);
+        defineSize(folder, obj);
+        defineOrigin(folder, obj);
+        defineAlpha(folder, obj);
+        defineAngle(folder, obj);
+        defineRotation(folder, obj);
+        defineScale(folder, obj);
+        defineCrop(folder, obj);
+        defineTexture(folder, obj);
+        
 
-    defineDestroy(folder, obj);
-    defineDeclare(folder, obj);
+        const anims = folder.addFolder({ title: "Animations", expanded: false });
+        checkAnimations(anims, obj);
+
+        defineDestroy(folder, obj);
+        defineDeclare(folder, obj);
+
+        folder.controller_.off("open", create);
+    };
+
+    folder.controller_.on("open", create);
 
     onDestroy(obj, folder, options);
 
