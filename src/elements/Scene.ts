@@ -1,4 +1,4 @@
-import { addedToScene, oldAddedToScene } from "../utils/extra";
+import { addedToScene, hasProp, oldAddedToScene } from "../utils/extra";
 import addCamera from "./Camera";
 
 export default function addScene(pane: any, scene: Phaser.Scene) {
@@ -86,5 +86,19 @@ function addChildren(folder: any, scene: Phaser.Scene) {
 
     scene.events.on("addedtoscene", (gameObject: any) => {
         addedToScene(childrenFolder, gameObject);
+    });
+
+    scene.events.on("shutdown", () => {
+        childrenFolder.children.forEach((a: any) => a.dispose());
+    });
+
+    scene.events.on("create", () => {
+        const list = scene.children.list.filter(gameobj => {
+            return (!hasProp(gameobj, "parentContainer"));
+        });
+
+        list.forEach((gameobj: any) => {
+            addedToScene(childrenFolder, gameobj);
+        });
     });
 }

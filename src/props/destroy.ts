@@ -1,3 +1,4 @@
+import { gameObjList } from "../utils/globals";
 
 export default function defineDestroy(folder: any, obj: any) {
     folder.addButton({ title: "Destroy" }).on("click", () => {
@@ -31,6 +32,7 @@ export function onDestroy(obj: any, folder: any, options: any) {
     obj.scene.events.on("update", func.update);
     obj.once && obj.once("destroy", () => {
         obj.scene.events.off("update", func.update);
+        gameObjList.remove(obj.DebugID);
         folder.dispose();
     });
 }
