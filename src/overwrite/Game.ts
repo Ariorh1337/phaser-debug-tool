@@ -56,6 +56,10 @@ export default function overwriteGame() {
     
             super(GameConfig);
         }
+
+        static call(context: any, GameConfig?: Phaser.Types.Core.GameConfig) {
+            return new Game(GameConfig);
+        }
     }
 
     return Game;
