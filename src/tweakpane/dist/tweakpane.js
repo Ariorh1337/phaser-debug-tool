@@ -1605,22 +1605,26 @@
         }
 
         onTitleClick_ = () => {
-            this.foldable.set('expanded', !this.foldable.get('expanded'));
-
-            const status = this.foldable.get('expanded') ? 'open' : 'close';
-            this.emit(status);
+            this.foldable.set('expanded', !this.expanded());
+            this.emit(this.expanded() ? 'open' : 'close');
         }
 
         open() {
-            if (this.foldable.get('expanded')) return;
+            if (this.expanded()) return;
+
             this.foldable.set('expanded', true);
             this.emit('open');
         }
 
         close() {
-            if (!this.foldable.get('expanded')) return;
+            if (!this.expanded()) return;
+
             this.foldable.set('expanded', false);
             this.emit('close');
+        }
+
+        expanded() {
+            return this.foldable.get('expanded');
         }
 
         on(...args) {

@@ -14,15 +14,13 @@ export default function overwriteGame() {
                 console.log("Phaser debug is attached");
 
                 const pane = new Tweakpane.Pane() as any;
-                pane.containerElem_.style.width = "auto";
-                pane.containerElem_.style.minWidth = "fit-content";
-                pane.containerElem_.style.overflow = "hidden auto";
-                pane.containerElem_.style.maxHeight = `${window.innerHeight - 20}px`;
 
                 const folder = pane.addFolder({
                     title: `Debug`,
                     expanded: false,
                 });
+
+                applyCustomStyleToPane(pane);
 
                 folder.addMonitor(game.loop, "actualFps", {
                     view: "graph",
@@ -63,4 +61,55 @@ export default function overwriteGame() {
     }
 
     return Game;
+}
+
+function applyCustomStyleToPane(pane: any) {
+    const element = pane.containerElem_;
+
+    element.style.width = "auto";
+    element.style.minWidth = "fit-content";
+    element.style.overflow = "hidden auto";
+    element.style.maxHeight = `${window.innerHeight - 20}px`;
+    element.style.resize = "vertical";
+
+    let offsetX = 0;
+    let offsetY = 0;
+    let movePane = false;
+    let moveStart = new Date().getTime();
+    let movedOnce = false;
+
+    element.addEventListener("pointerdown", (event: any) => {
+        if (event.target.innerHTML !== 'Debug') return;
+
+        const { x, y } = event;
+        const { top, left } = element.getBoundingClientRect();
+
+        offsetX = left - x;
+        offsetY = top - y;
+        movePane = true;
+        moveStart = new Date().getTime() + 200;
+    });
+
+    document.body.addEventListener("pointermove", (event: any) => {
+        if (!movePane) return;
+        if (moveStart > new Date().getTime()) return;
+
+        movedOnce = true;
+
+        const { x, y } = event;
+        element.style.top = `${y + offsetY}px`;
+        element.style.left = `${x + offsetX}px`;
+        element.style.right = "auto";
+    });
+
+    document.body.addEventListener("pointerup", (event: any) => {
+        if (!movePane) return;
+
+        movePane = false;
+
+        if (movedOnce) {
+            movedOnce = false;
+            pane.children[0].controller_.onTitleClick_();
+        }
+    });
 }
