@@ -66,11 +66,33 @@ export default function overwriteGame() {
 function applyCustomStyleToPane(pane: any) {
     const element = pane.containerElem_;
 
-    element.style.width = "auto";
-    element.style.minWidth = "fit-content";
-    element.style.overflow = "hidden auto";
-    element.style.maxHeight = `${window.innerHeight - 20}px`;
-    element.style.resize = "vertical";
+    element.setAttribute("id", "tweenpane_phaser_debug");
+
+    const style = document.createElement("style");
+    document.head.append(style);
+    style.innerHTML = `
+    #tweenpane_phaser_debug {
+        width: auto;
+        min-width: max-content;
+        overflow: hidden auto;
+        max-height: ${window.innerHeight - 20}px;
+        resize: vertical;
+    }
+
+    #tweenpane_phaser_debug::-webkit-scrollbar {
+        width: 0.5em;
+    }
+
+    #tweenpane_phaser_debug::-webkit-scrollbar-track {
+        background: #37383d;
+        border-radius: 7px;
+    }
+
+    #tweenpane_phaser_debug::-webkit-scrollbar-thumb {
+        background: #202125;
+        border-radius: 7px;
+    }
+    `;
 
     let offsetX = 0;
     let offsetY = 0;
@@ -97,8 +119,21 @@ function applyCustomStyleToPane(pane: any) {
         movedOnce = true;
 
         const { x, y } = event;
-        element.style.top = `${y + offsetY}px`;
-        element.style.left = `${x + offsetX}px`;
+        const [ targetX, targetY ] = [x + offsetX, y + offsetY];
+
+        if (targetY > 0 && targetY < innerHeight - 20) {
+            element.style.top = `${targetY}px`;
+
+            const { top, height } = element.getBoundingClientRect();
+            if (top + height > innerHeight) {
+                element.style.height = `${innerHeight - top - 20}px`;
+            }
+        }
+
+        if (targetX > 0) {
+            element.style.left = `${targetX}px`;
+        }
+
         element.style.right = "auto";
     });
 
