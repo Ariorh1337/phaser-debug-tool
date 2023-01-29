@@ -48,5 +48,12 @@ Firefox: `npm run build-firefox`
 
 ## TODO
 
-1. Fix perfomance issue
-2. Add search into scenes childer
+1. Fix firefox perfomance issue
+2. Add game object search
+3. Add parent container change
+4. Add mesh suppport
+5. Add tweens support
+6. Add button to export game obj data
+7. Add section to create new game objects
+8. Add section to create new tweens
+9. Add time scale into scene
