@@ -20,9 +20,23 @@ export default function defineName(folder: any, obj: any) {
 }
 
 export function parseName(obj: any) {
-    if (hasProp(obj, "name") && hasProp(obj, "type")) {
-        return `(${obj.name}) ${obj.type}`;
+    let [name, type] = ["", ""];
+
+    if (hasProp(obj, "type")) {
+        type = obj.type;
+    } else {
+        type = obj.constructor.name;
     }
 
-    return obj.name || obj.type || obj.constructor.name || "unknown";
+    if (hasProp(obj, "name") && obj.name !== "") {
+        name = obj.name;
+    } else {
+        name = obj.constructor.name;
+    }
+
+    if (name === type) {
+        return `() ${name}`;
+    } else {
+        return `(${name}) ${type}`;
+    }
 }
