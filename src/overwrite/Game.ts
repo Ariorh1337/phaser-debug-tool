@@ -11,7 +11,7 @@ export default function overwriteGame() {
             const postBoot = GameConfig.callbacks.postBoot;
     
             GameConfig.callbacks.postBoot = (game: Phaser.Game) => {
-                console.log("Phaser debug is attached");
+                console.log("Phaser debug is attached 🔍");
 
                 const pane = new Tweakpane.Pane() as any;
 
