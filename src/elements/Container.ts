@@ -44,40 +44,67 @@ export default function addContainer(
     const children = folder.addFolder({ title: "Children", expanded: false });
     (obj as any)._paneChild = children;
 
-    const addMMethod = obj.add;
+    defineAdd(children, obj);
+    defineAddAt(children, obj);
 
-    (obj as any).add = function (...args: any[]) {
-        const obj = addMMethod.apply(this, args as any);
-
-        if (Array.isArray(args[0])) {
-            args[0].forEach((child: any) => {
-                if (child._pane) {
-                    return child._pane.movePaneTo(children);
-                }
-
-                addedToScene(children, child);
-            });
-        } else {
-            if (args[0]._pane) {
-                return args[0]._pane.movePaneTo(children);
-            }
-
-            addedToScene(children, args[0]);
-        }
-
-        return obj;
-    };
-
-    obj.list.forEach((child: any) => {
-        if (child._pane) {
-            return child._pane.movePaneTo(children);
-        }
-
-        addedToScene(children, child);
-    });
+    obj.list.forEach((child: any) => addChild(children, child));
 
     defineDestroy(folder, obj);
     defineDeclare(folder, obj);
 
     onDestroy(obj, folder, options);
+}
+
+/**
+ * Overwrite the add method to add the child to the container
+ * @param folder 
+ * @param obj 
+ */
+function defineAddAt(folder: any, obj: any) {
+    const addMethod = obj.add;
+    (obj as any).addAt = function (...args: any[]) {
+        const obj = addMethod.apply(this, args as any);
+
+        if (!Array.isArray(args[0])) {
+            args[0] = [args[0]];
+        }
+
+        args[0].forEach((child: any) => addChild(folder, child));
+
+        return obj;
+    };
+}
+
+/**
+ * Overwrite the add method to add the child to the container
+ * @param folder 
+ * @param obj 
+ */
+function defineAdd(folder: any, obj: any) {
+    const addMethod = obj.add;
+    (obj as any).add = function (...args: any[]) {
+        const obj = addMethod.apply(this, args as any);
+
+        if (!Array.isArray(args[0])) {
+            args[0] = [args[0]];
+        }
+
+        args[0].forEach((child: any) => addChild(folder, child));
+
+        return obj;
+    };
+}
+
+/**
+ * Function to add a child to the folder
+ * @param folder 
+ * @param obj 
+ * @returns 
+ */
+function addChild(folder: any, obj: any) {
+    if (obj._pane) {
+        return obj._pane.movePaneTo(folder);
+    }
+
+    addedToScene(folder, obj);
 }
