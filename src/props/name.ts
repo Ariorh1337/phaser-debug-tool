@@ -24,6 +24,15 @@ export default function defineName(folder: any, obj: any) {
         const input = folder.addInput(proxy, "name");
         folder.on("refresh", () => input.refresh());
     }
+
+    if (hasProp(obj, "setName")) {
+        const setNameMethod = obj.setName;
+        obj.setName = function (value: string) {
+            const result = setNameMethod.call(obj, value);
+            folder.title = parseName(obj);
+            return result;
+        }
+    }
 }
 
 export function parseName(obj: any) {
