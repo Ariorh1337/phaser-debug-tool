@@ -1,3 +1,4 @@
+import { defineAdd, defineAddAt } from "../props/add";
 import { addedToScene, hasProp, oldAddedToScene } from "../utils/extra";
 import addCamera from "./Camera";
 
@@ -35,6 +36,13 @@ export default function addScene(pane: any, scene: Phaser.Scene) {
     if (true) { // Childrens
         addChildren(folder, scene);
     }
+
+    folder.addButton({ title: "Add window.gameobj as child" }).on("click", () => {
+        const element = (window as any).gameobj;
+        if (!element) return;
+
+        scene.children.add(element);
+    });
 
     folder.addButton({ title: "Declare as: window.scene" }).on("click", () => {
         window.scene = scene;
@@ -87,6 +95,9 @@ function addChildren(folder: any, scene: Phaser.Scene) {
     scene.events.on("addedtoscene", (gameObject: any) => {
         addedToScene(childrenFolder, gameObject);
     });
+
+    defineAdd(childrenFolder, scene.children);
+    defineAddAt(childrenFolder, scene.children);
 
     scene.events.on("shutdown", () => {
         childrenFolder.children.forEach((a: any) => a.dispose());

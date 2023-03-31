@@ -1,4 +1,5 @@
 import defineActive from "../props/active";
+import { addChild, defineAdd, defineAddAt, defineAddChildBtn } from "../props/add";
 import defineAlpha from "../props/alpha";
 import defineAngle from "../props/angle";
 import defineBlendMode from "../props/blendMode";
@@ -10,7 +11,6 @@ import definePosition from "../props/position";
 import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineVisible from "../props/visible";
-import { addedToScene } from "../utils/extra";
 
 export default function addContainer(
     pane: any,
@@ -50,61 +50,10 @@ export default function addContainer(
     obj.list.forEach((child: any) => addChild(children, child));
 
     defineDestroy(folder, obj);
+    defineAddChildBtn(folder, obj);
     defineDeclare(folder, obj);
 
     onDestroy(obj, folder, options);
-}
 
-/**
- * Overwrite the add method to add the child to the container
- * @param folder 
- * @param obj 
- */
-function defineAddAt(folder: any, obj: any) {
-    const addMethod = obj.add;
-    (obj as any).addAt = function (...args: any[]) {
-        const obj = addMethod.apply(this, args as any);
-
-        if (!Array.isArray(args[0])) {
-            args[0] = [args[0]];
-        }
-
-        args[0].forEach((child: any) => addChild(folder, child));
-
-        return obj;
-    };
-}
-
-/**
- * Overwrite the add method to add the child to the container
- * @param folder 
- * @param obj 
- */
-function defineAdd(folder: any, obj: any) {
-    const addMethod = obj.add;
-    (obj as any).add = function (...args: any[]) {
-        const obj = addMethod.apply(this, args as any);
-
-        if (!Array.isArray(args[0])) {
-            args[0] = [args[0]];
-        }
-
-        args[0].forEach((child: any) => addChild(folder, child));
-
-        return obj;
-    };
-}
-
-/**
- * Function to add a child to the folder
- * @param folder 
- * @param obj 
- * @returns 
- */
-function addChild(folder: any, obj: any) {
-    if (obj._pane) {
-        return obj._pane.movePaneTo(folder);
-    }
-
-    addedToScene(folder, obj);
+    return folder;
 }
