@@ -1,6 +1,9 @@
 import defineActive from "../props/active";
+import { addChild, defineAdd, defineAddAt, defineAddChildBtn } from "../props/add";
 import defineAlpha from "../props/alpha";
 import defineAngle from "../props/angle";
+import defineBlendMode from "../props/blendMode";
+import defineCrop from "../props/crop";
 import defineDeclare from "../props/declare";
 import defineDestroy, { onDestroy } from "../props/destroy";
 import defineInput from "../props/input";
@@ -10,6 +13,7 @@ import definePosition from "../props/position";
 import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineSize from "../props/size";
+import defineTexture from "../props/texture";
 import defineVisible from "../props/visible";
 import addArc from "./Arc";
 import addBitmapText from "./BitmapText";
@@ -64,24 +68,45 @@ export default function addGameObject(
 
     defineName(folder, obj);
 
+    const settings = (() => {
+        if (!obj.list) return folder;
+
+        return folder.addFolder({ title: "Settings", expanded: false });
+    })();
+
     const create = () => {
-        defineInput(folder, obj);
-        defineActive(folder, obj);
-        defineVisible(folder, obj);
-        definePosition(folder, obj);
-        defineSize(folder, obj);
-        defineOrigin(folder, obj);
-        defineAlpha(folder, obj);
-        defineAngle(folder, obj);
-        defineRotation(folder, obj);
-        defineScale(folder, obj);
-        defineDestroy(folder, obj);
-        defineDeclare(folder, obj);
+        defineInput(settings, obj);
+        defineActive(settings, obj);
+        defineVisible(settings, obj);
+        definePosition(settings, obj);
+        defineSize(settings, obj);
+        defineOrigin(settings, obj);
+        defineAlpha(settings, obj);
+        defineAngle(settings, obj);
+        defineRotation(settings, obj);
+        defineScale(settings, obj);
+        defineCrop(settings, obj);
+        defineTexture(settings, obj);
+        defineBlendMode(settings, obj);
 
         folder.controller_.off("open", create);
     };
 
     folder.controller_.on("open", create);
+
+    if (obj.list) {
+        const children = folder.addFolder({ title: "Children", expanded: false });
+        (obj as any)._paneChild = children;
+
+        defineAdd(children, obj);
+        defineAddAt(children, obj);
+
+        obj.list.forEach((child: any) => addChild(children, child));
+    }
+
+    defineDestroy(folder, obj);
+    if (obj.list) defineAddChildBtn(folder, obj);
+    defineDeclare(folder, obj);
 
     onDestroy(obj, folder, options);
 

@@ -1,4 +1,3 @@
-import { defineAdd, defineAddAt } from "../props/add";
 import { addedToScene, hasProp, oldAddedToScene } from "../utils/extra";
 import addCamera from "./Camera";
 
@@ -95,9 +94,6 @@ function addChildren(folder: any, scene: Phaser.Scene) {
     scene.events.on("addedtoscene", (gameObject: any) => {
         addedToScene(childrenFolder, gameObject);
     });
-
-    defineAdd(childrenFolder, scene.children);
-    defineAddAt(childrenFolder, scene.children);
 
     scene.events.on("shutdown", () => {
         childrenFolder.children.forEach((a: any) => a.dispose());
