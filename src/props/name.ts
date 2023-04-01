@@ -47,7 +47,8 @@ export function parseName(obj: any) {
     if (hasProp(obj, "name") && obj.name !== "") {
         name = obj.name;
     } else {
-        name = obj.constructor.name;
+        const value = obj.constructor.name;
+        name = (value === "initialize") ? "" : value;
     }
 
     if (name === type) {

@@ -14,7 +14,7 @@ export function defineAddAt(folder: any, obj: any) {
             args[0] = [args[0]];
         }
 
-        args[0].forEach((child: any) => addChild(folder, child));
+        args[0].forEach((child: any) => addedToScene(folder, child));
 
         return elm;
     };
@@ -34,7 +34,7 @@ export function defineAdd(folder: any, obj: any) {
             args[0] = [args[0]];
         }
 
-        args[0].forEach((child: any) => addChild(folder, child));
+        args[0].forEach((child: any) => addedToScene(folder, child));
 
         return elm;
     };
@@ -50,18 +50,4 @@ export function defineAddChildBtn(folder: any, obj: any) {
         const element = (window as any).gameobj;
         if (element && element !== obj) obj.add(element);
     });
-}
-
-/**
- * Function to add a child to the folder
- * @param folder 
- * @param obj 
- * @returns 
- */
-export function addChild(folder: any, obj: any) {
-    if (obj._pane) {
-        return obj._pane.movePaneTo(folder);
-    }
-
-    addedToScene(folder, obj);
 }

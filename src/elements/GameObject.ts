@@ -1,5 +1,5 @@
 import defineActive from "../props/active";
-import { addChild, defineAdd, defineAddAt, defineAddChildBtn } from "../props/add";
+import { defineAdd, defineAddAt, defineAddChildBtn } from "../props/add";
 import defineAlpha from "../props/alpha";
 import defineAngle from "../props/angle";
 import defineBlendMode from "../props/blendMode";
@@ -15,6 +15,7 @@ import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineTexture from "../props/texture";
 import defineVisible from "../props/visible";
+import { addedToScene } from "../utils/extra";
 import addArc from "./Arc";
 import addBitmapText from "./BitmapText";
 import addContainer from "./Container";
@@ -89,6 +90,10 @@ export default function addGameObject(
         defineTexture(settings, obj);
         defineBlendMode(settings, obj);
 
+        defineDestroy(folder, obj);
+        if (obj.list) defineAddChildBtn(folder, obj);
+        defineDeclare(folder, obj);
+
         folder.controller_.off("open", create);
     };
 
@@ -101,12 +106,8 @@ export default function addGameObject(
         defineAdd(children, obj);
         defineAddAt(children, obj);
 
-        obj.list.forEach((child: any) => addChild(children, child));
+        obj.list.forEach((child: any) => addedToScene(children, child));
     }
-
-    defineDestroy(folder, obj);
-    if (obj.list) defineAddChildBtn(folder, obj);
-    defineDeclare(folder, obj);
 
     onDestroy(obj, folder, options);
 

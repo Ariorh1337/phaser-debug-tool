@@ -1,5 +1,5 @@
 import defineActive from "../props/active";
-import { addChild, defineAdd, defineAddAt, defineAddChildBtn } from "../props/add";
+import { defineAdd, defineAddAt, defineAddChildBtn } from "../props/add";
 import defineAlpha from "../props/alpha";
 import defineAngle from "../props/angle";
 import defineBlendMode from "../props/blendMode";
@@ -11,6 +11,7 @@ import definePosition from "../props/position";
 import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineVisible from "../props/visible";
+import { addedToScene } from "../utils/extra";
 
 export default function addContainer(
     pane: any,
@@ -47,7 +48,7 @@ export default function addContainer(
     defineAdd(children, obj);
     defineAddAt(children, obj);
 
-    obj.list.forEach((child: any) => addChild(children, child));
+    obj.list.forEach((child: any) => addedToScene(children, child));
 
     defineDestroy(folder, obj);
     defineAddChildBtn(folder, obj);

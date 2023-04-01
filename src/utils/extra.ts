@@ -6,6 +6,11 @@ export function hasProp(obj: any, key: string) {
 }
 
 export function addedToScene(folder: any, gameObject: any) {
+    if (gameObject._pane) {
+        gameObject._pane.movePaneTo(folder);
+        return gameObject;
+    }
+
     gameObjList.add(gameObject);
     addGameObject(folder, gameObject);
     return gameObject;
