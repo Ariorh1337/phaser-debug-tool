@@ -14,15 +14,14 @@ import defineSize from "../props/size";
 import defineText from "../props/text";
 import defineTexture from "../props/texture";
 import defineVisible from "../props/visible";
-import { hasProp } from "../utils/extra";
+import { addGameObjectFolder, hasProp } from "../utils/extra";
 
 export default function addBitmapText(
     pane: any,
     obj: Phaser.GameObjects.BitmapText,
     options = { title: "", expanded: false }
 ) {
-    const folder = pane.addFolder(options);
-    (obj as any)._pane = folder;
+    const folder = addGameObjectFolder(pane, options, obj);
 
     defineName(folder, obj);
 

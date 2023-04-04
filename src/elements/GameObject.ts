@@ -1,5 +1,5 @@
 import defineActive from "../props/active";
-import { defineAdd, defineAddAt, defineAddChildBtn } from "../props/add";
+import { defineAdd, defineAddAt } from "../props/add";
 import defineAlpha from "../props/alpha";
 import defineAngle from "../props/angle";
 import defineBlendMode from "../props/blendMode";
@@ -15,7 +15,7 @@ import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineTexture from "../props/texture";
 import defineVisible from "../props/visible";
-import { addedToScene } from "../utils/extra";
+import { addGameObjectFolder, addedToScene } from "../utils/extra";
 import addArc from "./Arc";
 import addBitmapText from "./BitmapText";
 import addContainer from "./Container";
@@ -64,8 +64,7 @@ export default function addGameObject(
         return addSpine(pane, obj, options);
     }
 
-    const folder = pane.addFolder(options);
-    obj._pane = folder;
+    const folder = addGameObjectFolder(pane, options, obj);
 
     defineName(folder, obj);
 
@@ -91,7 +90,6 @@ export default function addGameObject(
         defineBlendMode(settings, obj);
 
         defineDestroy(folder, obj);
-        if (obj.list) defineAddChildBtn(folder, obj);
         defineDeclare(folder, obj);
 
         folder.controller_.off("open", create);

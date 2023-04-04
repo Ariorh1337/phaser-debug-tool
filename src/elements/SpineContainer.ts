@@ -1,5 +1,5 @@
 import defineActive from "../props/active";
-import { defineAdd, defineAddAt, defineAddChildBtn } from "../props/add";
+import { defineAdd, defineAddAt } from "../props/add";
 import defineAlpha from "../props/alpha";
 import defineAngle from "../props/angle";
 import defineBlendMode from "../props/blendMode";
@@ -13,15 +13,14 @@ import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineVisible from "../props/visible";
-import { addedToScene } from "../utils/extra";
+import { addChildrenFolder, addGameObjectFolder, addedToScene } from "../utils/extra";
 
 export default function addSpineContainer(
     pane: any,
     obj: any,
     options = { title: "", expanded: false }
 ) {
-    const folder = pane.addFolder(options);
-    (obj as any)._pane = folder;
+    const folder = addGameObjectFolder(pane, options, obj);
 
     obj.type = "SpineContainer";
 
@@ -48,12 +47,7 @@ export default function addSpineContainer(
 
     folder.controller_.on("open", create);
 
-    const children = folder.addFolder({
-        title: "Children",
-        expanded: false,
-    });
-
-    (obj as any)._paneChild = children;
+    const children = addChildrenFolder(folder, { title: "Children", expanded: false }, obj);
 
     defineAdd(children, obj);
     defineAddAt(children, obj);
@@ -61,7 +55,6 @@ export default function addSpineContainer(
     obj.list.forEach((child: any) => addedToScene(children, child));
 
     defineDestroy(folder, obj);
-    defineAddChildBtn(folder, obj);
     defineDeclare(folder, obj);
 
     onDestroy(obj, folder, options);

@@ -1,5 +1,6 @@
 import addGameObject from "../elements/GameObject";
 import { gameObjList } from "./globals";
+import { eye_off, eye_on, move } from "./svg";
 
 export function hasProp(obj: any, key: string) {
     return obj[key] !== undefined && obj[key] !== null;
@@ -49,4 +50,83 @@ export function oldAddedToScene(folder: any, scene: Phaser.Scene) {
             return addedToScene(folder, obj);
         }
     }
+}
+
+export function addGameObjectFolder(pane: any, options: any, obj: any) {
+    const folder = pane.addFolder(options);
+    folder.element.id = (obj as any).DebugID;
+    (obj as any)._pane = folder;
+
+    // --- colorful folder
+
+    const rnd = [
+        Phaser.Math.Between(20, 40),
+        Phaser.Math.Between(20, 40),
+        Phaser.Math.Between(20, 40)
+    ];
+
+    folder.element.style.backgroundColor = `rgb(${rnd[0]}, ${rnd[1]}, ${rnd[2]})`;
+
+    // ---
+
+    const drag = document.createElement("div");
+    const place1 = folder.element.querySelector('div[name="place1"]');
+    place1.appendChild(drag);
+
+    drag.innerHTML = move;
+    drag.setAttribute("draggable", "true");
+    drag.addEventListener('dragstart', (e) => {
+        e.dataTransfer?.setData('text/plain', (obj as any).DebugID);
+    });
+
+    // ---
+
+    const visible = document.createElement("div");
+    const place2 = folder.element.querySelector('div[name="place2"]');
+    place2.appendChild(visible);
+
+    visible.innerHTML = obj.visible ? eye_off : eye_on;
+    visible.addEventListener("click", () => {
+        obj.visible = !obj.visible;
+        visible.innerHTML = obj.visible ? eye_off : eye_on;
+    });
+
+    // ---
+
+    const point = folder.element.querySelector('div[name="point"]');
+    point.style.display = "none";
+
+    // ---
+
+    return folder;
+}
+
+export function addChildrenFolder(pane: any, options: any, obj: any) {
+    const folder = pane.addFolder(options);
+    (obj as any)._paneChild = folder;
+
+    // ---
+
+    folder.element.addEventListener("dragover", (e: any) => {
+        e.preventDefault();
+    });
+
+    // ---
+
+    folder.element.addEventListener('drop', (e: any) => {
+        e.preventDefault();
+
+        const draggedElementId = e.dataTransfer.getData('text/plain');
+        if (draggedElementId === (obj as any).DebugID) return;
+
+        try {
+            obj.add(gameObjList.get(draggedElementId));
+        } catch (e) {
+            console.error(e);
+        }
+    });
+
+    // ---
+
+    return folder;
 }

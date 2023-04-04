@@ -15,3 +15,5 @@ export const gameObjList = {
     },
     list: {} as { [key: string]: any },
 };
+
+(window as any).gameObjList = gameObjList;

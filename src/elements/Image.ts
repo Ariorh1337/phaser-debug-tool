@@ -14,14 +14,14 @@ import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineTexture from "../props/texture";
 import defineVisible from "../props/visible";
+import { addGameObjectFolder } from "../utils/extra";
 
 export default function addImage(
     pane: any,
     obj: Phaser.GameObjects.Image,
     options = { title: "", expanded: false }
 ) {
-    const folder = pane.addFolder(options);
-    (obj as any)._pane = folder;
+    const folder = addGameObjectFolder(pane, options, obj);
 
     defineName(folder, obj);
 

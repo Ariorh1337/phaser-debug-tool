@@ -39,15 +39,3 @@ export function defineAdd(folder: any, obj: any) {
         return elm;
     };
 }
-
-/**
- * Function to create button to add window.gameobj as child
- * @param folder 
- * @param obj 
- */
-export function defineAddChildBtn(folder: any, obj: any) {
-    folder.addButton({ title: "Add window.gameobj as child" }).on("click", () => {
-        const element = (window as any).gameobj;
-        if (element && element !== obj) obj.add(element);
-    });
-}

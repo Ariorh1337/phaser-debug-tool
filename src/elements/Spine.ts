@@ -12,7 +12,7 @@ import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineVisible from "../props/visible";
-import { hasProp } from "../utils/extra";
+import { addGameObjectFolder, hasProp } from "../utils/extra";
 import addSpineContainer from "./SpineContainer";
 
 export default function addSpine(
@@ -24,8 +24,7 @@ export default function addSpine(
         return addSpineContainer(pane, obj, options);
     }
 
-    const folder = pane.addFolder(options);
-    (obj as any)._pane = folder;
+    const folder = addGameObjectFolder(pane, options, obj);
 
     defineName(folder, obj);
 

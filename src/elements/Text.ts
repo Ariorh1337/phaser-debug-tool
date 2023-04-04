@@ -14,14 +14,14 @@ import defineSize from "../props/size";
 import defineText from "../props/text";
 import defineTextStyle from "../props/textStyle";
 import defineVisible from "../props/visible";
+import { addGameObjectFolder } from "../utils/extra";
 
 export default function addText(
     pane: any,
     obj: Phaser.GameObjects.Text,
     options = { title: "", expanded: false }
 ) {
-    const folder = pane.addFolder(options);
-    (obj as any)._pane = folder;
+    const folder = addGameObjectFolder(pane, options, obj);
 
     defineName(folder, obj);
 

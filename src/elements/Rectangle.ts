@@ -14,14 +14,14 @@ import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineStroke from "../props/stroke";
 import defineVisible from "../props/visible";
+import { addGameObjectFolder } from "../utils/extra";
 
 export default function addRectangle(
     pane: any,
     obj: Phaser.GameObjects.Rectangle,
     options = { title: "", expanded: false }
 ) {
-    const folder = pane.addFolder(options);
-    (obj as any)._pane = folder;
+    const folder = addGameObjectFolder(pane, options, obj);
 
     defineName(folder, obj);
 
