@@ -114,6 +114,8 @@ export function addChildrenFolder(pane: any, options: any, obj: any) {
     // ---
 
     folder.element.addEventListener('drop', (e: any) => {
+        if (e.target !== folder.controller_.view.titleElement) return;
+
         e.preventDefault();
 
         const draggedElementId = e.dataTransfer.getData('text/plain');

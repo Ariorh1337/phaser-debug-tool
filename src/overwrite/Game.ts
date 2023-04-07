@@ -94,6 +94,12 @@ function applyCustomStyleToPane(pane: any) {
     }
     `;
 
+    const elm = document.querySelector(".tp-rotv > .tp-rotv_c > .tp-fldv > .tp-fldv_c");
+    if (elm) {
+        (elm as HTMLElement).style.resize = "none";
+        (elm as HTMLElement).style.overflowY = 'hidden !important';
+    }
+
     let offsetX = 0;
     let offsetY = 0;
     let movePane = false;

@@ -1,4 +1,5 @@
 import { addedToScene, hasProp, oldAddedToScene } from "../utils/extra";
+import { gameObjList } from "../utils/globals";
 import addCamera from "./Camera";
 
 export default function addScene(pane: any, scene: Phaser.Scene) {
@@ -88,6 +89,25 @@ function addChildren(folder: any, scene: Phaser.Scene) {
         title: "Children",
         expanded: false,
     });
+
+    // ---
+
+    childrenFolder.element.addEventListener("dragover", (e: any) => {
+        e.preventDefault();
+    });
+
+    // ---
+
+    folder.element.addEventListener('drop', (e: any) => {
+        if (e.target !== childrenFolder.controller_.view.titleElement) return;
+
+        e.preventDefault();
+
+        const draggedElementId = e.dataTransfer.getData('text/plain');
+        scene.add.existing(gameObjList.get(draggedElementId));
+    });
+
+    // ---
 
     oldAddedToScene(childrenFolder, scene);
 

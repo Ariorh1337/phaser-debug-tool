@@ -1618,6 +1618,13 @@
                 this.foldable.cleanUpTransition();
             });
             this.view.buttonElement.addEventListener('click', this.onTitleClick_);
+
+            this.on('open', () => {
+                this.view.containerElement.style.height = 'auto';
+            });
+            this.on('close', () => {
+                this.view.containerElement.style.height = '';
+            });
         }
         
         get document() {
@@ -7768,7 +7775,7 @@ function CSS() {
     padding-bottom: 0;
     padding-top: 0;
     position: relative;
-    transition: height .2s ease-in-out, opacity .2s linear, padding .2s ease-in-out
+    transition: opacity .2s linear, padding .2s ease-in-out
 }
 
 .tp-rotv.tp-rotv-cpl:not(.tp-rotv-expanded) .tp-rotv_c,
@@ -7783,7 +7790,7 @@ function CSS() {
     padding-top: var(--cnt-v-p);
     transform: none;
     overflow: visible;
-    transition: height .2s ease-in-out, opacity .2s linear .2s, padding .2s ease-in-out
+    transition: opacity .2s linear .2s, padding .2s ease-in-out
 }
 
 .tp-lstv,
@@ -8258,6 +8265,25 @@ div.tp-fldv_c > div.tp-fldv:first-child {
     display: flex;
     margin-right: 8px;
     align-items: center;
+}
+
+.tp-fldv  > .tp-fldv_c {
+    resize: vertical;
+    overflow: hidden scroll !important;
+}
+
+.tp-fldv  > .tp-fldv_c::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+.tp-fldv  > .tp-fldv_c::-webkit-scrollbar-track {
+    background: #37383d;
+    border-radius: 7px;
+}
+
+.tp-fldv  > .tp-fldv_c::-webkit-scrollbar-thumb {
+    background: #202125;
+    border-radius: 7px;
 }
 
 .tp-fldv_c {
