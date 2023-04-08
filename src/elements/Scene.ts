@@ -37,12 +37,9 @@ export default function addScene(pane: any, scene: Phaser.Scene) {
         addChildren(folder, scene);
     }
 
-    folder.addButton({ title: "Add window.gameobj as child" }).on("click", () => {
-        const element = (window as any).gameobj;
-        if (!element) return;
-
-        scene.children.add(element);
-    });
+    if (true) {
+        addSearch(folder, scene);
+    }
 
     folder.addButton({ title: "Declare as: window.scene" }).on("click", () => {
         window.scene = scene;
@@ -127,5 +124,110 @@ function addChildren(folder: any, scene: Phaser.Scene) {
         list.forEach((gameobj: any) => {
             addedToScene(childrenFolder, gameobj);
         });
+    });
+}
+
+function addSearch(folder: any, scene: Phaser.Scene) {
+    const searchFolder = folder.addFolder({
+        title: "Search",
+        expanded: false,
+    });
+
+    let enabled = false;
+    const btn = searchFolder.addButton({ title: "Click to Seatch" });
+    function updateBtn(enabled: boolean) {
+        const color = enabled ? "#5fa770" : "";
+        const elm = btn.controller_.view.valueElement.firstChild.firstChild;
+        elm.style.backgroundColor = color;
+    }
+
+    const resultFolder = searchFolder.addFolder({
+        title: "Result",
+        expanded: false,
+    });
+
+    let searchResult = [] as any[];
+
+    resultFolder.controller_.on("close", () => {
+        searchResult.forEach((a: any) => a());
+        searchResult = [];
+    });
+
+    btn.on("click", () => {
+        updateBtn(enabled = !enabled);
+
+        if (enabled) {
+            searchResult.forEach((a: any) => a());
+            searchResult = [];
+
+            scene.input.once("pointerdown", (event: any) => {
+                updateBtn(enabled = !enabled);
+                searchResult = addSearchResult(resultFolder, search(event, scene));
+                resultFolder.controller_.open();
+            })
+        } else {
+            scene.input.off("pointerdown", search);
+        }
+    });
+}
+
+function search(event: any, scene: Phaser.Scene) {
+    const { worldX, worldY, camera } = event;
+
+    const inputEnabled = camera?.inputEnabled || true;
+    if (camera) camera.inputEnabled = false;
+
+    const result = Object.values(gameObjList.list).filter(obj => {
+        if (obj.scene !== scene) return false;
+
+        const originX = obj.originX ?? 0.5;
+        const originY = obj.originY ?? 0.5;
+
+        const width = obj.width * obj.scaleX;
+        const height = obj.height * obj.scaleY;
+
+        const { tx, ty } = obj.getWorldTransformMatrix();
+
+        const p = new Phaser.Geom.Rectangle(
+            tx - width * originX,
+            ty - height * originY,
+            width,
+            height
+        );
+
+        return Phaser.Geom.Rectangle.ContainsPoint(p, { x: worldX, y: worldY } as any)
+    });
+
+    setTimeout(() => {
+        if (camera && inputEnabled) camera.inputEnabled = inputEnabled;
+    }, 200);
+
+    return result;
+}
+
+function addSearchResult(folder: any, objs: any): (() => void)[] {
+    return objs.map((obj: any) => {
+        const fakeFolder = folder.addFolder({ title: obj._pane.title, expanded: false });
+
+        fakeFolder.controller_.on("open", () => {
+            fakeFolder.controller_.close();
+
+            const originalParent = obj._pane.parent;
+            const fakeParent = fakeFolder.parent;
+
+            fakeFolder.movePaneTo(originalParent);
+            obj._pane.movePaneTo(fakeParent);
+
+            obj._pane.controller_.open();
+        });
+
+        const originalParent = obj._pane.parent;
+        const fakeParent = fakeFolder.parent;
+
+        return function () {
+            obj._pane.controller_.close();
+            obj._pane.movePaneTo(originalParent);
+            fakeFolder.dispose();
+        };
     });
 }
