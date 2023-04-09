@@ -214,8 +214,13 @@ function addSearchResult(folder: any, objs: any): (() => void)[] {
             const originalParent = obj._pane.parent;
             const fakeParent = fakeFolder.parent;
 
-            fakeFolder.movePaneTo(originalParent);
-            obj._pane.movePaneTo(fakeParent);
+            const temp = document.createElement("div");
+
+            fakeParent.element.lastChild.insertBefore(temp, fakeFolder.element);
+            fakeFolder.movePaneTo(originalParent, obj._pane.element);
+            obj._pane.movePaneTo(fakeParent, temp);
+
+            temp.remove();
 
             obj._pane.controller_.open();
         });

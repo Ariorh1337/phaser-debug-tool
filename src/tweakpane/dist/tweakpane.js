@@ -1079,14 +1079,20 @@
 
             child.parent = this;
 
-            child.movePaneTo = function(parent) {
+            child.movePaneTo = function(parent, elm_before) {
                 var index = child.parent.children.indexOf(child);
                 if (index !== -1) {
                     child.parent.children.splice(index, 1);
                 }
 
                 child.parent = parent;
-                parent.element.lastChild.append(child.element);
+
+                if (elm_before) {
+                    parent.element.lastChild.insertBefore(child.element, elm_before);
+                } else {
+                    parent.element.lastChild.append(child.element);
+                }
+
                 child.parent.children.push(child);
             }
 
