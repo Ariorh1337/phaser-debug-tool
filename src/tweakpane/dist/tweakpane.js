@@ -883,7 +883,7 @@
         }
         add(item, opt_index) {
             if (this.includes(item)) {
-                throw TpError.shouldNeverHappen();
+                // throw TpError.shouldNeverHappen();
             }
             const index = opt_index !== undefined ? opt_index : this.items_.length;
             this.items_.splice(index, 0, item);
@@ -1080,20 +1080,13 @@
             child.parent = this;
 
             child.movePaneTo = function(parent, elm_before) {
-                var index = child.parent.children.indexOf(child);
-                if (index !== -1) {
-                    child.parent.children.splice(index, 1);
-                }
-
-                child.parent = parent;
+                parent.add(child);
 
                 if (elm_before) {
                     parent.element.lastChild.insertBefore(child.element, elm_before);
                 } else {
                     parent.element.lastChild.append(child.element);
                 }
-
-                child.parent.children.push(child);
             }
 
             return child;

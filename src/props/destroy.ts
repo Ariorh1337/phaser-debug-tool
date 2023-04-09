@@ -33,6 +33,6 @@ export function onDestroy(obj: any, folder: any, options: any) {
     obj.once && obj.once("destroy", () => {
         obj.scene.events.off("update", func.update);
         gameObjList.remove(obj.DebugID);
-        folder.dispose();
+        setTimeout(() => folder.dispose(), 1)
     });
 }
