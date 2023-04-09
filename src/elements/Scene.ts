@@ -156,26 +156,37 @@ function addSearch(folder: any, scene: Phaser.Scene) {
     btn.on("click", () => {
         updateBtn(enabled = !enabled);
 
+        let interval: any;
+        let inputEnabled = scene.input.enabled;
+
         if (enabled) {
             searchResult.forEach((a: any) => a());
             searchResult = [];
 
-            scene.input.once("pointerdown", (event: any) => {
+            scene.input.enabled = false;
+
+            interval = setInterval(() => {
+                const pointer = scene.game.input.activePointer;
+            
+                if (!pointer.isDown) return;
+
+                clearInterval(interval);
+
+                scene.input.enabled = inputEnabled;
+
                 updateBtn(enabled = !enabled);
-                searchResult = addSearchResult(resultFolder, search(event, scene));
+                searchResult = addSearchResult(resultFolder, search(pointer, scene));
                 resultFolder.controller_.open();
-            })
+            }, 50);
         } else {
-            scene.input.off("pointerdown", search);
+            scene.input.enabled = inputEnabled;
+            clearInterval(interval);
         }
     });
 }
 
 function search(event: any, scene: Phaser.Scene) {
     const { worldX, worldY, camera } = event;
-
-    const inputEnabled = camera?.inputEnabled || true;
-    if (camera) camera.inputEnabled = false;
 
     const result = Object.values(gameObjList.list).filter(obj => {
         if (obj.scene !== scene) return false;
@@ -197,10 +208,6 @@ function search(event: any, scene: Phaser.Scene) {
 
         return Phaser.Geom.Rectangle.ContainsPoint(p, { x: worldX, y: worldY } as any)
     });
-
-    setTimeout(() => {
-        if (camera && inputEnabled) camera.inputEnabled = inputEnabled;
-    }, 200);
 
     return result;
 }

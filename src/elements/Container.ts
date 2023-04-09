@@ -21,11 +21,12 @@ export default function addContainer(
     const folder = addGameObjectFolder(pane, options, obj);
 
     defineName(folder, obj);
-    defineVisible(folder, obj);
 
     const settings = folder.addFolder({ title: "Settings", expanded: false });
 
     const create = () => {
+        defineVisible(folder, obj);
+
         defineInput(settings, obj);
         defineActive(settings, obj);
 
