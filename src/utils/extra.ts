@@ -132,3 +132,14 @@ export function addChildrenFolder(pane: any, options: any, obj: any) {
 
     return folder;
 }
+
+export function isVisible(gameobj: any) {
+    let element = gameobj, visible = true;
+
+    do {
+        visible = element.visible;
+        element = element.parentContainer;
+    } while (visible && Boolean(element));
+
+    return visible;
+}

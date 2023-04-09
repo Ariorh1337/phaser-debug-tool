@@ -1,4 +1,4 @@
-import { addedToScene, hasProp, oldAddedToScene } from "../utils/extra";
+import { addedToScene, hasProp, isVisible, oldAddedToScene } from "../utils/extra";
 import { gameObjList } from "../utils/globals";
 import addCamera from "./Camera";
 
@@ -161,9 +161,14 @@ function addSearch(folder: any, scene: Phaser.Scene) {
             searchResult = [];
 
             scene.input.once("pointerdown", (event: any) => {
+                let input_enabled = scene.input.enabled;
+                scene.input.enabled = false;
+
                 updateBtn(enabled = !enabled);
                 searchResult = addSearchResult(resultFolder, search(event, scene));
                 resultFolder.controller_.open();
+
+                setTimeout(() => (scene.input.enabled = input_enabled), 500);
             })
         } else {
             scene.input.off("pointerdown", search);
@@ -172,13 +177,11 @@ function addSearch(folder: any, scene: Phaser.Scene) {
 }
 
 function search(event: any, scene: Phaser.Scene) {
-    const { worldX, worldY, camera } = event;
-
-    const inputEnabled = camera?.inputEnabled || true;
-    if (camera) camera.inputEnabled = false;
+    const { worldX, worldY } = event;
 
     const result = Object.values(gameObjList.list).filter(obj => {
         if (obj.scene !== scene) return false;
+        if (!isVisible(obj)) return false;
 
         const originX = obj.originX ?? 0.5;
         const originY = obj.originY ?? 0.5;
@@ -197,10 +200,6 @@ function search(event: any, scene: Phaser.Scene) {
 
         return Phaser.Geom.Rectangle.ContainsPoint(p, { x: worldX, y: worldY } as any)
     });
-
-    setTimeout(() => {
-        if (camera && inputEnabled) camera.inputEnabled = inputEnabled;
-    }, 200);
 
     return result;
 }
