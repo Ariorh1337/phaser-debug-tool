@@ -156,23 +156,32 @@ function addSearch(folder: any, scene: Phaser.Scene) {
     btn.on("click", () => {
         updateBtn(enabled = !enabled);
 
-        if (enabled) {
-            searchResult.forEach((a: any) => a());
-            searchResult = [];
+        let input_enabled = scene.input.enabled;
+        scene.input.enabled = false;
 
-            scene.input.once("pointerdown", (event: any) => {
-                let input_enabled = scene.input.enabled;
-                scene.input.enabled = false;
+        function click() {
+            const { worldX, worldY } = scene.input.activePointer;
 
-                updateBtn(enabled = !enabled);
-                searchResult = addSearchResult(resultFolder, search(event, scene));
-                resultFolder.controller_.open();
+            updateBtn(enabled = !enabled);
+            searchResult = addSearchResult(
+                resultFolder, 
+                search({ worldX, worldY }, scene)
+            );
+            resultFolder.controller_.open();
+            setTimeout(() => (scene.input.enabled = input_enabled), 500);
 
-                setTimeout(() => (scene.input.enabled = input_enabled), 500);
-            })
-        } else {
-            scene.input.off("pointerdown", search);
+            scene.game.canvas.removeEventListener("click", click);
         }
+
+        if (enabled) {
+            scene.game.canvas.addEventListener("click", click);
+        } else {
+            scene.game.canvas.removeEventListener("click", click);
+            setTimeout(() => (scene.input.enabled = input_enabled), 500);
+        }
+
+        searchResult.forEach((a: any) => a());
+        searchResult = [];
     });
 }
 
