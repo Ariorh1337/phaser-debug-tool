@@ -6,7 +6,7 @@ import { addedToScene } from "../utils/extra";
  * @param obj 
  */
 export function defineAddAt(folder: any, obj: any) {
-    const addMethod = obj.add;
+    const addMethod = obj.addAt;
     (obj as any).addAt = function (...args: any[]) {
         const elm = addMethod.apply(this, args as any);
 
