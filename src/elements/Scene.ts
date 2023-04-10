@@ -160,6 +160,7 @@ function addSearch(folder: any, scene: Phaser.Scene) {
         scene.input.enabled = false;
 
         function click() {
+            scene.input.activePointer.updateWorldPoint(scene.input.activePointer.camera || scene.cameras.main);
             const { worldX, worldY } = scene.input.activePointer;
 
             updateBtn(enabled = !enabled);
