@@ -167,21 +167,20 @@ export default function defineTextStyle(folder: any, obj: any) {
     });
     folder.on("refresh", () => input12.refresh());
 
-
     const paddingYProxy = {
         vector2: {
             get x() {
                 return obj.padding.top || 0;
             },
             set x(value) {
-                const {left, top, right, bottom} = obj.padding;
+                const { left, top, right, bottom } = obj.padding;
                 obj.setPadding(left, value, right, bottom);
             },
             get y() {
                 return obj.padding.bottom || 0;
             },
             set y(value) {
-                const {left, top, right, bottom} = obj.padding;
+                const { left, top, right, bottom } = obj.padding;
                 obj.setPadding(left, top, right, value);
             },
         },
@@ -199,14 +198,14 @@ export default function defineTextStyle(folder: any, obj: any) {
                 return obj.padding.left || 0;
             },
             set x(value) {
-                const {left, top, right, bottom} = obj.padding;
+                const { left, top, right, bottom } = obj.padding;
                 obj.setPadding(value, top, right, bottom);
             },
             get y() {
                 return obj.padding.right || 0;
             },
             set y(value) {
-                const {left, top, right, bottom} = obj.padding;
+                const { left, top, right, bottom } = obj.padding;
                 obj.setPadding(left, top, value, bottom);
             },
         },

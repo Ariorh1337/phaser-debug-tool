@@ -1,9 +1,10 @@
 /*! Tweakpane 3.1.1 (c) 2016 cocopon, licensed under the MIT license. */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Tweakpane = {}));
-})(this, (function (exports) { 'use strict';
+        typeof define === 'function' && define.amd ? define(['exports'], factory) :
+            (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Tweakpane = {}));
+})(this, (function (exports) {
+    'use strict';
 
     /***
      * A simple semantic versioning perser.
@@ -509,7 +510,7 @@
             number: createParamsParserBuilder((v) => typeof v === 'number' ? v : undefined)(optional),
             string: createParamsParserBuilder((v) => typeof v === 'string' ? v : undefined)(optional),
             function: createParamsParserBuilder((v) =>
-            typeof v === 'function' ? v : undefined)(optional),
+                typeof v === 'function' ? v : undefined)(optional),
             constant: (value) => createParamsParserBuilder((v) => (v === value ? value : undefined))(optional),
             raw: createParamsParserBuilder((v) => v)(optional),
             object: (keyToParserMap) => createParamsParserBuilder((v) => {
@@ -690,10 +691,12 @@
     class LabelController extends BladeController {
         constructor(doc, config) {
             const viewProps = config.valueController.viewProps;
-            super(Object.assign(Object.assign({}, config), { view: new LabelView(doc, {
+            super(Object.assign(Object.assign({}, config), {
+                view: new LabelView(doc, {
                     props: config.props,
                     viewProps: viewProps,
-                }), viewProps: viewProps }));
+                }), viewProps: viewProps
+            }));
             this.props = config.props;
             this.valueController = config.valueController;
             this.view.valueElement.appendChild(this.valueController.view.element);
@@ -1079,7 +1082,7 @@
 
             child.parent = this;
 
-            child.movePaneTo = function(parent, elm_before) {
+            child.movePaneTo = function (parent, elm_before) {
                 parent.add(child);
 
                 if (elm_before) {
@@ -1175,10 +1178,10 @@
             this.controller_.foldable
                 .value('expanded')
                 .emitter.on('change', (ev) => {
-                this.emitter_.emit('fold', {
-                    event: new TpFoldEvent(this, ev.sender.rawValue),
+                    this.emitter_.emit('fold', {
+                        event: new TpFoldEvent(this, ev.sender.rawValue),
+                    });
                 });
-            });
             this.rackApi_.on('change', (ev) => {
                 this.emitter_.emit('change', {
                     event: ev,
@@ -1502,10 +1505,12 @@
 
     class RackController extends BladeController {
         constructor(doc, config) {
-            super(Object.assign(Object.assign({}, config), { view: new PlainView(doc, {
+            super(Object.assign(Object.assign({}, config), {
+                view: new PlainView(doc, {
                     viewName: 'brk',
                     viewProps: config.viewProps,
-                }) }));
+                })
+            }));
             const rack = new BladeRack(config.root ? undefined : config.blade);
             rack.emitter.on('add', this.onRackAdd_);
             rack.emitter.on('remove', this.onRackRemove_);
@@ -1600,13 +1605,15 @@
                 root: config.root,
                 viewProps: config.viewProps,
             });
-            super(Object.assign(Object.assign({}, config), { rackController: rc, view: new FolderView(doc, {
+            super(Object.assign(Object.assign({}, config), {
+                rackController: rc, view: new FolderView(doc, {
                     containerElement: rc.view.element,
                     foldable: foldable,
                     props: config.props,
                     viewName: config.root ? 'rot' : undefined,
                     viewProps: config.viewProps,
-                }) }));
+                })
+            }));
             this.props = config.props;
             this.foldable = foldable;
             bindFoldable(this.foldable, this.view.containerElement);
@@ -1625,7 +1632,7 @@
                 this.view.containerElement.style.height = '';
             });
         }
-        
+
         get document() {
             return this.view.element.ownerDocument;
         }
@@ -1699,10 +1706,12 @@
     class LabeledValueController extends ValueBladeController {
         constructor(doc, config) {
             const viewProps = config.valueController.viewProps;
-            super(Object.assign(Object.assign({}, config), { value: config.valueController.value, view: new LabelView(doc, {
+            super(Object.assign(Object.assign({}, config), {
+                value: config.valueController.value, view: new LabelView(doc, {
                     props: config.props,
                     viewProps: viewProps,
-                }), viewProps: viewProps }));
+                }), viewProps: viewProps
+            }));
             this.props = config.props;
             this.valueController = config.valueController;
             this.view.valueElement.appendChild(this.valueController.view.element);
@@ -1726,9 +1735,11 @@
 
     class SeparatorController extends BladeController {
         constructor(doc, config) {
-            super(Object.assign(Object.assign({}, config), { view: new SeparatorView(doc, {
+            super(Object.assign(Object.assign({}, config), {
+                view: new SeparatorView(doc, {
                     viewProps: config.viewProps,
-                }) }));
+                })
+            }));
         }
     }
 
@@ -2791,7 +2802,7 @@
             }
             cursor = firstExpr.cursor;
             let expr = firstExpr.evaluable;
-            for (;;) {
+            for (; ;) {
                 const op = readBinaryOperator(ops, text, cursor);
                 if (!op) {
                     break;
@@ -5497,7 +5508,7 @@
         return null;
     }
     function createConstraint$4(params,
-    initialValue) {
+        initialValue) {
         const constraints = [];
         const sc = createStepConstraint(params, initialValue);
         if (sc) {
@@ -7186,8 +7197,8 @@
             const targets = this.controller_.rackController.rack
                 .find(InputBindingController)
                 .map((ibc) => {
-                return ibc.binding.target;
-            });
+                    return ibc.binding.target;
+                });
             importPresetJson(targets, preset);
             this.refresh();
         }
@@ -7199,8 +7210,8 @@
             const targets = this.controller_.rackController.rack
                 .find(InputBindingController)
                 .map((ibc) => {
-                return ibc.binding.target;
-            });
+                    return ibc.binding.target;
+                });
             return exportPresetJson(targets);
         }
         /**
@@ -7211,14 +7222,14 @@
             this.controller_.rackController.rack
                 .find(InputBindingController)
                 .forEach((ibc) => {
-                ibc.binding.read();
-            });
+                    ibc.binding.read();
+                });
             // Force-read all monitor bindings
             this.controller_.rackController.rack
                 .find(MonitorBindingController)
                 .forEach((mbc) => {
-                mbc.binding.read();
-            });
+                    mbc.binding.read();
+                });
         }
     }
 

@@ -42,7 +42,7 @@ export default function addRectangle(
         defineFill(folder, obj);
         folder.addInput(obj, "isStroked", { label: "stroked" });
         defineStroke(folder, obj);
-        
+
         defineBlendMode(folder, obj);
         defineDestroy(folder, obj);
         defineDeclare(folder, obj);

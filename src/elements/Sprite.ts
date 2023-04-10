@@ -38,9 +38,11 @@ export default function addSprite(
         defineScale(folder, obj);
         defineCrop(folder, obj);
         defineTexture(folder, obj);
-        
 
-        const anims = folder.addFolder({ title: "Animations", expanded: false });
+        const anims = folder.addFolder({
+            title: "Animations",
+            expanded: false,
+        });
         checkAnimations(anims, obj);
 
         defineDestroy(folder, obj);

@@ -7,9 +7,9 @@ export default function overwriteGame() {
             GameConfig ||= {};
             GameConfig.callbacks ||= {};
             GameConfig.callbacks.postBoot ||= () => {};
-    
+
             const postBoot = GameConfig.callbacks.postBoot;
-    
+
             GameConfig.callbacks.postBoot = (game: Phaser.Game) => {
                 console.log("Phaser debug is attached 🔍");
 
@@ -39,19 +39,25 @@ export default function overwriteGame() {
                 });
 
                 const method = game.scene.add;
-                game.scene.add = function (key: string, scene: Phaser.Scene, autoStart: boolean) {
+                game.scene.add = function (
+                    key: string,
+                    scene: Phaser.Scene,
+                    autoStart: boolean
+                ) {
                     const obj = method.call(game.scene, key, scene, autoStart);
                     addScene(scenesFolder, obj);
                     return obj;
-                }
+                };
 
-                folder.addButton({ title: "Declare as: window.game" }).on("click", () => {
-                    window.game = game;
-                });
-    
+                folder
+                    .addButton({ title: "Declare as: window.game" })
+                    .on("click", () => {
+                        window.game = game;
+                    });
+
                 postBoot(game);
             };
-    
+
             super(GameConfig);
         }
 
@@ -94,10 +100,12 @@ function applyCustomStyleToPane(pane: any) {
     }
     `;
 
-    const elm = document.querySelector(".tp-rotv > .tp-rotv_c > .tp-fldv > .tp-fldv_c");
+    const elm = document.querySelector(
+        ".tp-rotv > .tp-rotv_c > .tp-fldv > .tp-fldv_c"
+    );
     if (elm) {
         (elm as HTMLElement).style.resize = "none";
-        (elm as HTMLElement).style.overflowY = 'hidden !important';
+        (elm as HTMLElement).style.overflowY = "hidden !important";
     }
 
     let offsetX = 0;
@@ -107,7 +115,7 @@ function applyCustomStyleToPane(pane: any) {
     let movedOnce = false;
 
     element.addEventListener("pointerdown", (event: any) => {
-        if (event.target.innerHTML !== 'Debug') return;
+        if (event.target.innerHTML !== "Debug") return;
 
         const { x, y } = event;
         const { top, left } = element.getBoundingClientRect();
@@ -125,7 +133,7 @@ function applyCustomStyleToPane(pane: any) {
         movedOnce = true;
 
         const { x, y } = event;
-        const [ targetX, targetY ] = [x + offsetX, y + offsetY];
+        const [targetX, targetY] = [x + offsetX, y + offsetY];
 
         if (targetY > 0 && targetY < innerHeight - 20) {
             element.style.top = `${targetY}px`;

@@ -26,7 +26,7 @@ export default function defineScroll(folder: any, obj: any) {
         },
         y: {
             step: 5,
-        }
+        },
     });
     folder.on("refresh", () => input.refresh());
 }

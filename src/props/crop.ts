@@ -7,7 +7,11 @@ export default function defineCrop(folder: any, obj: any) {
         _crop: false,
         get crop() {
             if (!this._crop) {
-                this._crop = obj._crop.x === 0 && obj._crop.y === 0 && obj._crop.width === obj.width && obj._crop.height === obj.height;                
+                this._crop =
+                    obj._crop.x === 0 &&
+                    obj._crop.y === 0 &&
+                    obj._crop.width === obj.width &&
+                    obj._crop.height === obj.height;
             }
 
             return this._crop;
@@ -78,6 +82,4 @@ export default function defineCrop(folder: any, obj: any) {
         y: { step: 1 },
     });
     folder.on("refresh", () => input2.refresh());
-
-    
 }

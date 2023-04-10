@@ -7,7 +7,7 @@ export default function defineFill(folder: any, obj: any) {
 
 export function defineFillColor(folder: any, obj: any) {
     if (hasProp(obj, "fillColor")) {
-        const input = folder.addInput(obj, "fillColor", { view: 'color' });
+        const input = folder.addInput(obj, "fillColor", { view: "color" });
         folder.on("refresh", () => input.refresh());
     }
 }

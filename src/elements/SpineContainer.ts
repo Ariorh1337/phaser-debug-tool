@@ -13,7 +13,11 @@ import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineVisible from "../props/visible";
-import { addChildrenFolder, addGameObjectFolder, addedToScene } from "../utils/extra";
+import {
+    addChildrenFolder,
+    addGameObjectFolder,
+    addedToScene,
+} from "../utils/extra";
 
 export default function addSpineContainer(
     pane: any,
@@ -47,7 +51,11 @@ export default function addSpineContainer(
 
     folder.controller_.on("open", create);
 
-    const children = addChildrenFolder(folder, { title: "Children", expanded: false }, obj);
+    const children = addChildrenFolder(
+        folder,
+        { title: "Children", expanded: false },
+        obj
+    );
 
     defineAdd(children, obj);
     defineAddAt(children, obj);

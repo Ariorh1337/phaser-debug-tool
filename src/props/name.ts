@@ -11,7 +11,7 @@ export default function defineName(folder: any, obj: any) {
             set name(value) {
                 obj.name = value;
                 folder.title = parseName(obj);
-            }
+            },
         };
 
         const input = folder.addInput(proxy, "name");
@@ -24,7 +24,7 @@ export default function defineName(folder: any, obj: any) {
             const result = setNameMethod.call(obj, value);
             folder.title = parseName(obj);
             return result;
-        }
+        };
     }
 }
 
@@ -41,7 +41,7 @@ export function parseName(obj: any) {
         name = obj.name;
     } else {
         const value = obj.constructor.name;
-        name = (value === "initialize") ? "" : value;
+        name = value === "initialize" ? "" : value;
     }
 
     if (name === type) {

@@ -98,7 +98,10 @@ export default function addGameObject(
     folder.controller_.on("open", create);
 
     if (obj.list) {
-        const children = folder.addFolder({ title: "Children", expanded: false });
+        const children = folder.addFolder({
+            title: "Children",
+            expanded: false,
+        });
         (obj as any)._paneChild = children;
 
         defineAdd(children, obj);

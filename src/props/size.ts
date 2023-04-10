@@ -5,7 +5,7 @@ export default function defineSize(folder: any, obj: any, isInput = false) {
     const proxy = {
         vector2: {
             get x() {
-                return isFinite(obj.width) ? (obj.width || 0) : 0;
+                return isFinite(obj.width) ? obj.width || 0 : 0;
             },
             set x(value) {
                 if (isInput) {
@@ -13,7 +13,7 @@ export default function defineSize(folder: any, obj: any, isInput = false) {
                 }
             },
             get y() {
-                return isFinite(obj.height) ? (obj.height || 0) : 0;
+                return isFinite(obj.height) ? obj.height || 0 : 0;
             },
             set y(value) {
                 if (isInput) {

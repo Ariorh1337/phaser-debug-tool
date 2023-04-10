@@ -20,7 +20,12 @@ export function addedToScene(folder: any, gameObject: any) {
 export function oldAddedToScene(folder: any, scene: Phaser.Scene) {
     Object.keys(Object.getPrototypeOf(scene.add)).forEach(
         (methodName: string) => {
-            if (["boot", "start", "shutdown", "destroy", "tween"].includes(methodName)) return;
+            if (
+                ["boot", "start", "shutdown", "destroy", "tween"].includes(
+                    methodName
+                )
+            )
+                return;
 
             const method = (scene.add as any)[methodName];
             (scene.add as any)[methodName] = function (...args: any[]) {
@@ -41,14 +46,14 @@ export function oldAddedToScene(folder: any, scene: Phaser.Scene) {
         scene.physics.add.image = function (...args: any[]) {
             const obj = physicsImage.apply(this, args as any);
             return addedToScene(folder, obj);
-        }
+        };
 
         const physicsExisting = scene.physics.add.existing;
         // @ts-ignore
         scene.physics.add.existing = function (...args: any[]) {
             const obj = physicsExisting.apply(this, args as any);
             return addedToScene(folder, obj);
-        }
+        };
     }
 }
 
@@ -62,7 +67,7 @@ export function addGameObjectFolder(pane: any, options: any, obj: any) {
     const rnd = [
         Phaser.Math.Between(20, 40),
         Phaser.Math.Between(20, 40),
-        Phaser.Math.Between(20, 40)
+        Phaser.Math.Between(20, 40),
     ];
 
     folder.element.style.backgroundColor = `rgb(${rnd[0]}, ${rnd[1]}, ${rnd[2]})`;
@@ -75,8 +80,8 @@ export function addGameObjectFolder(pane: any, options: any, obj: any) {
 
     drag.innerHTML = move;
     drag.setAttribute("draggable", "true");
-    drag.addEventListener('dragstart', (e) => {
-        e.dataTransfer?.setData('text/plain', (obj as any).DebugID);
+    drag.addEventListener("dragstart", (e) => {
+        e.dataTransfer?.setData("text/plain", (obj as any).DebugID);
     });
 
     // ---
@@ -113,12 +118,12 @@ export function addChildrenFolder(pane: any, options: any, obj: any) {
 
     // ---
 
-    folder.element.addEventListener('drop', (e: any) => {
+    folder.element.addEventListener("drop", (e: any) => {
         if (e.target !== folder.controller_.view.titleElement) return;
 
         e.preventDefault();
 
-        const draggedElementId = e.dataTransfer.getData('text/plain');
+        const draggedElementId = e.dataTransfer.getData("text/plain");
         if (draggedElementId === (obj as any).DebugID) return;
 
         try {
@@ -134,7 +139,8 @@ export function addChildrenFolder(pane: any, options: any, obj: any) {
 }
 
 export function isVisible(gameobj: any) {
-    let element = gameobj, visible = true;
+    let element = gameobj,
+        visible = true;
 
     do {
         visible = element.visible;

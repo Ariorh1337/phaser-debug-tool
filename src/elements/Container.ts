@@ -11,7 +11,11 @@ import definePosition from "../props/position";
 import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineVisible from "../props/visible";
-import { addChildrenFolder, addGameObjectFolder, addedToScene } from "../utils/extra";
+import {
+    addChildrenFolder,
+    addGameObjectFolder,
+    addedToScene,
+} from "../utils/extra";
 
 export default function addContainer(
     pane: any,
@@ -41,7 +45,11 @@ export default function addContainer(
 
     folder.controller_.on("open", create);
 
-    const children = addChildrenFolder(folder, { title: "Children", expanded: false }, obj);
+    const children = addChildrenFolder(
+        folder,
+        { title: "Children", expanded: false },
+        obj
+    );
 
     defineAdd(children, obj);
     defineAddAt(children, obj);

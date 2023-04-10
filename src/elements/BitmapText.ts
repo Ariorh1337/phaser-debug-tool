@@ -45,7 +45,7 @@ export default function addBitmapText(
         defineDropShadowColor(folder, obj);
         defineDropShadowAlpha(folder, obj);
         defineAlign(folder, obj);
-        
+
         defineBlendMode(folder, obj);
         defineTexture(folder, obj);
 

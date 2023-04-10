@@ -2,8 +2,8 @@ import { addedToScene } from "../utils/extra";
 
 /**
  * Overwrite the add method to add the child to the container
- * @param folder 
- * @param obj 
+ * @param folder
+ * @param obj
  */
 export function defineAddAt(folder: any, obj: any) {
     const addMethod = obj.addAt;
@@ -22,8 +22,8 @@ export function defineAddAt(folder: any, obj: any) {
 
 /**
  * Overwrite the add method to add the child to the container
- * @param folder 
- * @param obj 
+ * @param folder
+ * @param obj
  */
 export function defineAdd(folder: any, obj: any) {
     const addMethod = obj.add;

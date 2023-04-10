@@ -18,7 +18,7 @@ export function defineStrokeWidth(folder: any, obj: any) {
 
 export function defineStrokeColor(folder: any, obj: any) {
     if (hasProp(obj, "strokeColor")) {
-        const input = folder.addInput(obj, "strokeColor", { view: 'color' });
+        const input = folder.addInput(obj, "strokeColor", { view: "color" });
         folder.on("refresh", () => input.refresh());
     }
 }

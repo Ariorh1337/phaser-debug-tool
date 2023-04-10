@@ -1,4 +1,9 @@
-import { addedToScene, hasProp, isVisible, oldAddedToScene } from "../utils/extra";
+import {
+    addedToScene,
+    hasProp,
+    isVisible,
+    oldAddedToScene,
+} from "../utils/extra";
 import { gameObjList } from "../utils/globals";
 import addCamera from "./Camera";
 
@@ -10,7 +15,8 @@ export default function addScene(pane: any, scene: Phaser.Scene) {
 
     scene.events.on("destroy", () => folder.dispose);
 
-    if (scene.load) { // Load
+    if (scene.load) {
+        // Load
         const loadFolder = folder.addFolder({ title: "Load", expanded: false });
         loadFolder.addMonitor(scene.load, "progress", {
             view: "graph",
@@ -22,18 +28,21 @@ export default function addScene(pane: any, scene: Phaser.Scene) {
         loadFolder.addMonitor(scene.load, "totalToLoad");
     }
 
-    if (true) { // Camera
+    if (true) {
+        // Camera
         addCamera(folder, scene.cameras.main, {
             title: "Default Camera",
             expanded: false,
         });
     }
 
-    if (true) { // State
+    if (true) {
+        // State
         addState(folder, scene);
     }
 
-    if (true) { // Childrens
+    if (true) {
+        // Childrens
         addChildren(folder, scene);
     }
 
@@ -57,28 +66,53 @@ function addState(folder: any, scene: Phaser.Scene) {
     stateFolder.addMonitor(scene.scene.settings, "status", {
         format: (value: any) => {
             switch (value) {
-                case 0: return "PENDING";
-                case 1: return "INIT";
-                case 2: return "START";
-                case 3: return "LOADING";
-                case 4: return "CREATING";
-                case 5: return "RUNNING";
-                case 6: return "PAUSED";
-                case 7: return "SLEEPING";
-                case 8: return "SHUTDOWN";
-                case 9: return "DESTROYED";
-                default: return "UNKNOWN";
+                case 0:
+                    return "PENDING";
+                case 1:
+                    return "INIT";
+                case 2:
+                    return "START";
+                case 3:
+                    return "LOADING";
+                case 4:
+                    return "CREATING";
+                case 5:
+                    return "RUNNING";
+                case 6:
+                    return "PAUSED";
+                case 7:
+                    return "SLEEPING";
+                case 8:
+                    return "SHUTDOWN";
+                case 9:
+                    return "DESTROYED";
+                default:
+                    return "UNKNOWN";
             }
         },
     });
 
-    stateFolder.addButton({ title: "Pause" }).on("click", () => scene.scene.pause());
-    stateFolder.addButton({ title: "Resume" }).on("click", () => scene.scene.resume());
-    stateFolder.addButton({ title: "Sleep" }).on("click", () => scene.scene.sleep());
-    stateFolder.addButton({ title: "Wake" }).on("click", () => scene.scene.wake());
-    stateFolder.addButton({ title: "Stop" }).on("click", () => scene.scene.stop());
-    stateFolder.addButton({ title: "Restart" }).on("click", () => scene.scene.restart());
-    stateFolder.addButton({ title: "Remove" }).on("click", () => scene.scene.remove());
+    stateFolder
+        .addButton({ title: "Pause" })
+        .on("click", () => scene.scene.pause());
+    stateFolder
+        .addButton({ title: "Resume" })
+        .on("click", () => scene.scene.resume());
+    stateFolder
+        .addButton({ title: "Sleep" })
+        .on("click", () => scene.scene.sleep());
+    stateFolder
+        .addButton({ title: "Wake" })
+        .on("click", () => scene.scene.wake());
+    stateFolder
+        .addButton({ title: "Stop" })
+        .on("click", () => scene.scene.stop());
+    stateFolder
+        .addButton({ title: "Restart" })
+        .on("click", () => scene.scene.restart());
+    stateFolder
+        .addButton({ title: "Remove" })
+        .on("click", () => scene.scene.remove());
 }
 
 function addChildren(folder: any, scene: Phaser.Scene) {
@@ -95,12 +129,12 @@ function addChildren(folder: any, scene: Phaser.Scene) {
 
     // ---
 
-    folder.element.addEventListener('drop', (e: any) => {
+    folder.element.addEventListener("drop", (e: any) => {
         if (e.target !== childrenFolder.controller_.view.titleElement) return;
 
         e.preventDefault();
 
-        const draggedElementId = e.dataTransfer.getData('text/plain');
+        const draggedElementId = e.dataTransfer.getData("text/plain");
         scene.add.existing(gameObjList.get(draggedElementId));
     });
 
@@ -117,8 +151,8 @@ function addChildren(folder: any, scene: Phaser.Scene) {
     });
 
     scene.events.on("create", () => {
-        const list = scene.children.list.filter(gameobj => {
-            return (!hasProp(gameobj, "parentContainer"));
+        const list = scene.children.list.filter((gameobj) => {
+            return !hasProp(gameobj, "parentContainer");
         });
 
         list.forEach((gameobj: any) => {
@@ -154,18 +188,20 @@ function addSearch(folder: any, scene: Phaser.Scene) {
     });
 
     btn.on("click", () => {
-        updateBtn(enabled = !enabled);
+        updateBtn((enabled = !enabled));
 
         let input_enabled = scene.input.enabled;
         scene.input.enabled = false;
 
         function click() {
-            scene.input.activePointer.updateWorldPoint(scene.input.activePointer.camera || scene.cameras.main);
+            scene.input.activePointer.updateWorldPoint(
+                scene.input.activePointer.camera || scene.cameras.main
+            );
             const { worldX, worldY } = scene.input.activePointer;
 
-            updateBtn(enabled = !enabled);
+            updateBtn((enabled = !enabled));
             searchResult = addSearchResult(
-                resultFolder, 
+                resultFolder,
                 search({ worldX, worldY }, scene)
             );
             resultFolder.controller_.open();
@@ -189,7 +225,7 @@ function addSearch(folder: any, scene: Phaser.Scene) {
 function search(event: any, scene: Phaser.Scene) {
     const { worldX, worldY } = event;
 
-    const result = Object.values(gameObjList.list).filter(obj => {
+    const result = Object.values(gameObjList.list).filter((obj) => {
         if (obj.scene !== scene) return false;
         if (!isVisible(obj)) return false;
 
@@ -208,7 +244,10 @@ function search(event: any, scene: Phaser.Scene) {
             height
         );
 
-        return Phaser.Geom.Rectangle.ContainsPoint(p, { x: worldX, y: worldY } as any)
+        return Phaser.Geom.Rectangle.ContainsPoint(p, {
+            x: worldX,
+            y: worldY,
+        } as any);
     });
 
     return result;
@@ -216,7 +255,10 @@ function search(event: any, scene: Phaser.Scene) {
 
 function addSearchResult(folder: any, objs: any): (() => void)[] {
     return objs.map((obj: any) => {
-        const fakeFolder = folder.addFolder({ title: obj._pane.title, expanded: false });
+        const fakeFolder = folder.addFolder({
+            title: obj._pane.title,
+            expanded: false,
+        });
 
         fakeFolder.controller_.on("open", () => {
             fakeFolder.controller_.close();
@@ -230,7 +272,7 @@ function addSearchResult(folder: any, objs: any): (() => void)[] {
 
             const temp = document.createElement("div");
 
-            if (fakeContainer.contains(fakeElm))  {
+            if (fakeContainer.contains(fakeElm)) {
                 fakeContainer.insertBefore(temp, fakeElm);
                 fakeFolder.movePaneTo(objParent, objElm);
                 obj._pane.movePaneTo(fakeParent, temp);

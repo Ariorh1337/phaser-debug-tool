@@ -1,4 +1,3 @@
-
 export default function defineInput(folder: any, obj: any) {
     const proxy = {
         get input() {
@@ -11,7 +10,7 @@ export default function defineInput(folder: any, obj: any) {
             } else {
                 console.log("no input to enable");
             }
-        }
+        },
     };
 
     const input = folder.addInput(proxy, "input");
