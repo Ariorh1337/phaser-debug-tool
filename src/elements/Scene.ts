@@ -221,26 +221,35 @@ function addSearchResult(folder: any, objs: any): (() => void)[] {
         fakeFolder.controller_.on("open", () => {
             fakeFolder.controller_.close();
 
-            const originalParent = obj._pane.parent;
+            const objParent = obj._pane.parent;
+            const objElm = obj._pane.element;
+
             const fakeParent = fakeFolder.parent;
+            const fakeElm = fakeFolder.element;
+            const fakeContainer = fakeParent.controller_.view.containerElement;
 
             const temp = document.createElement("div");
 
-            fakeParent.element.lastChild.insertBefore(temp, fakeFolder.element);
-            fakeFolder.movePaneTo(originalParent, obj._pane.element);
-            obj._pane.movePaneTo(fakeParent, temp);
+            if (fakeContainer.contains(fakeElm))  {
+                fakeContainer.insertBefore(temp, fakeElm);
+                fakeFolder.movePaneTo(objParent, objElm);
+                obj._pane.movePaneTo(fakeParent, temp);
+            } else {
+                fakeContainer.insertBefore(temp, objElm);
+                obj._pane.movePaneTo(objParent, fakeElm);
+                fakeFolder.movePaneTo(fakeParent, temp);
+            }
 
             temp.remove();
 
             obj._pane.controller_.open();
         });
 
-        const originalParent = obj._pane.parent;
-        const fakeParent = fakeFolder.parent;
+        const objParent = obj._pane.parent;
 
         return function () {
             obj._pane.controller_.close();
-            obj._pane.movePaneTo(originalParent);
+            obj._pane.movePaneTo(objParent);
             fakeFolder.dispose();
         };
     });
