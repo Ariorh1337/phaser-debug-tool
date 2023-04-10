@@ -7,17 +7,21 @@ Extension button on the right side of the screen which will show a list of avail
 
 ## Showcase
 
-![scenes](./readme/chrome_1Rg0EENWSP.png)
+![resize_and_move](./readme/resize_and_movable.gif)
 
-![Spine](./readme/chrome_86qPcCaOnH.png)
+![search](./readme/search.gif)
 
-![Rectangle](./readme/chrome_pusI5JVAiJ.png)
+![drag_and_drop](./readme/drag_and_drop.gif)
 
-![Image](./readme/chrome_ST3AHGqiV8.png)
+![scenes](./readme/scenes.png)
 
-![Container](./readme/chrome_U0ADmIqujz.png)
+![spine](./readme/spine.png)
 
-![Text](./readme/chrome_XyvcK5kfX1.png)
+![image](./readme/image.png)
+
+![container](./readme/container.png)
+
+![text](./readme/text.png)
 
 
 ## Build
@@ -49,11 +53,10 @@ Firefox: `npm run build-firefox`
 ## TODO
 
 1. Fix firefox perfomance issue
-2. Add game object search
-3. Add parent container change
-4. Add mesh suppport
-5. Add tweens support
-6. Add button to export game obj data
-7. Add section to create new game objects
-8. Add section to create new tweens
-9. Add time scale into scene
+2. Add game object search (by name)
+3. Add mesh suppport
+4. Add tweens support
+5. Add button to export game obj data
+6. Add section to create new game objects
+7. Add section to create new tweens
+8. Add time scale into scene
