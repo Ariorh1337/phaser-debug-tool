@@ -85,10 +85,10 @@ export function addGameObjectFolder(pane: any, options: any, obj: any) {
     const place2 = folder.element.querySelector('div[name="place2"]');
     place2.appendChild(visible);
 
-    visible.innerHTML = obj.visible ? eye_off : eye_on;
+    visible.innerHTML = obj.visible ? eye_on : eye_off;
     visible.addEventListener("click", () => {
         obj.visible = !obj.visible;
-        visible.innerHTML = obj.visible ? eye_off : eye_on;
+        visible.innerHTML = obj.visible ? eye_on : eye_off;
     });
 
     // ---
