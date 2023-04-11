@@ -6,7 +6,7 @@ import defineBlendMode from "../props/blendMode";
 import defineDeclare from "../props/declare";
 import defineDestroy, { onDestroy } from "../props/destroy";
 import defineInput from "../props/input";
-import defineName from "../props/name";
+import defineName, { parseName } from "../props/name";
 import defineOrigin from "../props/origin";
 import definePosition from "../props/position";
 import defineRotation from "../props/rotation";
@@ -25,15 +25,14 @@ export default function addSpineContainer(
     options = { title: "", expanded: false }
 ) {
     const folder = addGameObjectFolder(pane, options, obj);
-
+    folder.title = folder.title || parseName(obj);
     obj.type = "SpineContainer";
-
-    defineName(folder, obj);
-    defineVisible(folder, obj);
 
     const settings = folder.addFolder({ title: "Settings", expanded: false });
 
     const create = () => {
+        defineName(settings, obj);
+        defineVisible(settings, obj);
         defineInput(settings, obj);
         defineActive(settings, obj);
 

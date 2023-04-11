@@ -6,7 +6,7 @@ import defineBlendMode from "../props/blendMode";
 import defineDeclare from "../props/declare";
 import defineDestroy, { onDestroy } from "../props/destroy";
 import defineInput from "../props/input";
-import defineName from "../props/name";
+import defineName, { parseName } from "../props/name";
 import definePosition from "../props/position";
 import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
@@ -23,13 +23,13 @@ export default function addContainer(
     options = { title: "", expanded: false }
 ) {
     const folder = addGameObjectFolder(pane, options, obj);
-
-    defineName(folder, obj);
-    defineVisible(folder, obj);
+    folder.title = folder.title || parseName(obj);
 
     const settings = folder.addFolder({ title: "Settings", expanded: false });
 
     const create = () => {
+        defineName(settings, obj);
+        defineVisible(settings, obj);
         defineInput(settings, obj);
         defineActive(settings, obj);
 

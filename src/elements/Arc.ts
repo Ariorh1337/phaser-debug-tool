@@ -6,7 +6,7 @@ import defineDeclare from "../props/declare";
 import defineDestroy, { onDestroy } from "../props/destroy";
 import defineFill from "../props/fill";
 import defineInput from "../props/input";
-import defineName from "../props/name";
+import defineName, { parseName } from "../props/name";
 import defineOrigin from "../props/origin";
 import definePosition from "../props/position";
 import defineRotation from "../props/rotation";
@@ -22,10 +22,10 @@ export default function addArc(
     options = { title: "", expanded: false }
 ) {
     const folder = addGameObjectFolder(pane, options, obj);
-
-    defineName(folder, obj);
+    folder.title = folder.title || parseName(obj);
 
     const create = () => {
+        defineName(folder, obj);
         defineInput(folder, obj);
         defineActive(folder, obj);
         defineVisible(folder, obj);
