@@ -10,22 +10,25 @@ export default function defineName(folder: any, obj: any) {
             },
             set name(value) {
                 obj.name = value;
-                folder.title = parseName(obj);
             },
         };
 
         const input = folder.addInput(proxy, "name");
         folder.on("refresh", () => input.refresh());
     }
+}
 
-    if (hasProp(obj, "setName")) {
-        const setNameMethod = obj.setName;
-        obj.setName = function (value: string) {
-            const result = setNameMethod.call(obj, value);
+export function observeName(folder: any, obj: any) {
+    folder.title = folder.title || parseName(obj);
+
+    obj._phaser_debug_prop_name = obj.name;
+    Object.defineProperty(obj, "name", {
+        set(value) {
+            obj._phaser_debug_prop_name = value;
             folder.title = parseName(obj);
-            return result;
-        };
-    }
+        },
+        get() { return obj._phaser_debug_prop_name; }
+    }); 
 }
 
 export function parseName(obj: any) {
