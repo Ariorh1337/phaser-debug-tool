@@ -5,6 +5,10 @@ the injection occurs. Then you will get `Phaser debug is attached` if Game was s
 
 Extension button on the right side of the screen which will show a list of available scenes & FPS.
 
+## Links
+
+Chrome Store: https://chrome.google.com/webstore/detail/phaser-debugger/aigiefhkiaiihlploginlonehdafjljd
+
 ## Showcase
 
 ![resize_and_move](./readme/resize_and_movable.gif)
