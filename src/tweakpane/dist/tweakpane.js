@@ -1085,6 +1085,8 @@
             child.movePaneTo = function (parent, elm_before) {
                 parent.add(child);
 
+                child.parent = parent;
+
                 if (elm_before) {
                     parent.element.lastChild.insertBefore(child.element, elm_before);
                 } else {
