@@ -167,13 +167,28 @@ function addSearch(folder: any, scene: Phaser.Scene) {
         expanded: false,
     });
 
+    // ---
+
+    const row = searchFolder.addRow();
+
+    const searchBtn = row.addButton({
+        title: 'search',
+        width: '75px',
+    });
+
+    const searchInput = row.addInput({ value: "" }, "value", { width: '150px' });
+
+    // ---
+
     let enabled = false;
-    const btn = searchFolder.addButton({ title: "Click to Seatch" });
+    const btn = searchFolder.addButton({ title: "Click to Search" });
     function updateBtn(enabled: boolean) {
         const color = enabled ? "#5fa770" : "";
         const elm = btn.controller_.view.valueElement.firstChild.firstChild;
         elm.style.backgroundColor = color;
     }
+
+    // ---
 
     const resultFolder = searchFolder.addFolder({
         title: "Result",
@@ -186,6 +201,8 @@ function addSearch(folder: any, scene: Phaser.Scene) {
         searchResult.forEach((a: any) => a());
         searchResult = [];
     });
+
+    // --- 
 
     btn.on("click", () => {
         updateBtn((enabled = !enabled));
@@ -202,7 +219,7 @@ function addSearch(folder: any, scene: Phaser.Scene) {
             updateBtn((enabled = !enabled));
             searchResult = addSearchResult(
                 resultFolder,
-                search({ worldX, worldY }, scene)
+                searchVector({ worldX, worldY }, scene)
             );
             resultFolder.controller_.open();
             setTimeout(() => (scene.input.enabled = input_enabled), 500);
@@ -220,9 +237,22 @@ function addSearch(folder: any, scene: Phaser.Scene) {
         searchResult.forEach((a: any) => a());
         searchResult = [];
     });
+
+    searchBtn.on("click", () => {
+        searchResult.forEach((a: any) => a());
+        searchResult = [];
+
+        if (!searchInput.value) return;
+
+        searchResult = addSearchResult(
+            resultFolder,
+            searchName({ name: searchInput.value }, scene)
+        );
+        resultFolder.controller_.open();
+    });
 }
 
-function search(event: any, scene: Phaser.Scene) {
+function searchVector(event: any, scene: Phaser.Scene) {
     const { worldX, worldY } = event;
 
     const result = Object.values(gameObjList.list).filter((obj) => {
@@ -248,6 +278,19 @@ function search(event: any, scene: Phaser.Scene) {
             x: worldX,
             y: worldY,
         } as any);
+    });
+
+    return result;
+}
+
+function searchName(event: any, scene: Phaser.Scene) {
+    const { name } = event;
+
+    const result = Object.values(gameObjList.list).filter((obj) => {
+        if (obj.scene !== scene) return false;
+        if (!isVisible(obj)) return false;
+
+        return obj.name === name;
     });
 
     return result;
@@ -289,9 +332,17 @@ function addSearchResult(folder: any, objs: any): (() => void)[] {
 
         const objParent = obj._pane.parent;
 
+        const fakeParent = fakeFolder.parent;
+        const fakeElm = fakeFolder.element;
+        const fakeContainer = fakeParent.controller_.view.containerElement;
+
         return function () {
             obj._pane.controller_.close();
-            obj._pane.movePaneTo(objParent);
+
+            if (!fakeContainer.contains(fakeElm)) {
+                obj._pane.movePaneTo(objParent, fakeElm);
+            }
+
             fakeFolder.dispose();
         };
     });

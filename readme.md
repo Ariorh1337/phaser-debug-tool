@@ -57,10 +57,9 @@ Firefox: `npm run build-firefox`
 ## TODO
 
 1. Fix firefox perfomance issue
-2. Add game object search (by name)
-3. Add mesh suppport
-4. Add tweens support
-5. Add button to export game obj data
-6. Add section to create new game objects
-7. Add section to create new tweens
-8. Add time scale into scene
+2. Add mesh suppport
+3. Add tweens support
+4. Add button to export game obj data
+5. Add section to create new game objects
+6. Add section to create new tweens
+7. Add time scale into scene

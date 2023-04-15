@@ -957,6 +957,10 @@
         set label(label) {
             this.controller_.props.set('label', label);
         }
+        get value() {
+            const key = this.controller_.binding.target.key;
+            return this.controller_.binding.target.obj_[key];
+        }
         on(eventName, handler) {
             const bh = handler.bind(this);
             this.emitter_.on(eventName, (ev) => {
@@ -1234,6 +1238,31 @@
         }
         add(api, opt_index) {
             return this.rackApi_.add(api, opt_index);
+        }
+        addRow() {
+            const blade = this.addBlade({ view: 'tableRow', label: "" });
+            
+            {
+                const element = blade.controller_.view.element;
+                element.style.setProperty("display", "flex");
+                element.style.setProperty("flex-direction", "column");
+            }
+
+            {
+                const element = blade.controller_.view.valueElement;
+                element.style.setProperty("width", "100%");
+            }
+
+            const pane = blade.getPane();
+
+            {
+                const element = pane.controller_.view.containerElement;
+                element.style.setProperty("display", "flex");
+                element.style.setProperty("align-items", "flex-end");
+                element.style.setProperty("justify-content", "space-between");
+            }
+            
+            return pane;
         }
         remove(api) {
             this.rackApi_.remove(api);
@@ -6872,134 +6901,6 @@
         });
     }
 
-    class PluginPool {
-        constructor() {
-            this.pluginsMap_ = {
-                blades: [],
-                inputs: [],
-                monitors: [],
-            };
-        }
-        getAll() {
-            return [
-                ...this.pluginsMap_.blades,
-                ...this.pluginsMap_.inputs,
-                ...this.pluginsMap_.monitors,
-            ];
-        }
-        register(r) {
-            if (r.type === 'blade') {
-                this.pluginsMap_.blades.unshift(r);
-            }
-            else if (r.type === 'input') {
-                this.pluginsMap_.inputs.unshift(r);
-            }
-            else if (r.type === 'monitor') {
-                this.pluginsMap_.monitors.unshift(r);
-            }
-        }
-        createInput(document, target, params) {
-            const initialValue = target.read();
-            if (isEmpty(initialValue)) {
-                throw new TpError({
-                    context: {
-                        key: target.key,
-                    },
-                    type: 'nomatchingcontroller',
-                });
-            }
-            const bc = this.pluginsMap_.inputs.reduce((result, plugin) => result !== null && result !== void 0 ? result : createInputBindingController(plugin, {
-                document: document,
-                target: target,
-                params: params,
-            }), null);
-            if (bc) {
-                return bc;
-            }
-            throw new TpError({
-                context: {
-                    key: target.key,
-                },
-                type: 'nomatchingcontroller',
-            });
-        }
-        createMonitor(document, target, params) {
-            const bc = this.pluginsMap_.monitors.reduce((result, plugin) => result !== null && result !== void 0 ? result : createMonitorBindingController(plugin, {
-                document: document,
-                params: params,
-                target: target,
-            }), null);
-            if (bc) {
-                return bc;
-            }
-            throw new TpError({
-                context: {
-                    key: target.key,
-                },
-                type: 'nomatchingcontroller',
-            });
-        }
-        createBlade(document, params) {
-            const bc = this.pluginsMap_.blades.reduce((result, plugin) => result !== null && result !== void 0 ? result : createBladeController(plugin, {
-                document: document,
-                params: params,
-            }), null);
-            if (!bc) {
-                throw new TpError({
-                    type: 'nomatchingview',
-                    context: {
-                        params: params,
-                    },
-                });
-            }
-            return bc;
-        }
-        createBladeApi(bc) {
-            if (bc instanceof InputBindingController) {
-                return new InputBindingApi(bc);
-            }
-            if (bc instanceof MonitorBindingController) {
-                return new MonitorBindingApi(bc);
-            }
-            if (bc instanceof RackController) {
-                return new RackApi(bc, this);
-            }
-            const api = this.pluginsMap_.blades.reduce((result, plugin) => result !== null && result !== void 0 ? result : plugin.api({
-                controller: bc,
-                pool: this,
-            }), null);
-            if (!api) {
-                throw TpError.shouldNeverHappen();
-            }
-            return api;
-        }
-    }
-
-    function createDefaultPluginPool() {
-        const pool = new PluginPool();
-        [
-            Point2dInputPlugin,
-            Point3dInputPlugin,
-            Point4dInputPlugin,
-            StringInputPlugin,
-            NumberInputPlugin,
-            StringColorInputPlugin,
-            ObjectColorInputPlugin,
-            NumberColorInputPlugin,
-            BooleanInputPlugin,
-            BooleanMonitorPlugin,
-            StringMonitorPlugin,
-            NumberMonitorPlugin,
-            ButtonBladePlugin,
-            FolderBladePlugin,
-            SeparatorBladePlugin,
-            TabBladePlugin,
-        ].forEach((p) => {
-            pool.register(p);
-        });
-        return pool;
-    }
-
     class ListApi extends BladeApi {
         constructor(controller) {
             super(controller);
@@ -7437,6 +7338,254 @@
                 ],
             });
         }
+    }
+
+    class RowApi extends BladeApi {
+        getCell(i) {
+            return this.controller_.valueController.cells.children[i];
+        }
+        getPane() {
+            return this.controller_.valueController.cells;
+        }
+    }
+
+    class RowPane extends Pane {
+        addInput(
+            object,
+            key,
+            opt_params = {},
+        ) {
+            !opt_params.label && (opt_params.label = "");
+
+            const api = super.addInput(object, key, opt_params);
+
+            if (opt_params.width) {
+                api.element.style.width = opt_params.width;
+            }
+
+            if (opt_params.label === "") {
+                api.element.style.setProperty("display", "flex");
+                api.element.style.setProperty("flex-direction", "column");
+            }
+
+            api.controller_.view.valueElement.style.setProperty("width", "100%");
+
+            return api;
+        }
+        addMonitor(
+            object,
+            key,
+            opt_params
+        ) {
+            const api = super.addMonitor(object, key, opt_params);
+            if (opt_params?.width) {
+                api.element.style.width = opt_params.width;
+            }
+            return api;
+        }
+        addButton(params) {
+            const api = super.addButton(params);
+            if (params.width) {
+                api.element.style.width = params.width;
+            }
+            return api;
+        }
+        addBlade(params) {
+            const api = super.addBlade(params);
+            if (params.width) {
+                api.element.style.width = params.width;
+            }
+            return api;
+        }
+    }
+
+    class RowView {
+        constructor(doc, config) {
+            this.element = doc.createElement('div');
+            this.element.classList.add(ClassName('table_')(), ClassName('row_')());
+            config.viewProps.bindClassModifiers(this.element);
+        }
+    }
+
+    class RowController {
+        constructor(doc, config, cellsParams) {
+            this.viewProps = config.viewProps;
+            this.view = new RowView(doc, {
+                viewProps: this.viewProps,
+            });
+            this.cells = new RowPane({ container: this.view.element });
+            for (const cellParams of cellsParams) {
+                this.cells.addBlade(cellParams);
+            }
+            this.viewProps.handleDispose(() => {
+                this.cells.dispose();
+            });
+        }
+    }
+
+    const RowPanePlugin = {
+        id: 'RowPanePlugin',
+		type: 'blade',
+        accept(params) {
+			const p = ParamsParsers;
+			const result = parseParams(params, {
+				view: p.required.constant('tableRow'),
+				label: p.required.string,
+				cells: p.optional.array(p.required.custom((p) => p)),
+			});
+			return result ? { params: result } : null;
+		},
+        controller(args) {
+			return new LabelController(args.document, {
+				blade: args.blade,
+				props: ValueMap.fromObject({
+					label: args.params.label,
+				}),
+				valueController: new RowController(
+					args.document,
+					{ viewProps: args.viewProps },
+					args.params.cells || []
+				),
+			});
+		},
+        api({ controller }) {
+			if (!(controller instanceof LabelController)) {
+				return null;
+			}
+			if (!(controller.valueController instanceof RowController)) {
+				return null;
+			}
+			return new RowApi(controller);
+		},
+    };
+
+    class PluginPool {
+        constructor() {
+            this.pluginsMap_ = {
+                blades: [],
+                inputs: [],
+                monitors: [],
+            };
+        }
+        getAll() {
+            return [
+                ...this.pluginsMap_.blades,
+                ...this.pluginsMap_.inputs,
+                ...this.pluginsMap_.monitors,
+            ];
+        }
+        register(r) {
+            if (r.type === 'blade') {
+                this.pluginsMap_.blades.unshift(r);
+            }
+            else if (r.type === 'input') {
+                this.pluginsMap_.inputs.unshift(r);
+            }
+            else if (r.type === 'monitor') {
+                this.pluginsMap_.monitors.unshift(r);
+            }
+        }
+        createInput(document, target, params) {
+            const initialValue = target.read();
+            if (isEmpty(initialValue)) {
+                throw new TpError({
+                    context: {
+                        key: target.key,
+                    },
+                    type: 'nomatchingcontroller',
+                });
+            }
+            const bc = this.pluginsMap_.inputs.reduce((result, plugin) => result !== null && result !== void 0 ? result : createInputBindingController(plugin, {
+                document: document,
+                target: target,
+                params: params,
+            }), null);
+            if (bc) {
+                return bc;
+            }
+            throw new TpError({
+                context: {
+                    key: target.key,
+                },
+                type: 'nomatchingcontroller',
+            });
+        }
+        createMonitor(document, target, params) {
+            const bc = this.pluginsMap_.monitors.reduce((result, plugin) => result !== null && result !== void 0 ? result : createMonitorBindingController(plugin, {
+                document: document,
+                params: params,
+                target: target,
+            }), null);
+            if (bc) {
+                return bc;
+            }
+            throw new TpError({
+                context: {
+                    key: target.key,
+                },
+                type: 'nomatchingcontroller',
+            });
+        }
+        createBlade(document, params) {
+            const bc = this.pluginsMap_.blades.reduce((result, plugin) => result !== null && result !== void 0 ? result : createBladeController(plugin, {
+                document: document,
+                params: params,
+            }), null);
+            if (!bc) {
+                throw new TpError({
+                    type: 'nomatchingview',
+                    context: {
+                        params: params,
+                    },
+                });
+            }
+            return bc;
+        }
+        createBladeApi(bc) {
+            if (bc instanceof InputBindingController) {
+                return new InputBindingApi(bc);
+            }
+            if (bc instanceof MonitorBindingController) {
+                return new MonitorBindingApi(bc);
+            }
+            if (bc instanceof RackController) {
+                return new RackApi(bc, this);
+            }
+            const api = this.pluginsMap_.blades.reduce((result, plugin) => result !== null && result !== void 0 ? result : plugin.api({
+                controller: bc,
+                pool: this,
+            }), null);
+            if (!api) {
+                throw TpError.shouldNeverHappen();
+            }
+            return api;
+        }
+    }
+
+    function createDefaultPluginPool() {
+        const pool = new PluginPool();
+        [
+            Point2dInputPlugin,
+            Point3dInputPlugin,
+            Point4dInputPlugin,
+            StringInputPlugin,
+            NumberInputPlugin,
+            StringColorInputPlugin,
+            ObjectColorInputPlugin,
+            NumberColorInputPlugin,
+            BooleanInputPlugin,
+            BooleanMonitorPlugin,
+            StringMonitorPlugin,
+            NumberMonitorPlugin,
+            ButtonBladePlugin,
+            FolderBladePlugin,
+            SeparatorBladePlugin,
+            TabBladePlugin,
+            RowPanePlugin,
+        ].forEach((p) => {
+            pool.register(p);
+        });
+        return pool;
     }
 
     const VERSION = new Semver('3.1.1');
