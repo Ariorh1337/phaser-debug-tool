@@ -63,3 +63,5 @@ Firefox: `npm run build-firefox`
 5. Add section to create new game objects
 6. Add section to create new tweens
 7. Add time scale into scene
+8. Dynamic "declare as gameobj" - allow you to assign any name
+9. Windowed mode - add a button that opens the game object in a separate and customizable window
