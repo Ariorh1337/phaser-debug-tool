@@ -16,6 +16,7 @@ export default function defineText(folder: any, obj: any) {
         const input = folder.addInput(proxy, "text", {
             format: String,
         });
+
         folder.on("refresh", () => input.refresh());
     }
 }

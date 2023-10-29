@@ -21,6 +21,7 @@ import addBitmapText from "./BitmapText";
 import addContainer from "./Container";
 import addImage from "./Image";
 import addRectangle from "./Rectangle";
+import addRenderTexture from "./RenderTexture";
 import addSpine from "./Spine";
 import addSprite from "./Sprite";
 import addText from "./Text";
@@ -62,6 +63,10 @@ export default function addGameObject(
 
     if (obj.type && obj.type === "Spine") {
         return addSpine(pane, obj, options);
+    }
+
+    if (obj.type && obj.type === "RenderTexture") {
+        return addRenderTexture(pane, obj, options);
     }
 
     const folder = addGameObjectFolder(pane, options, obj);
