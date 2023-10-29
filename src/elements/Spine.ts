@@ -11,6 +11,7 @@ import definePosition from "../props/position";
 import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineSize from "../props/size";
+import defineTimeScale from "../props/timeScale";
 import defineVisible from "../props/visible";
 import { addGameObjectFolder, hasProp } from "../utils/extra";
 import addSpineContainer from "./SpineContainer";
@@ -64,12 +65,6 @@ export function defineDebug(folder: any, obj: any) {
     if (!hasProp(obj, "drawDebug")) return;
 
     folder.addInput(obj, "drawDebug");
-}
-
-export function defineTimeScale(folder: any, obj: any) {
-    if (!hasProp(obj, "timeScale")) return;
-
-    folder.addInput(obj, "timeScale", { min: 0, max: 10, step: 0.01 });
 }
 
 export function defineSkeleton(folder: any, obj: any) {

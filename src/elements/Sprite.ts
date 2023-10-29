@@ -12,6 +12,8 @@ import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineTexture from "../props/texture";
+import defineTimeScale from "../props/timeScale";
+import defineToBase64 from "../props/toBase64";
 import defineVisible from "../props/visible";
 import { addGameObjectFolder } from "../utils/extra";
 
@@ -36,6 +38,9 @@ export default function addSprite(
         defineAngle(folder, obj);
         defineRotation(folder, obj);
         defineScale(folder, obj);
+
+        defineTimeScale(folder, obj.anims);
+
         defineCrop(folder, obj);
         defineTexture(folder, obj);
 
@@ -45,6 +50,7 @@ export default function addSprite(
         });
         checkAnimations(anims, obj);
 
+        defineToBase64(folder, obj);
         defineDestroy(folder, obj);
         defineDeclare(folder, obj);
 

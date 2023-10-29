@@ -13,6 +13,7 @@ import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineText from "../props/text";
 import defineTextStyle from "../props/textStyle";
+import defineToBase64 from "../props/toBase64";
 import defineVisible from "../props/visible";
 import { addGameObjectFolder } from "../utils/extra";
 
@@ -41,6 +42,7 @@ export default function addText(
         defineText(folder, obj);
         defineTextStyle(folder, obj);
 
+        defineToBase64(folder, obj);
         defineDestroy(folder, obj);
         defineDeclare(folder, obj);
 

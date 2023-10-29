@@ -13,6 +13,7 @@ import defineRotation from "../props/rotation";
 import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineTexture from "../props/texture";
+import defineToBase64 from "../props/toBase64";
 import defineVisible from "../props/visible";
 import { addGameObjectFolder } from "../utils/extra";
 
@@ -40,6 +41,7 @@ export default function addImage(
         defineCrop(folder, obj);
         defineTexture(folder, obj);
         defineBlendMode(folder, obj);
+        defineToBase64(folder, obj);
         defineDestroy(folder, obj);
         defineDeclare(folder, obj);
 
