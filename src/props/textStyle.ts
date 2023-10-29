@@ -35,6 +35,13 @@ export default function defineTextStyle(folder: any, obj: any) {
             obj.setStyle(obj.style);
         },
 
+        get backgroundColor() {
+            return obj.style.backgroundColor || "#ffffff";
+        },
+        set backgroundColor(value) {
+            obj.setBackgroundColor(value)
+        },
+
         get color() {
             return obj.style.color;
         },
@@ -112,6 +119,9 @@ export default function defineTextStyle(folder: any, obj: any) {
         step: 1,
     });
     folder.on("refresh", () => input4.refresh());
+
+    const input15 = folder.addInput(proxy, "backgroundColor", { view: "color" });
+    folder.on("refresh", () => input15.refresh());
 
     if (typeof obj.style.color === "string") {
         const input5 = folder.addInput(proxy, "color", { view: "color" });
