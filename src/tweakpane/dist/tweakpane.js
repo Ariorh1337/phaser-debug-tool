@@ -1615,6 +1615,11 @@
             place2.classList.add(this.className_('q'));
             right.appendChild(place2);
 
+            const place3 = doc.createElement('div');
+            place3.setAttribute("name", "place3");
+            place3.classList.add(this.className_('q'));
+            right.appendChild(place3);
+
             const markElem = doc.createElement('div');
             markElem.setAttribute("name", "point");
             markElem.classList.add(this.className_('m'));

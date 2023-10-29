@@ -1,6 +1,6 @@
 import addGameObject from "../elements/GameObject";
 import { gameObjList } from "./globals";
-import { eye_off, eye_on, move } from "./svg";
+import { eye_off, eye_on, move, print } from "./svg";
 
 export function hasProp(obj: any, key: string) {
     return obj[key] !== undefined && obj[key] !== null;
@@ -74,9 +74,20 @@ export function addGameObjectFolder(pane: any, options: any, obj: any) {
 
     // ---
 
-    const drag = document.createElement("div");
+    const printElm = document.createElement("div");
     const place1 = folder.element.querySelector('div[name="place1"]');
-    place1.appendChild(drag);
+    place1.appendChild(printElm);
+
+    printElm.innerHTML = print;
+    printElm.addEventListener("click", () => {
+        console.log(objToString(obj));
+    });
+
+    // ---
+
+    const drag = document.createElement("div");
+    const place2 = folder.element.querySelector('div[name="place2"]');
+    place2.appendChild(drag);
 
     drag.innerHTML = move;
     drag.setAttribute("draggable", "true");
@@ -87,8 +98,8 @@ export function addGameObjectFolder(pane: any, options: any, obj: any) {
     // ---
 
     const visible = document.createElement("div");
-    const place2 = folder.element.querySelector('div[name="place2"]');
-    place2.appendChild(visible);
+    const place3 = folder.element.querySelector('div[name="place3"]');
+    place3.appendChild(visible);
 
     visible.innerHTML = obj.visible ? eye_on : eye_off;
     visible.addEventListener("click", () => {
@@ -148,4 +159,72 @@ export function isVisible(gameobj: any) {
     } while (visible && Boolean(element));
 
     return visible;
+}
+
+function objToString(gameobj: any) {
+    const camera = gameobj.scene.cameras.main;
+
+    const result = [];
+
+    const { name } = gameobj;
+    if (name) result.push(`name: "${name}",`);
+
+    const { x } = gameobj;
+    if (x) result.push(`x: ${x}, // ${x / camera.width},`);
+
+    const { y } = gameobj;
+    if (y) result.push(`y: ${y}, // ${y / camera.height},`);
+
+    const { alpha } = gameobj;
+    if (alpha !== 1) result.push(`alpha: ${alpha},`);
+
+    const { angle } = gameobj;
+    if (angle) result.push(`angle: ${angle},`);
+
+    const { rotation } = gameobj;
+    if (rotation) result.push(`rotation: ${rotation},`);
+
+    const { originX, originY } = gameobj;
+    if (originX !== 0.5 || originY !== 0.5) {
+        result.push(`origin: { x: ${originX}, y: ${originY} },`);
+    }
+
+    const { scaleX, scaleY } = gameobj;
+    if (scaleX !== 1 || scaleY !== 1) {
+        result.push(`scale: { x: ${scaleX}, y: ${scaleY} },`);
+    }
+
+    const { texture, frame } = gameobj;
+    if (texture && texture.key) result.push(`key: "${texture.key}",`);
+    if (frame && frame.name && !frame.name.includes("__BASE")) result.push(`frame: "${frame.name}",`);
+
+    const { skeletonKey } = gameobj;
+    if (skeletonKey) result.push(`skeleton: "${skeletonKey}",`);
+
+    const { flipX, flipY } = gameobj;
+    if (flipX) result.push(`flipX: ${flipX},`);
+    if (flipY) result.push(`flipY: ${flipY},`);
+
+    const { text } = gameobj;
+    if (text) result.push(`text: "${text}",`);
+
+    const { style } = gameobj;
+    if (style) result.push(`style: ${JSON.stringify(style, undefined, 8)},`);
+
+    const { _crop } = gameobj;
+    if (_crop) {
+        if (_crop.x !== 0 || _crop.y !== 0 || _crop.width !== 0 || _crop.height !== 0) {
+            if (_crop.width !== gameobj.width || _crop.height !== gameobj.height) {
+                result.push(`crop: { x: ${_crop.x}, y: ${_crop.y}, width: ${_crop.width}, height: ${_crop.height} },`);
+            }
+        }
+    }
+
+    const { depth } = gameobj;
+    if (depth) result.push(`depth: ${depth},`);
+
+    const { visible } = gameobj;
+    if (!visible) result.push(`visible: ${visible},`);
+
+    return "{\n    " + result.join("\n    ") + "    \n}";
 }
