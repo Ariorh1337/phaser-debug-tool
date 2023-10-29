@@ -32,7 +32,9 @@ export default function addArc(
 
         definePosition(folder, obj);
         defineSize(folder, obj);
-        folder.addInput(obj, "radius", { min: 0, step: 1 });
+
+        folder.addInput(obj, "radius");
+
         defineOrigin(folder, obj);
         defineAlpha(folder, obj);
         defineAngle(folder, obj);
