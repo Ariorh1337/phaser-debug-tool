@@ -7,7 +7,9 @@ Extension button on the right side of the screen which will show a list of avail
 
 ## Links
 
-Chrome Store: https://chrome.google.com/webstore/detail/phaser-debugger/aigiefhkiaiihlploginlonehdafjljd
+Chrome: https://chrome.google.com/webstore/detail/phaser-debugger/aigiefhkiaiihlploginlonehdafjljd
+
+Firefox: https://addons.mozilla.org/en-US/firefox/addon/phaser-debugger/
 
 ## Showcase
 
