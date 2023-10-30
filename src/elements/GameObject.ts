@@ -20,6 +20,7 @@ import addArc from "./Arc";
 import addBitmapText from "./BitmapText";
 import addContainer from "./Container";
 import addImage from "./Image";
+import addMesh from "./Mesh";
 import addRectangle from "./Rectangle";
 import addRenderTexture from "./RenderTexture";
 import addSpine from "./Spine";
@@ -67,6 +68,10 @@ export default function addGameObject(
 
     if (obj.type && obj.type === "RenderTexture") {
         return addRenderTexture(pane, obj, options);
+    }
+
+    if (obj.type && obj.type === "Mesh") {
+        return addMesh(pane, obj, options);
     }
 
     const folder = addGameObjectFolder(pane, options, obj);
