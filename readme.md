@@ -30,7 +30,17 @@ Chrome Store: https://chrome.google.com/webstore/detail/phaser-debugger/aigiefhk
 
 ## Build
 
-Install the project: `npm install`
+### Requirements
+
+OS : Linux / Windows
+Node.js v19.7.0 and newer
+NPM v9.5.0 and newer
+
+### Process
+
+1. Install the project: `npm install`
+
+2. Choose destination browser:
 
 Chrome: `npm run build-chrome`
 Firefox: `npm run build-firefox`
