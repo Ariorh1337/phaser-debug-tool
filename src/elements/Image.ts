@@ -3,6 +3,7 @@ import defineAlpha from "../props/alpha";
 import defineAngle from "../props/angle";
 import defineBlendMode from "../props/blendMode";
 import defineCrop from "../props/crop";
+import defineDebug from "../props/debug";
 import defineDeclare from "../props/declare";
 import defineDestroy, { onDestroy } from "../props/destroy";
 import defineInput from "../props/input";
@@ -27,6 +28,9 @@ export default function addImage(
 
     const create = () => {
         defineName(folder, obj);
+
+        defineDebug(folder, obj);
+
         defineInput(folder, obj);
         defineActive(folder, obj);
         defineVisible(folder, obj);

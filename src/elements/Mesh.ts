@@ -25,39 +25,67 @@ export default function addMesh(
 
     const create = () => {
         defineName(folder, obj);
+
+        //
+
+        defineDebug(
+            folder,
+            obj,
+            (graphics) => {
+                obj.scene.time.delayedCall(10, () => {
+                    obj.setData("points", pointsObj(obj));
+                });
+
+                const input = obj.scene.input;
+
+                type Pointer = Phaser.Input.Pointer;
+
+                const func1 = (p: Pointer) => onPointerDown(p, obj);
+                input.on("pointerdown", func1);
+
+                const func2 = (p: Pointer) => onPointerMove(p, obj);
+                input.on("pointermove", func2);
+
+                obj.once("destroy", () => {
+                    input.off("pointerdown", func1);
+                    input.off("pointermove", func2);
+                });
+
+                obj.on("debug", (value: boolean) => {
+                    if (value) {
+                        obj.setDebug(graphics);
+                    } else {
+                        obj.setDebug();
+                    }
+                });
+                
+                (obj as any).originX = 0.5;
+                (obj as any).originY = 0.5;
+            },
+            (graphics) => {
+                if (!obj.getData("points")) return;
+
+                obj.getData("points").forEach((point: any, i: number) => {
+                    graphics.beginPath();
+
+                    const [x, y] = [point[0].tx, point[0].ty];
+                    const [sa, se] = [
+                        Phaser.Math.DegToRad(0),
+                        Phaser.Math.DegToRad(360),
+                    ];
+
+                    graphics.arc(x, y, 3, sa, se, true, 0.02);
+                    graphics.closePath();
+                    graphics.strokePath();
+                });
+            }
+        );
+
+        //
+
         defineInput(folder, obj);
         defineActive(folder, obj);
         defineVisible(folder, obj);
-
-        obj.scene.time.delayedCall(10, () => {
-            (obj as any)._points = pointsObj(obj);
-        });
-
-        defineDebug(folder, obj, (graphics: Phaser.GameObjects.Graphics) => {
-            if (!(obj as any)._points) return;
-
-            (obj as any)._points.forEach((point: any, i: number) => {
-                graphics.beginPath();
-
-                const [ x, y ] = [ point[0].tx, point[0].ty ];
-                const [ sa, se ] = [ Phaser.Math.DegToRad(0), Phaser.Math.DegToRad(360) ];
-        
-                graphics.arc(x, y, 5, sa, se, true, 0.02);
-                graphics.closePath();
-                graphics.strokePath();
-            });
-        });
-
-        const func1 = (p: Phaser.Input.Pointer) => onPointerDown(p, obj);
-        obj.scene.input.on("pointerdown", func1);
-
-        const func2 = (p: Phaser.Input.Pointer) => onPointerMove(p, obj);
-        obj.scene.input.on("pointermove", func2);
-
-        obj.once("destroy", () => {
-            obj.scene.input.off("pointerdown", func1);
-            obj.scene.input.off("pointermove", func2);
-        });
 
         definePosition(folder, obj);
         defineSize(folder, obj);
@@ -84,11 +112,11 @@ export default function addMesh(
 
 function pointsObj(gameobj: Phaser.GameObjects.Mesh) {
     var list = new Map();
-    
-    gameobj.vertices.forEach(ver => {
+
+    gameobj.vertices.forEach((ver) => {
         const key = `x:${ver.tx};y:${ver.ty}`;
         const points = list.get(key);
-    
+
         if (points) points.push(ver);
         else list.set(key, [ver]);
     });
@@ -96,27 +124,39 @@ function pointsObj(gameobj: Phaser.GameObjects.Mesh) {
     return [...list.values()];
 }
 
-function onPointerDown(pointer: Phaser.Input.Pointer, mesh: Phaser.GameObjects.Mesh) {
-    const size = 10;
-    
+function onPointerDown(
+    pointer: Phaser.Input.Pointer,
+    mesh: Phaser.GameObjects.Mesh
+) {
+    const size = 5;
+
     const { x: x2, y: y2 } = pointer;
 
-    (mesh as any)._point = (mesh as any)._points.find((p: any) => {
+    const point = mesh.getData("points").find((p: any) => {
         const { tx: x, ty: y } = p[0];
 
-        const onX = (x > x2 - size) && (x < x2 + size);
-        const onY = (y > y2 - size) && (y < y2 + size);
+        const onX = x > x2 - size && x < x2 + size;
+        const onY = y > y2 - size && y < y2 + size;
 
         return onX && onY;
     });
+
+    mesh.setData("point", point);
+
+    if (point) {
+        mesh.setData("dragging", undefined);
+    }
 }
 
 let updateTrigger = false;
-function onPointerMove(pointer: Phaser.Input.Pointer, mesh: Phaser.GameObjects.Mesh) {
+function onPointerMove(
+    pointer: Phaser.Input.Pointer,
+    mesh: Phaser.GameObjects.Mesh
+) {
     if (!pointer.isDown) return;
-    if (!(mesh as any)._point) return;
+    if (!mesh.getData("point")) return;
 
-    (mesh as any)._point.forEach((point: any) => {
+    mesh.getData("point").forEach((point: any) => {
         const offsetX = point.tx - pointer.x;
         const offsetY = point.ty - pointer.y;
 
@@ -125,9 +165,9 @@ function onPointerMove(pointer: Phaser.Input.Pointer, mesh: Phaser.GameObjects.M
     });
 
     if (updateTrigger) {
-        (mesh as any).rotateZ += 0.0000000001
+        (mesh as any).rotateZ += 0.0000000001;
     } else {
-        (mesh as any).rotateZ -= 0.0000000001
+        (mesh as any).rotateZ -= 0.0000000001;
     }
 
     updateTrigger = !updateTrigger;
