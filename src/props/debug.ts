@@ -26,7 +26,8 @@ export default function defineDebug(folder: any, obj: any, onStart?: DebugFuncti
         set debug(value) {
             this._debug = value;
 
-            obj.emit("debug", value);
+            obj.setData("__debug", value);
+            obj.emit("__debug", value);
         }
     };
 
@@ -123,6 +124,8 @@ function onPointerDown(
     pointer: Phaser.Input.Pointer,
     obj: any
 ) {
+    if (!obj.getData("__debug")) return;
+
     const { xOrigin, yOrigin } = getBounds(obj);
 
     const left = pointer.x >= xOrigin - 20 && pointer.x <= xOrigin - 10;
@@ -147,6 +150,7 @@ function onPointerMove(
     obj: any
 ) {
     if (!pointer.isDown) return;
+    if (!obj.getData("__debug")) return;
 
     const { xOrigin, yOrigin } = getBounds(obj);
 

@@ -51,7 +51,7 @@ export default function addMesh(
                     input.off("pointermove", func2);
                 });
 
-                obj.on("debug", (value: boolean) => {
+                obj.on("__debug", (value: boolean) => {
                     if (value) {
                         obj.setDebug(graphics);
                     } else {
