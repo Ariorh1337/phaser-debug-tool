@@ -6,6 +6,7 @@ export default function defineDebug(folder: any, obj: any, onStart?: DebugFuncti
     if (!obj.scene.__debugGraphics) {
         obj.scene.__debugGraphics = obj.scene.add.graphics();
         obj.scene.__debugGraphics.setDepth(9999999);
+        obj.scene.__debugGraphics.setName("DEBUG");
 
         const update = () => {
             obj.scene.__debugGraphics.clear();

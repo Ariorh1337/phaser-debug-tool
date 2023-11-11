@@ -68,12 +68,10 @@ Firefox: `npm run build-firefox`
 
 ## TODO
 
-1. Fix firefox perfomance issue
-2. Add mesh suppport
-3. Add tweens support
-4. Add button to export game obj data
-5. Add section to create new game objects
-6. Add section to create new tweens
-7. Add time scale into scene
-8. Dynamic "declare as gameobj" - allow you to assign any name
-9. Windowed mode - add a button that opens the game object in a separate and customizable window
+1. Add mesh suppport
+2. Add tweens support
+3. Add section to create new game objects
+4. Add section to create new tweens
+5. Add time scale into scene
+6. Dynamic "declare as gameobj" - allow you to assign any name
+7. Windowed mode - add a button that opens the game object in a separate and customizable window
