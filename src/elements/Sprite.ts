@@ -13,6 +13,7 @@ import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineTexture from "../props/texture";
 import defineTimeScale from "../props/timeScale";
+import defineTint from "../props/tint";
 import defineToBase64 from "../props/toBase64";
 import defineVisible from "../props/visible";
 import { addGameObjectFolder } from "../utils/extra";
@@ -42,6 +43,7 @@ export default function addSprite(
         defineTimeScale(folder, obj.anims);
 
         defineCrop(folder, obj);
+        defineTint(folder, obj);
         defineTexture(folder, obj);
 
         const anims = folder.addFolder({

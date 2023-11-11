@@ -13,6 +13,7 @@ import defineScale from "../props/scale";
 import defineSize from "../props/size";
 import defineText from "../props/text";
 import defineTextStyle from "../props/textStyle";
+import defineTint from "../props/tint";
 import defineToBase64 from "../props/toBase64";
 import defineVisible from "../props/visible";
 import { addGameObjectFolder } from "../utils/extra";
@@ -38,6 +39,7 @@ export default function addText(
         defineRotation(folder, obj);
         defineScale(folder, obj);
         defineCrop(folder, obj);
+        defineTint(folder, obj);
 
         defineText(folder, obj);
         defineTextStyle(folder, obj);
