@@ -3,44 +3,16 @@ import ReactDOM from 'react-dom';
 import FloatingWidget from './FloatingWidget';
 
 interface State {
-    windows: Array<JSX.Element>;
+    children: Array<JSX.Element>;
 }
 
 class DebugWidget extends React.Component<{}, State> {
     constructor(props: {}) {
         super(props);
+
         this.state = {
-            windows: [],
+            children: [],
         };
-    }
-
-    addFloatingWindow = (dragText: string, x: -1 | 0 | 1, y: -1 | 0 | 1) => {
-        this.setState(prevState => ({
-            windows: [
-                ...prevState.windows,
-                <FloatingWidget key={prevState.windows.length} dragText={dragText} x={x} y={y} />
-            ]
-        }));
-    };
-
-    render() {
-        return (
-            <div>{this.state.windows}</div>
-        );
-    }
-}
-
-export default class ExporterDebugWidget {
-    private _root: HTMLDivElement;
-    private _ref: React.RefObject<DebugWidget>;
-
-    constructor() {
-        this._ref = React.createRef();
-
-        this._root = document.createElement('div');
-        document.body.appendChild(this._root);
-
-        ReactDOM.render(<DebugWidget ref={this._ref} />, this._root);
     }
 
     /**
@@ -50,9 +22,49 @@ export default class ExporterDebugWidget {
      * @param {-1 | 0 | 1} x - The horizontal position of the window. -1 for left edge, 0 for center, 1 for right edge.
      * @param {-1 | 0 | 1} y - The vertical position of the window. -1 for top edge, 0 for center, 1 for bottom edge.
      */
-    public addFloatingWindow(dragText: string, x: -1 | 0 | 1, y: -1 | 0 | 1) {
-        if (this._ref.current) {
-            this._ref.current.addFloatingWindow(dragText, x, y);
-        }
+    addFloatingWindow = (dragText: string, x: -1 | 0 | 1, y: -1 | 0 | 1) => {
+        const ref = React.createRef<FloatingWidget>();
+
+        this.setState(prevState => ({
+            children: [
+                ...prevState.children,
+                <FloatingWidget ref={ref} key={prevState.children.length} dragText={dragText} x={x} y={y} />
+            ]
+        }));
+
+        return ref.current;
+    };
+
+    /**
+     * Removes a floating window from the application.
+     *
+     * @param {JSX.Element} child - The window to be removed.
+     */
+    remove = (child: JSX.Element) => {
+        this.setState(prevState => ({
+            children: prevState.children.filter(window => window !== child)
+        }));
+    }
+
+    render() {
+        return (
+            <div>{this.state.children}</div>
+        );
+    }
+}
+
+export default class ExporterDebugWidget extends DebugWidget {
+    constructor(data?: any) {
+        const root = document.createElement('div');
+        document.body.appendChild(root);
+        
+        const ref = React.createRef<DebugWidget>();
+        ReactDOM.render(<DebugWidget ref={ref} />, root);
+
+        return ref.current;
+
+        // This is side move to pass the ts error
+        // And it is for purpose of passing DebugWidget types
+        super(data);
     }
 };

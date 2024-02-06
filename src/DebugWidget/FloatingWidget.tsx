@@ -14,7 +14,7 @@ interface State {
 }
 
 class FloatingWidget extends React.Component<Props, State> {
-    windowRef: React.RefObject<HTMLDivElement>;
+    private _ref: React.RefObject<HTMLDivElement>;
 
     constructor(props: Props) {
         super(props);
@@ -35,15 +35,15 @@ class FloatingWidget extends React.Component<Props, State> {
             dimensions: { width: 0, height: 0 },
         };
 
-        this.windowRef = React.createRef();
+        this._ref = React.createRef();
     }
 
     componentDidMount() {
-        if (this.windowRef.current) {
+        if (this._ref.current) {
             this.setState({
                 dimensions: {
-                    width: this.windowRef.current.offsetWidth + 2,
-                    height: this.windowRef.current.offsetHeight + 2,
+                    width: this._ref.current.offsetWidth + 2,
+                    height: this._ref.current.offsetHeight + 2,
                 },
             }, this.recalculatePosition);
         }
@@ -60,7 +60,7 @@ class FloatingWidget extends React.Component<Props, State> {
     }
 
     recalculatePosition = () => {
-        if (this.windowRef.current) {
+        if (this._ref.current) {
             this.setState({
                 position: {
                     x: Math.min(
@@ -110,12 +110,15 @@ class FloatingWidget extends React.Component<Props, State> {
     render() {
         return (
             <div
-                ref={this.windowRef}
+                ref={this._ref}
                 style={{
                     position: 'fixed',
                     top: this.state.position.y + 'px',
                     left: this.state.position.x + 'px',
                     zIndex: 1000,
+                    backgroundColor: "#28292e",
+                    borderRadius: "4px",
+                    padding: "4px",
                 }}
             >
                 <div
