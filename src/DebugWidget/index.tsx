@@ -1,9 +1,7 @@
-import 'phaser';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Base, { BaseProps, BaseState } from './Base';
 import FloatingContainer, { FloatingContainerProps, FloatingContainerState } from './FloatingContainer';
-import Swear from './utils/swear';
 
 class DebugWidget extends Base<BaseProps, BaseState> {
     constructor(props: BaseProps) {

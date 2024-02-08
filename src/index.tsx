@@ -15,10 +15,10 @@ function debug() {
     console.log({ widget, debug });
 }
 
-// if(window.Phaser) {
-//     console.log("Phaser debug executed too late 😢 (ServiceWorker PreCache?)");
-//     window._Phaser = window.Phaser;
-// }
+if(window.Phaser) {
+    console.log("Phaser debug executed too late 😢 (ServiceWorker PreCache?)");
+    window._Phaser = window.Phaser;
+}
 
 Object.defineProperty(window, "Phaser", {
     set(value) {

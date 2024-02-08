@@ -1,7 +1,6 @@
 import React from 'react';
 import formatRelativeCenter from './utils/formatRelative';
 import Base, { BaseState, BaseProps } from './Base';
-import Phaser from 'phaser';
 
 export interface FloatingContainerProps extends BaseProps {
     settings: {
