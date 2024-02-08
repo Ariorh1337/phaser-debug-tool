@@ -1,56 +1,34 @@
+import 'phaser';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import FloatingWidget from './FloatingWidget';
+import Base, { BaseProps, BaseState } from './Base';
+import FloatingContainer, { FloatingContainerProps, FloatingContainerState } from './FloatingContainer';
+import Swear from './utils/swear';
 
-interface State {
-    children: Array<JSX.Element>;
-}
-
-class DebugWidget extends React.Component<{}, State> {
-    constructor(props: {}) {
+class DebugWidget extends Base<BaseProps, BaseState> {
+    constructor(props: BaseProps) {
         super(props);
-
-        this.state = {
-            children: [],
-        };
     }
 
     /**
-     * Adds a new floating window to the application.
-     *
-     * @param {string} dragText - The text to be displayed in the draggable area of the window.
-     * @param {-1 | 0 | 1} x - The horizontal position of the window. -1 for left edge, 0 for center, 1 for right edge.
-     * @param {-1 | 0 | 1} y - The vertical position of the window. -1 for top edge, 0 for center, 1 for bottom edge.
+     * Adds a new floating container to the page.
      */
-    addFloatingWindow = (dragText: string, x: -1 | 0 | 1, y: -1 | 0 | 1) => {
-        const ref = React.createRef<FloatingWidget>();
+    addFloatingContainer = (settings: FloatingContainerProps["settings"]) => {
+        const ref = React.createRef<HTMLDivElement>();
+        const id = Phaser.Utils.String.UUID();
 
         this.setState(prevState => ({
             children: [
                 ...prevState.children,
-                <FloatingWidget ref={ref} key={prevState.children.length} dragText={dragText} x={x} y={y} />
+                {
+                    id,
+                    child: <FloatingContainer ref={ref as any} id={id} key={prevState.children.length} settings={settings} />
+                }
             ]
         }));
 
         return ref.current;
     };
-
-    /**
-     * Removes a floating window from the application.
-     *
-     * @param {JSX.Element} child - The window to be removed.
-     */
-    remove = (child: JSX.Element) => {
-        this.setState(prevState => ({
-            children: prevState.children.filter(window => window !== child)
-        }));
-    }
-
-    render() {
-        return (
-            <div>{this.state.children}</div>
-        );
-    }
 }
 
 export default class ExporterDebugWidget extends DebugWidget {
@@ -59,7 +37,9 @@ export default class ExporterDebugWidget extends DebugWidget {
         document.body.appendChild(root);
         
         const ref = React.createRef<DebugWidget>();
-        ReactDOM.render(<DebugWidget ref={ref} />, root);
+        const id = Phaser.Utils.String.UUID();
+
+        ReactDOM.render(<DebugWidget id={id} ref={ref} />, root);
 
         return ref.current;
 

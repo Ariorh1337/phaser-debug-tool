@@ -6,7 +6,8 @@
         "target": "es5",
         "jsx": "react",
         "allowJs": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "typeRoots": ["node_modules/@types"]
     },
     "include": ["./src/**/*"]
 }

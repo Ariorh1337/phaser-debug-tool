@@ -1,42 +1,58 @@
 import React from 'react';
+import formatRelativeCenter from './utils/formatRelative';
+import Base, { BaseState, BaseProps } from './Base';
+import Phaser from 'phaser';
 
-interface Props {
-    dragText: string;
-    x: -1 | 0 | 1;
-    y: -1 | 0 | 1;
+export interface FloatingContainerProps extends BaseProps {
+    settings: {
+        title: string;
+        relativeX: -1 | 0 | 1;
+        relativeY: -1 | 0 | 1;
+    }
 }
 
-interface State {
+export interface FloatingContainerState extends BaseState {
     isDragging: boolean;
     position: { x: number; y: number };
     offset: { x: number; y: number };
     dimensions: { width: number; height: number };
 }
 
-class FloatingWidget extends React.Component<Props, State> {
-    private _ref: React.RefObject<HTMLDivElement>;
-
-    constructor(props: Props) {
+export default class FloatingContainer<A extends FloatingContainerProps, B extends FloatingContainerState> extends Base<FloatingContainerProps, FloatingContainerState> {
+    constructor(props: A) {
         super(props);
 
-        const format = {
-            "-1": (n: number) => n * 0,
-            "0": (n: number) => n * 0.5,
-            "1": (n: number) => n * 1,
-        };
+        const x = formatRelativeCenter(props.settings.relativeX, window.innerWidth);
+        const y = formatRelativeCenter(props.settings.relativeY, window.innerHeight);
 
         this.state = {
+            children: [],
             isDragging: false,
-            position: {
-                x: format[props.x](window.innerWidth),
-                y: format[props.y](window.innerHeight),
-            },
+            position: { x, y },
             offset: { x: 0, y: 0 },
             dimensions: { width: 0, height: 0 },
-        };
-
-        this._ref = React.createRef();
+        } as B;
     }
+
+    /**
+     * Adds a new floating container to the page.
+     */
+    addFloatingContainer = (settings: FloatingContainerProps["settings"]) => {
+        const ref = React.createRef<HTMLDivElement>();
+        const id = Phaser.Utils.String.UUID();
+
+        this.setState(prevState => ({
+            children: [
+                ...prevState.children,
+                {
+                    id,
+                    child: <FloatingContainer ref={ref as any} id={id} key={prevState.children.length} settings={settings} />
+                }
+            ]
+        }));
+
+        return ref.current;
+    };
 
     componentDidMount() {
         if (this._ref.current) {
@@ -126,11 +142,9 @@ class FloatingWidget extends React.Component<Props, State> {
                         cursor: this.state.isDragging ? 'grabbing' : 'grab',
                     }}
                     onMouseDown={this.onMouseDown}
-                >{this.props.dragText}</div>
-                <div>Hello, I'm a floating window!</div>
+                >{this.props.settings.title}</div>
+                { super.render() }
             </div>
         );
     }
-}
-
-export default FloatingWidget;
+};
