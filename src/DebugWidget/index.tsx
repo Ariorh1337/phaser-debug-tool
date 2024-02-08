@@ -12,7 +12,7 @@ class DebugWidget extends Base<BaseProps, BaseState> {
      * Adds a new floating container to the page.
      */
     addFloatingContainer = (settings: FloatingContainerProps["settings"]) => {
-        const ref = React.createRef<HTMLDivElement>();
+        const ref = React.createRef<FloatingContainer<FloatingContainerProps, FloatingContainerState>>();
         const id = Phaser.Utils.String.UUID();
 
         this.setState(prevState => ({
@@ -20,7 +20,7 @@ class DebugWidget extends Base<BaseProps, BaseState> {
                 ...prevState.children,
                 {
                     id,
-                    child: <FloatingContainer ref={ref as any} id={id} key={prevState.children.length} settings={settings} />
+                    child: <FloatingContainer ref={ref as any} id={id} key={id} settings={settings} />
                 }
             ]
         }));
@@ -32,8 +32,15 @@ class DebugWidget extends Base<BaseProps, BaseState> {
 export default class ExporterDebugWidget extends DebugWidget {
     constructor(data?: any) {
         const root = document.createElement('div');
-        document.body.appendChild(root);
-        
+
+        if (document.body) {
+            document.body.appendChild(root);
+        } else {
+            document.addEventListener('DOMContentLoaded', () => {
+                document.body.appendChild(root);
+            }, { once: true });
+        }
+
         const ref = React.createRef<DebugWidget>();
         const id = Phaser.Utils.String.UUID();
 

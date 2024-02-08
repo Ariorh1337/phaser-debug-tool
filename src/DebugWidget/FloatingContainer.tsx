@@ -1,6 +1,7 @@
 import React from 'react';
 import formatRelativeCenter from './utils/formatRelative';
 import Base, { BaseState, BaseProps } from './Base';
+import Input, { InputProps } from './Input';
 
 export interface FloatingContainerProps extends BaseProps {
     settings: {
@@ -37,7 +38,7 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
      * Adds a new floating container to the page.
      */
     addFloatingContainer = (settings: FloatingContainerProps["settings"]) => {
-        const ref = React.createRef<HTMLDivElement>();
+        const ref = React.createRef<FloatingContainer<FloatingContainerProps, FloatingContainerState>>();
         const id = Phaser.Utils.String.UUID();
 
         this.setState(prevState => ({
@@ -45,13 +46,30 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
                 ...prevState.children,
                 {
                     id,
-                    child: <FloatingContainer ref={ref as any} id={id} key={prevState.children.length} settings={settings} />
+                    child: <FloatingContainer ref={ref} id={id} key={id} settings={settings} />
                 }
             ]
         }));
 
         return ref.current;
     };
+
+    addInput = (settings: InputProps["settings"]) => {
+        const ref = React.createRef<Input>();
+        const id = Phaser.Utils.String.UUID();
+
+        this.setState(prevState => ({
+            children: [
+                ...prevState.children,
+                {
+                    id,
+                    child: <Input ref={ref as any} id={id} key={id} settings={settings} />
+                }
+            ]
+        }));
+
+        return ref.current;
+    }
 
     componentDidMount() {
         if (this._ref.current) {

@@ -12,7 +12,23 @@ function debug() {
         relativeY: -1,
     });
 
-    console.log({ widget, debug });
+    const asd = {
+        asd: 123,
+    };
+
+    debug.addInput({
+        title: 'Test 1:',
+        property: 'asd',
+        target: asd,
+    });
+
+    debug.addInput({
+        title: 'Test 2:',
+        property: 'asd',
+        target: asd,
+    });
+
+    console.log({ widget, debug, asd });
 }
 
 if(window.Phaser) {
