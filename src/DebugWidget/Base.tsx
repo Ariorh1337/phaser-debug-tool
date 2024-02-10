@@ -34,7 +34,13 @@ export default class Base<A extends BaseProps, B extends BaseState> extends Reac
 
     render() {
         return (
-            <div>{
+            <div
+                style={{
+                    backgroundColor: "#515151",
+                    padding: "0.3em 0.2em",
+                    borderRadius: "0.2em",
+                }}
+            >{
                 this.state.children.map(({ id, child }) => {
                     return <div key={id}>{child}</div>;
                 })

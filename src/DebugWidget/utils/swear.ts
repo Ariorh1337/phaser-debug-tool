@@ -1,15 +1,13 @@
 export default class Swear<T> {
-    public state = "pending" as "pending" | "done" | "canceled" | "rejected";
+    public state: "pending" | "done" | "canceled" | "rejected" = "pending";
     public promise: Promise<T>;
-    public value?: T;
+    public value: T | null = null;
 
-    private _cancel: boolean;
+    private _cancel = false;
     private _resolve!: (value: T | PromiseLike<T>) => void;
     private _reject!: (reason?: any) => void;
 
     constructor() {
-        this._cancel = false;
-
         this.promise = new Promise((resolve, reject) => {
             this._resolve = resolve;
             this._reject = reject;

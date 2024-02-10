@@ -1,36 +1,40 @@
 import React from 'react';
-import formatRelativeCenter from './utils/formatRelative';
 import Base, { BaseState, BaseProps } from './Base';
 import Input, { InputProps } from './Input';
 
 export interface FloatingContainerProps extends BaseProps {
     settings: {
         title: string;
-        relativeX: -1 | 0 | 1;
-        relativeY: -1 | 0 | 1;
-    }
+    } & (
+        | { left?: number; right?: never; }
+        | { left?: never; right?: number; }
+    ) & (
+        | { top?: number; bottom?: never; }
+        | { top?: never; bottom?: number; }
+    );
 }
 
 export interface FloatingContainerState extends BaseState {
     isDragging: boolean;
-    position: { x: number; y: number };
+    position: {
+        x: number;
+        y: number;
+    };
     offset: { x: number; y: number };
-    dimensions: { width: number; height: number };
 }
 
 export default class FloatingContainer<A extends FloatingContainerProps, B extends FloatingContainerState> extends Base<FloatingContainerProps, FloatingContainerState> {
     constructor(props: A) {
         super(props);
 
-        const x = formatRelativeCenter(props.settings.relativeX, window.innerWidth);
-        const y = formatRelativeCenter(props.settings.relativeY, window.innerHeight);
+        const x = props.settings.left ?? props.settings.right;
+        const y = props.settings.top ?? props.settings.bottom;
 
         this.state = {
             children: [],
             isDragging: false,
             position: { x, y },
             offset: { x: 0, y: 0 },
-            dimensions: { width: 0, height: 0 },
         } as B;
     }
 
@@ -72,14 +76,7 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
     }
 
     componentDidMount() {
-        if (this._ref.current) {
-            this.setState({
-                dimensions: {
-                    width: this._ref.current.offsetWidth + 2,
-                    height: this._ref.current.offsetHeight + 2,
-                },
-            }, this.recalculatePosition);
-        }
+        this.recalculatePosition();
 
         window.addEventListener('mousemove', this.onMouseMove);
         window.addEventListener('mouseup', this.onMouseUp);
@@ -94,17 +91,11 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
 
     recalculatePosition = () => {
         if (this._ref.current) {
+            const x = Math.max(0, Math.min(this.state.offset.x, window.innerWidth));
+            const y = Math.max(0, Math.min(this.state.offset.y, window.innerHeight));
+    
             this.setState({
-                position: {
-                    x: Math.min(
-                        this.state.position.x,
-                        window.innerWidth - this.state.dimensions.width
-                    ),
-                    y: Math.min(
-                        this.state.position.y,
-                        window.innerHeight - this.state.dimensions.height
-                    ),
-                },
+                position: { x, y },
             });
         }
     }
@@ -124,16 +115,23 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
     onMouseMove = (e: MouseEvent) => {
         if (!this.state.isDragging) return;
 
-        let newPosition = {
+        let vec = {
             x: e.clientX - this.state.offset.x,
             y: e.clientY - this.state.offset.y,
         };
 
         // Ensure the position is within the screen bounds
-        newPosition.x = Math.max(0, Math.min(newPosition.x, window.innerWidth - this.state.dimensions.width));
-        newPosition.y = Math.max(0, Math.min(newPosition.y, window.innerHeight - this.state.dimensions.height));
+        vec.x = Math.max(0, Math.min(vec.x, window.innerWidth));
+        vec.y = Math.max(0, Math.min(vec.y, window.innerHeight));
 
-        this.setState({ position: newPosition });
+        if (this.props.settings.right !== undefined) {
+            vec.x = window.innerWidth - vec.x - this._ref.current.offsetWidth;
+        }
+        if (this.props.settings.bottom !== undefined) {
+            vec.y = window.innerHeight - vec.y - this._ref.current.offsetHeight;
+        }
+
+        this.setState({ position: vec });
     };
 
     onMouseUp = () => {
@@ -141,26 +139,48 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
     };
 
     render() {
+        const { settings } = this.props;
+        const { position } = this.state;
+
+        const style = {
+            position: 'fixed',
+            zIndex: 1000,
+            backgroundColor: "#28292e",
+            borderRadius: "0.2em",
+            color: "white",
+            padding: "0.3em 0.2em",
+            width: "min-content",
+
+            left: "unset",
+            right: "unset",
+            top: "unset",
+            bottom: "unset",
+        };
+
+        if (settings.right !== undefined) {
+            style.right = `${position.x}px`;
+        } else {
+            style.left = `${position.x || 0}px`;
+        }
+
+        if (settings.bottom !== undefined) {
+            style.bottom = `${position.y}px`;
+        } else {
+            style.top = `${position.y || 0}px`;
+        }
+
         return (
             <div
                 ref={this._ref}
-                style={{
-                    position: 'fixed',
-                    top: this.state.position.y + 'px',
-                    left: this.state.position.x + 'px',
-                    zIndex: 1000,
-                    backgroundColor: "#28292e",
-                    borderRadius: "4px",
-                    padding: "4px",
-                }}
+                style={style}
             >
                 <div
                     style={{
                         cursor: this.state.isDragging ? 'grabbing' : 'grab',
                     }}
                     onMouseDown={this.onMouseDown}
-                >{this.props.settings.title}</div>
-                { super.render() }
+                >{settings.title}</div>
+                {  super.render() }
             </div>
         );
     }

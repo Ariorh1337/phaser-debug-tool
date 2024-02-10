@@ -8,27 +8,41 @@ function debug() {
 
     const debug = widget.addFloatingContainer({
         title: 'Debug',
-        relativeX: 1,
-        relativeY: -1,
+        right: 0,
+        top: 0,
     });
 
-    const asd = {
-        asd: 123,
+    const test = {
+        number: 123,
+        text: 'Hello, World!',
+        boolean: true,
     };
 
     debug.addInput({
-        title: 'Test 1:',
-        property: 'asd',
-        target: asd,
+        title: 'Num:',
+        property: 'number',
+        target: test,
     });
 
     debug.addInput({
-        title: 'Test 2:',
-        property: 'asd',
-        target: asd,
+        title: 'Num:',
+        property: 'number',
+        target: test,
     });
 
-    console.log({ widget, debug, asd });
+    debug.addInput({
+        title: 'Text:',
+        property: 'text',
+        target: test,
+    });
+
+    debug.addInput({
+        title: 'Bool:',
+        property: 'boolean',
+        target: test,
+    });
+
+    console.log({ widget, debug, test });
 }
 
 if(window.Phaser) {
