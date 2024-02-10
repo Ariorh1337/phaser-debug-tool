@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as style from "./index.css";
 import Base, { BaseProps, BaseState } from './Base';
 import FloatingContainer, { FloatingContainerProps, FloatingContainerState } from './FloatingContainer';
 
@@ -33,11 +34,16 @@ export default class ExporterDebugWidget extends DebugWidget {
     constructor(data?: any) {
         const root = document.createElement('div');
 
+        const s = document.createElement('style');
+        s.innerHTML = style.default.toString();
+
         if (document.body) {
             document.body.appendChild(root);
+            document.body.appendChild(s);
         } else {
             document.addEventListener('DOMContentLoaded', () => {
                 document.body.appendChild(root);
+                document.body.appendChild(s);
             }, { once: true });
         }
 

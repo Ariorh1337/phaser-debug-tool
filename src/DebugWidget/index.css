@@ -1,0 +1,14 @@
+.debug-ext-container {
+    position: relative;
+    z-index: 1000;
+    background-color: #28292e;
+    border-radius: 0.2em;
+    color: white;
+    padding: 0.3em 0.2em;
+}
+
+.debug-ext-base {
+    background-color: #515151;
+    padding: 0.3em 0.2em;
+    border-radius: 0.2em;
+}

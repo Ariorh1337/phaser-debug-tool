@@ -1,8 +1,7 @@
 import React from 'react';
-import Base, { BaseState, BaseProps } from './Base';
-import Input, { InputProps } from './Input';
+import Container, { ContainerState, ContainerProps } from './Container';
 
-export interface FloatingContainerProps extends BaseProps {
+export interface FloatingContainerProps extends ContainerProps {
     settings: {
         title: string;
     } & (
@@ -14,16 +13,13 @@ export interface FloatingContainerProps extends BaseProps {
     );
 }
 
-export interface FloatingContainerState extends BaseState {
+export interface FloatingContainerState extends ContainerState {
     isDragging: boolean;
-    position: {
-        x: number;
-        y: number;
-    };
+    position: { x: number; y: number };
     offset: { x: number; y: number };
 }
 
-export default class FloatingContainer<A extends FloatingContainerProps, B extends FloatingContainerState> extends Base<FloatingContainerProps, FloatingContainerState> {
+export default class FloatingContainer<A extends FloatingContainerProps, B extends FloatingContainerState> extends Container<A, B> {
     constructor(props: A) {
         super(props);
 
@@ -31,7 +27,9 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
         const y = props.settings.top ?? props.settings.bottom;
 
         this.state = {
-            children: [],
+            ...this.state,
+            bgColor: "#28292e",
+            active: true,
             isDragging: false,
             position: { x, y },
             offset: { x: 0, y: 0 },
@@ -57,23 +55,6 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
 
         return ref.current;
     };
-
-    addInput = (settings: InputProps["settings"]) => {
-        const ref = React.createRef<Input>();
-        const id = Phaser.Utils.String.UUID();
-
-        this.setState(prevState => ({
-            children: [
-                ...prevState.children,
-                {
-                    id,
-                    child: <Input ref={ref as any} id={id} key={id} settings={settings} />
-                }
-            ]
-        }));
-
-        return ref.current;
-    }
 
     componentDidMount() {
         this.recalculatePosition();
@@ -143,18 +124,12 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
         const { position } = this.state;
 
         const style = {
-            position: 'fixed',
-            zIndex: 1000,
-            backgroundColor: "#28292e",
-            borderRadius: "0.2em",
-            color: "white",
-            padding: "0.3em 0.2em",
-            width: "min-content",
-
             left: "unset",
             right: "unset",
             top: "unset",
             bottom: "unset",
+            backgroundColor: this.state.bgColor,
+            position: 'fixed',
         };
 
         if (settings.right !== undefined) {
@@ -172,6 +147,7 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
         return (
             <div
                 ref={this._ref}
+                className='debug-ext-container'
                 style={style}
             >
                 <div
@@ -180,7 +156,11 @@ export default class FloatingContainer<A extends FloatingContainerProps, B exten
                     }}
                     onMouseDown={this.onMouseDown}
                 >{settings.title}</div>
-                {  super.render() }
+                <div className='debug-ext-base'>{
+                    this.state.children.map(({ id, child }) => {
+                        return <div key={id}>{child}</div>;
+                    })
+                }</div>
             </div>
         );
     }

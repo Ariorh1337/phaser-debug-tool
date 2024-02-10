@@ -25,12 +25,6 @@ function debug() {
     });
 
     debug.addInput({
-        title: 'Num:',
-        property: 'number',
-        target: test,
-    });
-
-    debug.addInput({
         title: 'Text:',
         property: 'text',
         target: test,
@@ -39,6 +33,16 @@ function debug() {
     debug.addInput({
         title: 'Bool:',
         property: 'boolean',
+        target: test,
+    });
+
+    const container = debug.addContainer({
+        title: 'Container',
+    });
+
+    container.addInput({
+        title: 'Num:',
+        property: 'number',
         target: test,
     });
 

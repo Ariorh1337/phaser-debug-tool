@@ -1,12 +1,14 @@
 import React from 'react';
 
-export interface BaseState {
-    children: Array<{ id: string, child: React.ReactNode }>;
-}
-
 export interface BaseProps {
     id: string;
 }
+
+export interface BaseState {
+    active: boolean;
+    children: Array<{ id: string, child: React.ReactNode }>;
+}
+
 
 export default class Base<A extends BaseProps, B extends BaseState> extends React.Component<A, B> {
     protected _ref: React.RefObject<HTMLDivElement>;
@@ -15,6 +17,7 @@ export default class Base<A extends BaseProps, B extends BaseState> extends Reac
         super(props);
 
         this.state = {
+            active: false,
             children: [],
         } as B;
 
@@ -34,13 +37,7 @@ export default class Base<A extends BaseProps, B extends BaseState> extends Reac
 
     render() {
         return (
-            <div
-                style={{
-                    backgroundColor: "#515151",
-                    padding: "0.3em 0.2em",
-                    borderRadius: "0.2em",
-                }}
-            >{
+            <div className='debug-ext-base'>{
                 this.state.children.map(({ id, child }) => {
                     return <div key={id}>{child}</div>;
                 })
