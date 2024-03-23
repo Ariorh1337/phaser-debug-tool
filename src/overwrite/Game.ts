@@ -83,6 +83,7 @@ function applyCustomStyleToPane(pane: any) {
         overflow: hidden auto;
         max-height: ${window.innerHeight - 20}px;
         resize: vertical;
+        z-index: 9999;
     }
 
     #tweenpane_phaser_debug::-webkit-scrollbar {
