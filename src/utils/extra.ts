@@ -30,6 +30,10 @@ export function oldAddedToScene(folder: any, scene: Phaser.Scene) {
             const method = (scene.add as any)[methodName];
             (scene.add as any)[methodName] = function (...args: any[]) {
                 const obj = method.apply(this, args as any);
+
+                // Path Object fix
+                if (!obj.scene) obj.scene = scene;
+
                 return addedToScene(folder, obj);
             };
         }
