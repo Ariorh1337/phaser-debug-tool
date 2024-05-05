@@ -147,6 +147,7 @@
             this.key_ = key;
             this.presetKey_ = opt_id !== null && opt_id !== void 0 ? opt_id : key;
         }
+
         static isBindable(obj) {
             if (obj === null) {
                 return false;
@@ -156,18 +157,23 @@
             }
             return true;
         }
+
         get key() {
             return this.key_;
         }
+
         get presetKey() {
             return this.presetKey_;
         }
+
         read() {
             return this.obj_[this.key_];
         }
+
         write(value) {
             this.obj_[this.key_] = value;
         }
+
         writeProperty(name, value) {
             const valueObj = this.read();
             if (!BindingTarget.isBindable(valueObj)) {

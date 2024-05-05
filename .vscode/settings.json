@@ -2,18 +2,12 @@
     "eslint.autoFixOnSave": false,
     "editor.formatOnSave": false,
     "editor.codeActionsOnSave": {
-        "source.organizeImports": true,
-
-        // For ESLint
-        "source.fixAll.eslint": true,
-        // For TSLint
-        "source.fixAll.tslint": true,
-        // For Stylelint
-        "source.fixAll.stylelint": true,
-        // For Prettier
-        "source.fixAll.prettier": true,
-
-        "source.fixAll": true
+        "source.organizeImports": "explicit",
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll.tslint": "explicit",
+        "source.fixAll.stylelint": "explicit",
+        "source.fixAll.prettier": "explicit",
+        "source.fixAll": "explicit"
     },
     "files.eol": "\r\n",
     "files.autoSave": "onFocusChange"

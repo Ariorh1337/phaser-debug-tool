@@ -20,6 +20,9 @@ export default function overwriteGame() {
                     expanded: false,
                 });
 
+                (game as any)._tweakpane = pane;
+                (game as any)._pane = folder;
+
                 applyCustomStyleToPane(pane);
 
                 folder.addMonitor(game.loop, "actualFps", {

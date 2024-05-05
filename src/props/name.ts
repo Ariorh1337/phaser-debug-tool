@@ -1,4 +1,4 @@
-import { hasProp } from "../utils/extra";
+import { hasProp, propertyChangeTrigger } from "../utils/extra";
 
 export default function defineName(folder: any, obj: any) {
     folder.title = folder.title || parseName(obj);
@@ -21,14 +21,9 @@ export default function defineName(folder: any, obj: any) {
 export function observeName(folder: any, obj: any) {
     folder.title = folder.title || parseName(obj);
 
-    obj._phaser_debug_prop_name = obj.name;
-    Object.defineProperty(obj, "name", {
-        set(value) {
-            obj._phaser_debug_prop_name = value;
-            folder.title = parseName(obj);
-        },
-        get() { return obj._phaser_debug_prop_name; }
-    }); 
+    propertyChangeTrigger(obj, "name", () => {
+        folder.title = parseName(obj);
+    });
 }
 
 export function parseName(obj: any) {

@@ -107,6 +107,10 @@ export function addGameObjectFolder(pane: any, options: any, obj: any) {
         visible.innerHTML = obj.visible ? eye_on : eye_off;
     });
 
+    propertyChangeTrigger(obj, "visible", () => {
+        visible.innerHTML = obj.visible ? eye_on : eye_off;
+    });
+
     // ---
 
     const point = folder.element.querySelector('div[name="point"]');
@@ -227,4 +231,54 @@ function objToString(gameobj: any) {
     if (!visible) result.push(`visible: ${visible},`);
 
     return "{\n    " + result.join("\n    ") + "    \n}";
+}
+
+export function propertyChangeTrigger(gameobj: any, property: string, onUpdate: Function) {
+    const descriptor = getPropertyDescriptor(gameobj, property);
+
+    if (!descriptor) return;
+
+    if (descriptor.value === undefined) {
+        const set = descriptor.set?.bind(gameobj) || new Function();
+        const get = descriptor.get?.bind(gameobj) || new Function();
+
+        Object.defineProperty(gameobj, property, {
+            get: function () {
+                return get();
+            },
+            set: function (value: unknown) {
+                set(value);
+                onUpdate();
+            }
+        });
+    } else {
+        gameobj[`__phaser_debugger_${property}`] = descriptor.value;
+
+        Object.defineProperty(gameobj, property, {
+            get: function () {
+                return this[`__phaser_debugger_${property}`];
+            },
+            set: function (value: number | string) {
+                this[`__phaser_debugger_${property}`] = value;
+                onUpdate();
+            }
+        });
+    }
+
+    if (gameobj.once) {
+        gameobj.once("destroy", () => {
+            onUpdate = () => {};
+        });
+    }
+}
+
+function getPropertyDescriptor(obj: Object, prop: string) {
+    while (obj !== null) {
+        const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
+        if (descriptor) {
+            return descriptor;
+        }
+        obj = Object.getPrototypeOf(obj);
+    }
+    return null;
 }

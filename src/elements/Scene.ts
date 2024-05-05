@@ -13,6 +13,8 @@ export default function addScene(pane: any, scene: Phaser.Scene) {
         expanded: false,
     });
 
+    (scene as any)._pane = folder;
+
     scene.events.on("destroy", () => folder.dispose);
 
     if (scene.load) {
