@@ -10,8 +10,7 @@
     script.setAttribute('type', 'text/javascript');
     script.setAttribute('src', file_path);
 
-    let html = document.childNodes[1];
-    if (!html) html = document.childNodes[0];
+    const html = document.documentElement;
     html.appendChild(script);
 }
 
