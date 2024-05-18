@@ -41,14 +41,20 @@ export default function overwriteGame() {
                     addScene(scenesFolder, scene);
                 });
 
-                const method = game.scene.add;
+                const method = game.scene.add.bind(game.scene);
                 game.scene.add = function (
                     key: string,
                     scene: Phaser.Scene,
                     autoStart: boolean
                 ) {
-                    const obj = method.call(game.scene, key, scene, autoStart);
-                    addScene(scenesFolder, obj);
+                    const obj = method(key, scene, autoStart);
+
+                    if (obj) {
+                        addScene(scenesFolder, obj);
+                    } else {
+                        console.error(`🪲 Failed to add scene "${key}"`);
+                    }
+
                     return obj;
                 };
 
