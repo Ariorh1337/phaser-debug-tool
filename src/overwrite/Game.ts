@@ -1,6 +1,8 @@
 import addScene from "../elements/Scene";
 import * as Tweakpane from "../tweakpane";
 
+var oldPane: Tweakpane.Pane | undefined;
+
 export default function overwriteGame() {
     class Game extends Phaser.Game {
         constructor(GameConfig?: Phaser.Types.Core.GameConfig) {
@@ -22,6 +24,12 @@ export default function overwriteGame() {
 
                 (game as any)._tweakpane = pane;
                 (game as any)._pane = folder;
+
+                if (oldPane) {
+                    (oldPane as any).remove(oldPane)
+                    oldPane.element.remove();
+                }
+                oldPane = pane;
 
                 applyCustomStyleToPane(pane);
 
