@@ -1,5 +1,6 @@
 import addScene from "../elements/Scene";
 import * as Tweakpane from "../tweakpane";
+import { addEvent } from "./EventEmitter";
 
 var oldPane: Tweakpane.Pane | undefined;
 
@@ -8,7 +9,9 @@ export default function overwriteGame() {
         constructor(GameConfig?: Phaser.Types.Core.GameConfig) {
             GameConfig ||= {};
             GameConfig.callbacks ||= {};
-            GameConfig.callbacks.postBoot ||= () => {};
+            GameConfig.callbacks.postBoot ||= () => { };
+            
+            console.dir(Phaser.Events.EventEmitter);
 
             const postBoot = GameConfig.callbacks.postBoot;
 
@@ -39,6 +42,12 @@ export default function overwriteGame() {
                     max: 120,
                     label: "FPS",
                 });
+
+                const eventsFolder = folder.addFolder({
+                    title: `Events`,
+                    expanded: false,
+                });
+                addEvent(eventsFolder);
 
                 const scenesFolder = folder.addFolder({
                     title: `Scenes`,

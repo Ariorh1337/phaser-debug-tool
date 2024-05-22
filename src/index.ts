@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/triple-slash-reference */
 ///<reference path="../node_modules/phaser/types/phaser.d.ts" />
 
+import overwriteEventEmitter from "./overwrite/EventEmitter";
 import overwriteGame from "./overwrite/Game";
 
 if(window.Phaser) {
     console.log("Phaser debug executed too late 😢 (ServiceWorker PreCache?)");
     window._Phaser = window.Phaser;
 }
+
+overwriteEventEmitter();
 
 Object.defineProperty(window, "Phaser", {
     set(value) {
@@ -28,4 +31,4 @@ Object.defineProperty(window, "Phaser", {
     get() {
         return window._Phaser;
     }
-}); 
+});
