@@ -64,8 +64,10 @@ function createClass(EventEmitter: any) {
             if (proxy.enabled || this.__debug_shout) {
                 if (EventEmitter.__debug_ignoreEvents) {
                     if (!EventEmitter.__debug_ignoreEvents.includes(args[0])) {
-                        console.warn(`(${this.__debug_id}) Event.${key}("${args[0]}")`);
+                        console.warn(`(${this.__debug_id}) ${this.constructor.name}.${key}("${args[0]}")`);
                     }
+                } else {
+                    console.warn(`(${this.__debug_id}) ${this.constructor.name}.${key}("${args[0]}")`);
                 }
             }
 
@@ -84,6 +86,8 @@ function createClass(EventEmitter: any) {
         }
 
         if (this instanceof Phaser.GameObjects.GameObject) {
+            // @ts-ignore
+            this.__debug_ignoreEvents = undefined;
             return;
         }
 
@@ -91,7 +95,7 @@ function createClass(EventEmitter: any) {
             return;
         }
 
-        const name = this.name || this.constructor.name || "Event";
+        const name = this.constructor.name || "Event";
 
         const folder = EventEmitter.__debug_eventsFolder.addFolder({
             title: `(${this.__debug_id}) ${name}`,
