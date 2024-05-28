@@ -14,7 +14,7 @@ export default function defineDebug(folder: any, obj: any, onStart?: DebugFuncti
         };
 
         obj.scene.__debugGraphics.scene.events.on("update", update);
-        obj.scene.__debugGraphics.once("destroy", () => {
+        obj.scene.__debugGraphics.once(Phaser.Core.Events.DESTROY, () => {
             obj.scene.__debugGraphics.scene.events.off("update", update);
         });
     }
@@ -59,7 +59,7 @@ export default function defineDebug(folder: any, obj: any, onStart?: DebugFuncti
     };
 
     obj.scene.events.on("postupdate", update);
-    obj.once("destroy", () => {
+    obj.once(Phaser.Core.Events.DESTROY, () => {
         obj.scene.events.off("postupdate", update);
     });
 
@@ -75,7 +75,7 @@ export default function defineDebug(folder: any, obj: any, onStart?: DebugFuncti
     const func2 = (p: Pointer) => onPointerMove(p, obj);
     obj.scene.input.on("pointermove", func2);
     
-    obj.once("destroy", () => {
+    obj.once(Phaser.Core.Events.DESTROY, () => {
         obj.scene.input.off("pointermove", func2);
     });
 

@@ -46,7 +46,7 @@ export default function addMesh(
                 const func2 = (p: Pointer) => onPointerMove(p, obj);
                 input.on("pointermove", func2);
 
-                obj.once("destroy", () => {
+                obj.once(Phaser.Core.Events.DESTROY, () => {
                     input.off("pointerdown", func1);
                     input.off("pointermove", func2);
                 });

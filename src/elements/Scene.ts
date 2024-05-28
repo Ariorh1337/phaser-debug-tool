@@ -15,7 +15,7 @@ export default function addScene(pane: any, scene: Phaser.Scene) {
 
     (scene as any)._pane = folder;
 
-    scene.events.on("destroy", () => folder.dispose);
+    scene.events.on(Phaser.Core.Events.DESTROY, () => folder.dispose);
 
     if (scene.load) {
         // Load

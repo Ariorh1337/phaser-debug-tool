@@ -31,7 +31,7 @@ export function onDestroy(obj: any, folder: any, options: any) {
 
     obj.scene.events.on("update", func.update);
     obj.once &&
-        obj.once("destroy", () => {
+        obj.once(Phaser.Core.Events.DESTROY, () => {
             obj.scene.events.off("update", func.update);
             gameObjList.remove(obj.DebugID);
             setTimeout(() => folder.dispose(), 1);

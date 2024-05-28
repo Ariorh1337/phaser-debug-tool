@@ -270,7 +270,7 @@ export function propertyChangeTrigger(gameobj: any, property: string, onUpdate: 
     }
 
     if (gameobj.once) {
-        gameobj.once("destroy", () => {
+        gameobj.once(Phaser.Core.Events.DESTROY, () => {
             onUpdate = () => {};
         });
     }

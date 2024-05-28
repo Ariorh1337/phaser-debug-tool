@@ -1,7 +1,16 @@
 import addScene from "../elements/Scene";
 import * as Tweakpane from "../tweakpane";
 
-var oldPane: Tweakpane.Pane | undefined;
+var mainPane: Tweakpane.Pane | undefined;
+var postfix = (() => {
+    let index = 0;
+
+    return () => {
+        index++;
+
+        return index === 1 ? "" : ` #${index}`;
+    };
+})();
 
 export default function overwriteGame() {
     class Game extends Phaser.Game {
@@ -13,25 +22,30 @@ export default function overwriteGame() {
             const postBoot = GameConfig.callbacks.postBoot;
 
             GameConfig.callbacks.postBoot = (game: Phaser.Game) => {
-                console.log("Phaser debug is attached 🔍");
+                console.log("Phaser debug: 🔍 attached");
 
-                const pane = new Tweakpane.Pane() as any;
+                if ((game as any)._pane) {
+                    console.log("Phaser debug: 🤯 already attached (multiple Game.postBoot execution)");
+                    return;
+                }
 
-                const folder = pane.addFolder({
-                    title: `Debug`,
+                if (!mainPane) {
+                    mainPane = new Tweakpane.Pane();
+                    applyCustomStyleToPane(mainPane);
+                }
+
+                const folder = (mainPane as any).addFolder({
+                    title: `Debug${postfix()}`,
                     expanded: false,
                 });
 
-                (game as any)._tweakpane = pane;
+                (game as any)._tweakpane = mainPane;
                 (game as any)._pane = folder;
 
-                if (oldPane) {
-                    (oldPane as any).remove(oldPane)
-                    oldPane.element.remove();
-                }
-                oldPane = pane;
-
-                applyCustomStyleToPane(pane);
+                game.events.once(Phaser.Core.Events.DESTROY, () => {
+                    console.log("Phaser debug: 🗑️ game destroyed");
+                    folder.dispose();
+                });
 
                 folder.addMonitor(game.loop, "actualFps", {
                     view: "graph",

@@ -4,14 +4,14 @@
 import overwriteGame from "./overwrite/Game";
 
 if(window.Phaser) {
-    console.log("Phaser debug executed too late 😢 (ServiceWorker PreCache?)");
+    console.log("Phaser debug: 😢 executed too late (ServiceWorker PreCache?)");
     window._Phaser = window.Phaser;
 }
 
 Object.defineProperty(window, "Phaser", {
     set(value) {
         if (value.VERSION.match(/2\.([0-9]*)\.([0-9]*)/)) {
-            console.log("Phaser 2 unsupported 👴");
+            console.log("Phaser debug: 👴 v2 unsupported");
             window._Phaser = value;
             return;
         }
@@ -21,7 +21,7 @@ Object.defineProperty(window, "Phaser", {
         window._Phaser = value;
 
         if (firstTime) {
-            console.log("Phaser debug is enabled 🪲");
+            console.log("Phaser debug: 🪲 enabled");
             Phaser.Game = overwriteGame();
         }
     },
