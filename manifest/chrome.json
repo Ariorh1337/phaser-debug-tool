@@ -5,8 +5,9 @@
     "manifest_version": 3,
     "content_scripts": [
         {
-            "js": ["inject.js"],
-            "matches": ["*://*/*"],
+            "world": "MAIN",
+            "js": ["index.js"],
+            "matches": ["<all_urls>"],
             "match_about_blank": true,
             "all_frames": true,
             "run_at": "document_start"
