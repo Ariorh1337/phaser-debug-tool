@@ -58,6 +58,30 @@ export default function addScene(pane: any, scene: Phaser.Scene) {
 }
 
 function addState(folder: any, scene: Phaser.Scene) {
+    const statusElm = document.createElement("div");
+    folder.element.querySelector('div[name="point"]').style.display = "none";
+    folder.element.querySelector('div[name="place1"]').appendChild(statusElm);
+    statusElm.style.borderRadius = "50%";
+    statusElm.style.width = "10px";
+    statusElm.style.height = "10px";
+
+    const updateStatus = () => {
+        const status = scene.scene.settings.status;
+        const colors = {
+            5: "lightgreen",
+            6: "lightsalmon",
+            7: "lightblue",
+            8: "indianred",
+        };
+
+        statusElm.style.backgroundColor = colors[status as keyof typeof colors] ?? "darkgray";
+    };
+
+    updateStatus();
+    setInterval(updateStatus, 1000);
+
+    //
+
     const stateFolder = folder.addFolder({
         title: "State",
         expanded: false,
