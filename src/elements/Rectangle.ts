@@ -16,12 +16,12 @@ import defineStroke from "../props/stroke";
 import defineVisible from "../props/visible";
 import { addGameObjectFolder } from "../utils/extra";
 
-export default function addRectangle(
+export default async function addRectangle(
     pane: any,
     obj: Phaser.GameObjects.Rectangle,
     options = { title: "", expanded: false }
 ) {
-    const folder = addGameObjectFolder(pane, options, obj);
+    const folder = await addGameObjectFolder(pane, options, obj);
     observeName(folder, obj);
 
     const create = () => {

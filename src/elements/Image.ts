@@ -19,12 +19,12 @@ import defineToBase64 from "../props/toBase64";
 import defineVisible from "../props/visible";
 import { addGameObjectFolder } from "../utils/extra";
 
-export default function addImage(
+export default async function addImage(
     pane: any,
     obj: Phaser.GameObjects.Image,
     options = { title: "", expanded: false }
 ) {
-    const folder = addGameObjectFolder(pane, options, obj);
+    const folder = await addGameObjectFolder(pane, options, obj);
     observeName(folder, obj);
 
     const create = () => {

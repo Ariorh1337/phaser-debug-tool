@@ -17,12 +17,12 @@ import {
     addedToScene,
 } from "../utils/extra";
 
-export default function addContainer(
+export default async function addContainer(
     pane: any,
     obj: Phaser.GameObjects.Container,
     options = { title: "", expanded: false }
 ) {
-    const folder = addGameObjectFolder(pane, options, obj);
+    const folder = await addGameObjectFolder(pane, options, obj);
     observeName(folder, obj);
 
     const settings = folder.addFolder({ title: "Settings", expanded: false });

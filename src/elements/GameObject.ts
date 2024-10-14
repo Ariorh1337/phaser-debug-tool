@@ -27,7 +27,7 @@ import addSpine from "./Spine";
 import addSprite from "./Sprite";
 import addText from "./Text";
 
-export default function addGameObject(
+export default async function addGameObject(
     pane: any,
     obj: any,
     options = { title: "", expanded: false }
@@ -74,7 +74,7 @@ export default function addGameObject(
         return addMesh(pane, obj, options);
     }
 
-    const folder = addGameObjectFolder(pane, options, obj);
+    const folder = await addGameObjectFolder(pane, options, obj);
     observeName(folder, obj);
 
     const settings = (() => {

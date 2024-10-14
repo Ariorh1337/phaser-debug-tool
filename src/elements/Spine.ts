@@ -16,7 +16,7 @@ import defineVisible from "../props/visible";
 import { addGameObjectFolder, hasProp } from "../utils/extra";
 import addSpineContainer from "./SpineContainer";
 
-export default function addSpine(
+export default async function addSpine(
     pane: any,
     obj: any,
     options = { title: "", expanded: false }
@@ -25,7 +25,7 @@ export default function addSpine(
         return addSpineContainer(pane, obj, options);
     }
 
-    const folder = addGameObjectFolder(pane, options, obj);
+    const folder = await addGameObjectFolder(pane, options, obj);
     observeName(folder, obj);
 
     const create = () => {

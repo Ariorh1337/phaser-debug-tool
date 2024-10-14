@@ -1,6 +1,7 @@
 import addGameObject from "../elements/GameObject";
 import { gameObjList } from "./globals";
 import { eye_off, eye_on, move, print } from "./svg";
+import Swear from "./Swear";
 
 export function hasProp(obj: any, key: string) {
     return obj[key] !== undefined && obj[key] !== null;
@@ -61,7 +62,34 @@ export function oldAddedToScene(folder: any, scene: Phaser.Scene) {
     }
 }
 
-export function addGameObjectFolder(pane: any, options: any, obj: any) {
+let gameObjCreationPool: Swear<unknown>[] = [];
+const runGameObjCreationPool = (deadline: any) => {
+    while (deadline.timeRemaining() > 0 && gameObjCreationPool.length > 0) {
+        const swear = gameObjCreationPool.shift()!;
+        swear.resolve(undefined);
+    }
+
+    if (gameObjCreationPool.length > 0) {
+        requestIdleCallback(runGameObjCreationPool);
+    }
+}
+
+export async function addGameObjectFolder(pane: any, options: any, obj: any) {
+    (obj as any)._pane = {
+        movePaneTo: (parent: any) => {
+            pane = parent;
+        }
+    };
+
+    const swear = new Swear();
+    gameObjCreationPool.push(swear);
+
+    if (gameObjCreationPool.length === 1) {
+        requestIdleCallback(runGameObjCreationPool);
+    }
+
+    await swear.promise;
+
     const folder = pane.addFolder(options);
     folder.element.id = (obj as any).DebugID;
     (obj as any)._pane = folder;

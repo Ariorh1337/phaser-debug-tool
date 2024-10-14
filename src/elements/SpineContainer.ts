@@ -19,12 +19,12 @@ import {
     addedToScene,
 } from "../utils/extra";
 
-export default function addSpineContainer(
+export default async function addSpineContainer(
     pane: any,
     obj: any,
     options = { title: "", expanded: false }
 ) {
-    const folder = addGameObjectFolder(pane, options, obj);
+    const folder = await addGameObjectFolder(pane, options, obj);
     observeName(folder, obj);
     obj.type = "SpineContainer";
 

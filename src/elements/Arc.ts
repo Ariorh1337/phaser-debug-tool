@@ -16,12 +16,12 @@ import defineStroke from "../props/stroke";
 import defineVisible from "../props/visible";
 import { addGameObjectFolder } from "../utils/extra";
 
-export default function addArc(
+export default async function addArc(
     pane: any,
     obj: Phaser.GameObjects.Arc,
     options = { title: "", expanded: false }
 ) {
-    const folder = addGameObjectFolder(pane, options, obj);
+    const folder = await addGameObjectFolder(pane, options, obj);
     observeName(folder, obj);
 
     const create = () => {
