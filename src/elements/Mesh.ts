@@ -13,7 +13,7 @@ import defineSize from "../props/size";
 import defineTexture from "../props/texture";
 import defineToBase64 from "../props/toBase64";
 import defineVisible from "../props/visible";
-import { addGameObjectFolder } from "../utils/extra";
+import { addGameObjectFolder, hasProp } from "../utils/extra";
 
 export default function addMesh(
     pane: any,
@@ -94,6 +94,8 @@ export default function addMesh(
         defineRotation(folder, obj);
         defineScale(folder, obj);
 
+        defineModel(folder, obj);
+
         defineTexture(folder, obj);
 
         defineToBase64(folder, obj);
@@ -172,3 +174,43 @@ function onPointerMove(
 
     updateTrigger = !updateTrigger;
 }
+
+function defineModel(folder: any, obj: any) {
+    if (!(hasProp(obj, "modelPosition") || hasProp(obj, "modelScale") || hasProp(obj, "modelRotation"))) return;
+
+    const modelFolder = folder.addFolder({
+        title: "Model",
+        expanded: false,
+    });
+
+    modelFolder.addInput(obj.modelPosition, "x", {
+        label: "position.x",
+    });
+    modelFolder.addInput(obj.modelPosition, "y", {
+        label: "position.y",
+    });
+    modelFolder.addInput(obj.modelPosition, "z", {
+        label: "position.z",
+    });
+
+    modelFolder.addInput(obj.modelScale, "x", {
+        label: "scale.x",
+    });
+    modelFolder.addInput(obj.modelScale, "y", {
+        label: "scale.y",
+    });
+    modelFolder.addInput(obj.modelScale, "z", {
+        label: "scale.z",
+    });
+
+    modelFolder.addInput(obj.modelRotation, "x", {
+        label: "rotation.x",
+    });
+    modelFolder.addInput(obj.modelRotation, "y", {
+        label: "rotation.y",
+    });
+    modelFolder.addInput(obj.modelRotation, "z", {
+        label: "rotation.z",
+    });
+}
+
