@@ -17,5 +17,5 @@
         "16": "logo.png",
         "48": "logo.png"
     },
-    "web_accessible_resources": ["index.js"]
+    "web_accessible_resources": ["index.js", "interceptor.js"]
 }
