@@ -29,10 +29,10 @@ export function onDestroy(obj: any, folder: any, options: any) {
     };
     func.update = func.update.bind(func);
 
-    obj.scene.events.on("update", func.update);
+    obj.scene && obj.scene.events.on("update", func.update);
     obj.once &&
         obj.once(Phaser.Core.Events.DESTROY, () => {
-            obj.scene.events.off("update", func.update);
+            obj.scene && obj.scene.events.off("update", func.update);
             gameObjList.remove(obj.DebugID);
             setTimeout(() => folder.dispose(), 1);
         });
