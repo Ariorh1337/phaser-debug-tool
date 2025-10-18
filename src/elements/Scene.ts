@@ -1,8 +1,8 @@
 import {
-    addedToScene,
-    hasProp,
-    isVisible,
-    oldAddedToScene,
+	addedToScene,
+	hasProp,
+	isVisible,
+	oldAddedToScene,
 } from "../utils/extra";
 import { gameObjList } from "../utils/globals";
 import addCamera from "./Camera";
@@ -15,10 +15,9 @@ export default function addScene(pane: any, scene: Phaser.Scene) {
 
     (scene as any)._pane = folder;
 
-    scene.events.on(Phaser.Core.Events.DESTROY, () => folder.dispose);
+    scene.events.on(Phaser.Core.Events.DESTROY, () => folder.dispose());
 
     if (scene.load) {
-        // Load
         const loadFolder = folder.addFolder({ title: "Load", expanded: false });
         loadFolder.addMonitor(scene.load, "progress", {
             view: "graph",
@@ -30,27 +29,16 @@ export default function addScene(pane: any, scene: Phaser.Scene) {
         loadFolder.addMonitor(scene.load, "totalToLoad");
     }
 
-    if (true) {
-        // Camera
-        addCamera(folder, scene.cameras.main, {
-            title: "Default Camera",
-            expanded: false,
-        });
-    }
+    addCamera(folder, scene.cameras.main, {
+		title: "Default Camera",
+		expanded: false,
+	});
 
-    if (true) {
-        // State
-        addState(folder, scene);
-    }
+    addState(folder, scene);
 
-    if (true) {
-        // Childrens
-        addChildren(folder, scene);
-    }
+    addChildren(folder, scene);
 
-    if (true) {
-        addSearch(folder, scene);
-    }
+    addSearch(folder, scene);
 
     folder.addButton({ title: "Declare as: window.scene" }).on("click", () => {
         window.scene = scene;
