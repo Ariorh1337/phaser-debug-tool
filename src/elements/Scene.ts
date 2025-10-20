@@ -54,6 +54,9 @@ function addState(folder: any, scene: Phaser.Scene) {
     statusElm.style.height = "10px";
 
     const updateStatus = () => {
+		if (!scene.scene) return;
+		if (!scene.scene.settings) return;
+
         const status = scene.scene.settings.status;
         const colors = {
             5: "lightgreen",
@@ -66,7 +69,8 @@ function addState(folder: any, scene: Phaser.Scene) {
     };
 
     updateStatus();
-    setInterval(updateStatus, 1000);
+    const interval = setInterval(updateStatus, 1000);
+    scene.events.on(Phaser.Core.Events.DESTROY, () => clearInterval(interval));
 
     //
 
