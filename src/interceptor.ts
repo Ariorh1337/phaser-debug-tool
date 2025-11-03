@@ -1,8 +1,40 @@
+const MAIN_SCRIPT_URL = document.documentElement.getAttribute('data-phaser-debug-url');
+
+/**
+ * It is a workaround to fire the DOMContentLoaded listener manually if the DOM is already loaded.
+ * The issue persists only in Firefox. Issue https://github.com/Ariorh1337/phaser-debug-tool/issues/12
+ */
+(function() {
+	'use strict';
+
+	if (!MAIN_SCRIPT_URL?.startsWith('moz-extension://')) return;
+
+	const originalAddEventListener = document.addEventListener;
+
+	// @ts-ignore
+	document.addEventListener = function(type, listener, options) {
+		if (type !== 'DOMContentLoaded') {
+			return originalAddEventListener.call(document, type, listener, options);
+		}
+
+		if (document.readyState === 'loading') {
+			originalAddEventListener.call(document, type, listener, options);
+		} else {
+			console.log('Phaser debug: DCL is dead 😢. Firing DOMContentLoaded listener manually.');
+			try {
+				listener(); 
+			} catch (e) {
+				console.error('Phaser debug: Failed to run hijacked DCL listener 😭', e);
+			}
+		}
+	};
+})();
+
 (function () {
     'use strict';
 
     if ((window as any).Phaser) {
-        console.log("Phaser debug: 😢 executed too late (ServiceWorker PreCache?)");
+        console.log("Phaser debug: possibly executed too late (ServiceWorker PreCache? OR Phaser lib inside DOM?) 🤔");
         loadDebugger();
         return;
     }
@@ -33,16 +65,14 @@
     });
 
     function loadDebugger() {
-        let mainScriptUrl = document.documentElement.getAttribute('data-phaser-debug-url');
-
-        if (!mainScriptUrl) {
+        if (!MAIN_SCRIPT_URL) {
             console.error("Phaser debug: ❌ Failed to get runtime URL");
             return;
         }
 
         try {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', mainScriptUrl, false);
+            xhr.open('GET', MAIN_SCRIPT_URL, false);
             xhr.send(null);
 
             if (xhr.status === 200) {

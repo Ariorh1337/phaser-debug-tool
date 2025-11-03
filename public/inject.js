@@ -25,12 +25,13 @@
 	try {
 		(new Function(``))();
 		const code = loadScript(interceptorUrl);
-		new Function(code)();
+		(new Function(code))();
 		return;
 	} catch(err) {}
 
     var script = document.createElement('script');
 	script.fetchPriority = 'high';
+	script.async = false;
     script.setAttribute('type', 'text/javascript');
     script.setAttribute('src', interceptorUrl);
 	script.setAttribute('id', 'Phaser-Debugger');
