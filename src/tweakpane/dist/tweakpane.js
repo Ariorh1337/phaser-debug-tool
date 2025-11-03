@@ -8496,7 +8496,8 @@ div.tp-fldv_c > div.tp-fldv:first-child {
 }
 
 .tp-grlv_t.tp-grlv_t-a {
-    visibility: visible
+    visibility: visible;
+	margin-top: 15px;
 }
 
 .tp-grlv_t.tp-grlv_t-in {
