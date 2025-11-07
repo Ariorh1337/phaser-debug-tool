@@ -22,5 +22,10 @@
             "resources": ["index.js", "interceptor.js"],
             "matches": ["http://*/*", "https://*/*"]
         }
-    ]
+    ],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "{923d14e5-ae34-4093-9edb-65e0f84f9154}"
+		}
+	}
 }
