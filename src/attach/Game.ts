@@ -71,12 +71,7 @@ function setup(game: Phaser.Game) {
         folder.dispose();
     });
 
-    folder.addMonitor(game.loop, "actualFps", {
-        view: "graph",
-        min: 0,
-        max: 120,
-        label: "FPS",
-    });
+    addFpsMonitor(folder, game);
 
     const scenesFolder = folder.addFolder({
         title: `Scenes`,
@@ -109,6 +104,45 @@ function setup(game: Phaser.Game) {
         .on("click", () => {
             window.game = game;
         });
+}
+
+function addFpsMonitor(folder: any, game: Phaser.Game) {
+    const FPS_SCALE_STEP = 30;
+    const FPS_SCALE_HEADROOM = FPS_SCALE_STEP;
+    const FPS_SCALE_FLOOR = 2 * FPS_SCALE_STEP;
+    const FPS_SCALE_TOLERANCE = FPS_SCALE_STEP / 4;
+
+    const monitor = folder.addMonitor(game.loop, "actualFps", {
+        view: "graph",
+        min: 0,
+        max: FPS_SCALE_FLOOR,
+        label: "FPS",
+    });
+
+    const graph = monitor.controller_?.valueController;
+    const props = graph?.props_;
+
+    if (!graph || !props || typeof props.set !== "function") {
+        return monitor;
+    }
+
+    monitor.on("update", () => {
+        const buffer: (number | undefined)[] = graph.value.rawValue;
+
+        let peak = 0;
+        for (const v of buffer) {
+            if (typeof v === "number" && v > peak) peak = v;
+        }
+
+        const snapped = Math.ceil((peak - FPS_SCALE_TOLERANCE) / FPS_SCALE_STEP) * FPS_SCALE_STEP;
+        const max = Math.max(FPS_SCALE_FLOOR, snapped + FPS_SCALE_HEADROOM);
+
+        if (props.get("maxValue") !== max) {
+            props.set("maxValue", max);
+        }
+    });
+
+    return monitor;
 }
 
 function applyCustomStyleToPane(pane: any) {
