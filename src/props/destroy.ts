@@ -1,4 +1,5 @@
 import { gameObjList } from "../utils/globals";
+import { DESTROY } from "../utils/phaser";
 
 export default function defineDestroy(folder: any, obj: any) {
     folder.addButton({ title: "Destroy" }).on("click", () => {
@@ -31,7 +32,7 @@ export function onDestroy(obj: any, folder: any, options: any) {
 
     obj.scene && obj.scene.events.on("update", func.update);
     obj.once &&
-        obj.once(Phaser.Core.Events.DESTROY, () => {
+        obj.once(DESTROY, () => {
             obj.scene && obj.scene.events.off("update", func.update);
             gameObjList.remove(obj.DebugID);
             setTimeout(() => folder.dispose(), 1);

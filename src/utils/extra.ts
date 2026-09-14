@@ -1,6 +1,7 @@
 import addGameObject from "../elements/GameObject";
 import { gameObjList } from "./globals";
 import { eye_off, eye_on, move, print } from "./svg";
+import { DESTROY, between } from "./phaser";
 
 export function hasProp(obj: any, key: string) {
     return obj[key] !== undefined && obj[key] !== null;
@@ -69,9 +70,9 @@ export function addGameObjectFolder(pane: any, options: any, obj: any) {
     // --- colorful folder
 
     const rnd = [
-        Phaser.Math.Between(20, 40),
-        Phaser.Math.Between(20, 40),
-        Phaser.Math.Between(20, 40),
+        between(20, 40),
+        between(20, 40),
+        between(20, 40),
     ];
 
     folder.element.style.backgroundColor = `rgb(${rnd[0]}, ${rnd[1]}, ${rnd[2]})`;
@@ -270,7 +271,7 @@ export function propertyChangeTrigger(gameobj: any, property: string, onUpdate: 
     }
 
     if (gameobj.once) {
-        gameobj.once(Phaser.Core.Events.DESTROY, () => {
+        gameobj.once(DESTROY, () => {
             onUpdate = () => {};
         });
     }

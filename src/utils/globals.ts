@@ -1,22 +1,13 @@
+import { uuid } from "./phaser";
+
 export const gameObjList = {
     add: function (obj: any) {
-        const UUID = (() => {
-            // Phaser v3.11 has no Phaser.Utils.String.UUID
-            if (Phaser.Utils.String.UUID) {
-                return Phaser.Utils.String.UUID();
-            } else if (Phaser.Math.RND.uuid) {
-                return Phaser.Math.RND.uuid();
-            } else {
-                console.error("🪲 Phaser UUID is not found");
-            }
-        });
+        const id = obj.DebugID || uuid();
 
-        const uuid = obj.DebugID || UUID();
+        this.list[id] = obj;
+        obj.DebugID = id;
 
-        this.list[uuid] = obj;
-        obj.DebugID = uuid;
-
-        return uuid;
+        return id;
     },
 
     get: function (id: string) {

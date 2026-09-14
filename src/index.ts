@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/triple-slash-reference */
 ///<reference path="../node_modules/phaser/types/phaser.d.ts" />
 
-import overwriteGame from "./overwrite/Game";
+import attachGame from "./attach/Game";
 
-if (window.Phaser) {
-    Phaser.Game = overwriteGame();
+const api = window.__PHASER_DEBUG__;
+
+if (api) {
+    api.attach = attachGame;
 } else {
-    console.error("Phaser debug: ❌ Main module loaded without Phaser instance");
+    console.error("Phaser debug: ❌ Main module loaded without the interceptor (window.__PHASER_DEBUG__ is missing)");
 }

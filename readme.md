@@ -1,5 +1,10 @@
 ## About
 
+Works with Phaser 3 and Phaser 4, no matter how the library is loaded (script tag, Vite / webpack / esbuild bundle).
+The extension does not rely on `window.Phaser`: it catches every `Phaser.Game` instance at construction time and attaches the panel in `postBoot`.
+
+If the game was created before the extension could run (rare), attach it manually from the console: `__PHASER_DEBUG__.register(game)`.
+
 If Phaser is found on the page, you will see `Phaser debug is enabled` message in console, at this point
 the injection occurs. Then you will get `Phaser debug is attached` if Game was successfully started.
 

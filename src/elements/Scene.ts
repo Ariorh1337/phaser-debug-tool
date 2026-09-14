@@ -6,6 +6,7 @@ import {
 } from "../utils/extra";
 import { gameObjList } from "../utils/globals";
 import addCamera from "./Camera";
+import { DESTROY, rectContainsPoint } from "../utils/phaser";
 
 export default function addScene(pane: any, scene: Phaser.Scene) {
     const folder = pane.addFolder({
@@ -15,7 +16,7 @@ export default function addScene(pane: any, scene: Phaser.Scene) {
 
     (scene as any)._pane = folder;
 
-    scene.events.on(Phaser.Core.Events.DESTROY, () => folder.dispose());
+    scene.events.on(DESTROY, () => folder.dispose());
 
     if (scene.load) {
         const loadFolder = folder.addFolder({ title: "Load", expanded: false });
@@ -70,7 +71,7 @@ function addState(folder: any, scene: Phaser.Scene) {
 
     updateStatus();
     const interval = setInterval(updateStatus, 1000);
-    scene.events.on(Phaser.Core.Events.DESTROY, () => clearInterval(interval));
+    scene.events.on(DESTROY, () => clearInterval(interval));
 
     //
 
@@ -168,7 +169,9 @@ function addChildren(folder: any, scene: Phaser.Scene) {
         childrenFolder.children.forEach((a: any) => a.dispose());
     });
 
-    scene.events.on("create", () => {
+    const collectExisting = () => {
+        if (!scene.children || !scene.children.list) return;
+
         const list = scene.children.list.filter((gameobj) => {
             return !hasProp(gameobj, "parentContainer");
         });
@@ -176,7 +179,13 @@ function addChildren(folder: any, scene: Phaser.Scene) {
         list.forEach((gameobj: any) => {
             addedToScene(childrenFolder, gameobj);
         });
-    });
+    };
+
+    scene.events.on("create", collectExisting);
+
+    // Scenes without a preload step run create() during game boot, i.e. before the panel
+    // is attached in postBoot. Pick up whatever is already on the display list.
+    collectExisting();
 }
 
 function addSearch(folder: any, scene: Phaser.Scene) {
@@ -285,17 +294,14 @@ function searchVector(event: any, scene: Phaser.Scene) {
 
         const { tx, ty } = obj.getWorldTransformMatrix();
 
-        const p = new Phaser.Geom.Rectangle(
+        return rectContainsPoint(
             tx - width * originX,
             ty - height * originY,
             width,
-            height
+            height,
+            worldX,
+            worldY
         );
-
-        return Phaser.Geom.Rectangle.ContainsPoint(p, {
-            x: worldX,
-            y: worldY,
-        } as any);
     });
 
     return result;

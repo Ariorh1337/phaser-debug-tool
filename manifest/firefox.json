@@ -1,6 +1,6 @@
 {
     "name": "Phaser Debugger",
-    "description": "Debug tool for Phaser 3",
+    "description": "Debug tool for Phaser 3 & 4",
     "version": "",
     "manifest_version": 3,
     "content_scripts": [

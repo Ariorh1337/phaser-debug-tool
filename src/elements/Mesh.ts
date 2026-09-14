@@ -14,6 +14,7 @@ import defineTexture from "../props/texture";
 import defineToBase64 from "../props/toBase64";
 import defineVisible from "../props/visible";
 import { addGameObjectFolder, hasProp } from "../utils/extra";
+import { DESTROY, degToRad } from "../utils/phaser";
 
 export default function addMesh(
     pane: any,
@@ -46,7 +47,7 @@ export default function addMesh(
                 const func2 = (p: Pointer) => onPointerMove(p, obj);
                 input.on("pointermove", func2);
 
-                obj.once(Phaser.Core.Events.DESTROY, () => {
+                obj.once(DESTROY, () => {
                     input.off("pointerdown", func1);
                     input.off("pointermove", func2);
                 });
@@ -70,8 +71,8 @@ export default function addMesh(
 
                     const [x, y] = [point[0].tx, point[0].ty];
                     const [sa, se] = [
-                        Phaser.Math.DegToRad(0),
-                        Phaser.Math.DegToRad(360),
+                        degToRad(0),
+                        degToRad(360),
                     ];
 
                     graphics.arc(x, y, 3, sa, se, true, 0.02);

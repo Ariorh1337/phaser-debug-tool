@@ -1,3 +1,5 @@
+import { DESTROY } from "../utils/phaser";
+
 type DebugFunction = (graphics: Phaser.GameObjects.Graphics, folder: any) => void;
 
 export default function defineDebug(folder: any, obj: any, onStart?: DebugFunction, onUpdate?: DebugFunction) {
@@ -14,7 +16,7 @@ export default function defineDebug(folder: any, obj: any, onStart?: DebugFuncti
         };
 
         obj.scene.__debugGraphics.scene.events.on("update", update);
-        obj.scene.__debugGraphics.once(Phaser.Core.Events.DESTROY, () => {
+        obj.scene.__debugGraphics.once(DESTROY, () => {
             obj.scene.__debugGraphics.scene.events.off("update", update);
         });
     }
@@ -43,23 +45,15 @@ export default function defineDebug(folder: any, obj: any, onStart?: DebugFuncti
         obj.scene.__debugGraphics.strokeRect(x, y, width, height);
 
         obj.scene.__debugGraphics.fillStyle(0xffff00, 1);
-        obj.scene.__debugGraphics.fillCircleShape(
-            (new Phaser.Geom.Circle(xOrigin - 10, yOrigin, 3))
-        );
-        obj.scene.__debugGraphics.fillCircleShape(
-            (new Phaser.Geom.Circle(xOrigin + 10, yOrigin, 3))
-        );
+        obj.scene.__debugGraphics.fillCircle(xOrigin - 10, yOrigin, 3);
+        obj.scene.__debugGraphics.fillCircle(xOrigin + 10, yOrigin, 3);
         obj.scene.__debugGraphics.fillStyle(0x00ffff, 1);
-        obj.scene.__debugGraphics.fillCircleShape(
-            (new Phaser.Geom.Circle(xOrigin, yOrigin - 10, 3))
-        );
-        obj.scene.__debugGraphics.fillCircleShape(
-            (new Phaser.Geom.Circle(xOrigin, yOrigin + 10, 3))
-        );
+        obj.scene.__debugGraphics.fillCircle(xOrigin, yOrigin - 10, 3);
+        obj.scene.__debugGraphics.fillCircle(xOrigin, yOrigin + 10, 3);
     };
 
     obj.scene.events.on("postupdate", update);
-    obj.once(Phaser.Core.Events.DESTROY, () => {
+    obj.once(DESTROY, () => {
         obj.scene.events.off("postupdate", update);
     });
 
@@ -75,7 +69,7 @@ export default function defineDebug(folder: any, obj: any, onStart?: DebugFuncti
     const func2 = (p: Pointer) => onPointerMove(p, obj);
     obj.scene.input.on("pointermove", func2);
     
-    obj.once(Phaser.Core.Events.DESTROY, () => {
+    obj.once(DESTROY, () => {
         obj.scene.input.off("pointermove", func2);
     });
 
